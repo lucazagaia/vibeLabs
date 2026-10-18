@@ -10,12 +10,12 @@ export default function Home() {
     <DashboardProvider>
       <ShowNoticeTool />
       {/* h-dvh + overflow-hidden: the page itself never scrolls; chat and dashboard scroll inside. */}
-      <main className="grid h-dvh grid-cols-1 overflow-hidden md:grid-cols-[420px_1fr]">
-        <section className="min-h-0 border-b border-black/10 md:border-r md:border-b-0 dark:border-white/10">
-          <ChatPane />
-        </section>
-        <section className="min-h-0 bg-black/[0.02] dark:bg-white/[0.02]">
+      <main className="grid h-dvh grid-cols-1 overflow-hidden md:grid-cols-[minmax(0,1fr)_420px]">
+        <section className="order-2 min-h-0 border-t border-black/10 md:order-1 md:border-t-0 md:border-r dark:border-white/10">
           <Dashboard />
+        </section>
+        <section className="order-1 min-h-0 border-b border-black/10 md:order-2 md:border-b-0 dark:border-white/10">
+          <ChatPane />
         </section>
       </main>
     </DashboardProvider>

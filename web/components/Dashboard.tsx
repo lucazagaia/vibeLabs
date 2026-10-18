@@ -2,34 +2,16 @@
 
 import { agentLabel } from "./agents";
 import { useDashboard } from "./DashboardContext";
+import { SupplierWorkspace } from "./SupplierWorkspace";
 
 // Dashboard skeleton: for now it only shows `show_notice` cards. Real panels (W1–W12) come later.
 export function Dashboard() {
   const { notices } = useDashboard();
 
-  if (notices.length === 0) {
-    return (
-      <div className="flex h-full items-center justify-center p-6 text-sm text-black/50 dark:text-white/50">
-        Ask a Buddy something… results will appear here.
-      </div>
-    );
-  }
-
   return (
-    <div className="h-full overflow-y-auto p-6">
-      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-        {notices.map((notice) => (
-          <article
-            key={notice.id}
-            className="rounded-xl border border-black/10 bg-white p-4 shadow-sm dark:border-white/10 dark:bg-neutral-900"
-          >
-            <p className="text-xs font-medium uppercase tracking-wide text-black/40 dark:text-white/40">
-              Notice · {agentLabel(notice.agentId)}
-            </p>
-            <p className="mt-1 text-base">{notice.text}</p>
-          </article>
-        ))}
-      </div>
+    <div className="relative h-full">
+      <SupplierWorkspace />
+      {notices.length > 0 && <div className="pointer-events-none absolute bottom-4 right-4 z-20 w-72 space-y-2">{notices.map((notice) => <article key={notice.id} className="pointer-events-auto rounded-xl border border-black/10 bg-white/95 p-3 shadow-lg backdrop-blur"><p className="text-[10px] font-medium uppercase tracking-wide text-black/40">Notice · {agentLabel(notice.agentId)}</p><p className="mt-1 text-xs">{notice.text}</p></article>)}</div>}
     </div>
   );
 }
