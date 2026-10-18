@@ -35,7 +35,7 @@ export function WorkspaceShell({ home }: { home: React.ReactNode }) {
   }
 
   return (
-    <div className="relative flex h-full min-h-0 bg-[#f7f8fa]">
+    <div className="relative flex h-full min-h-0 bg-[#f7f8fa] dark:bg-neutral-950">
       {sidebarOpen && (
         <WorkspaceSidebar active={page} onChange={openPage} counts={{ favourites: favourites.length, pool: pool.length }} />
       )}
@@ -47,11 +47,11 @@ export function WorkspaceShell({ home }: { home: React.ReactNode }) {
       >
         <WorkspaceHeader sidebarOpen={sidebarOpen} onToggleSidebar={() => setSidebarOpen((open) => !open)}>
           <div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-black/35">Workspace</p>
+            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-black/35 dark:text-white/35">Workspace</p>
             <h1 className="text-lg font-semibold tracking-tight">Home</h1>
           </div>
         </WorkspaceHeader>
-        <div className="min-h-0 min-w-0 flex-1 bg-white">{home}</div>
+        <div className="min-h-0 min-w-0 flex-1 bg-white dark:bg-neutral-900">{home}</div>
       </div>
 
       {SUPPLIER_PAGES.map((supplierPage) => (
@@ -88,9 +88,9 @@ export function WorkspaceShell({ home }: { home: React.ReactNode }) {
           {notices.map((notice) => (
             <article
               key={notice.id}
-              className="pointer-events-auto rounded-xl border border-black/10 bg-white/95 p-3 shadow-lg backdrop-blur"
+              className="pointer-events-auto rounded-xl border border-black/10 bg-white/95 p-3 shadow-lg backdrop-blur dark:border-white/10 dark:bg-neutral-900/95"
             >
-              <p className="text-[10px] font-medium uppercase tracking-wide text-black/40">
+              <p className="text-[10px] font-medium uppercase tracking-wide text-black/40 dark:text-white/40">
                 Notice · {agentLabel(notice.agentId)}
               </p>
               <p className="mt-1 text-xs">{notice.text}</p>

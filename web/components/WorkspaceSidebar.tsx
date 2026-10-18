@@ -25,7 +25,7 @@ export function WorkspaceSidebar({
   counts: Partial<Record<WorkspacePage, number>>;
 }) {
   return (
-    <aside className="w-48 shrink-0 border-r border-black/10 bg-white px-3 py-4">
+    <aside className="w-48 shrink-0 border-r border-black/10 bg-white px-3 py-4 dark:border-white/10 dark:bg-neutral-900">
       <div className="px-2 pb-4 text-sm font-semibold tracking-tight">Supplier workspace</div>
       <nav className="space-y-1">
         {WORKSPACE_PAGES.map(({ id, icon, label }) => (
@@ -35,13 +35,13 @@ export function WorkspaceSidebar({
             onClick={() => onChange(id)}
             aria-current={active === id ? "page" : undefined}
             className={`flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left text-xs ${
-              active === id ? "bg-black/[0.07] font-semibold text-black" : "text-black/55 hover:bg-black/[0.04]"
+              active === id ? "bg-black/[0.07] font-semibold text-black dark:bg-white/[0.07] dark:text-white" : "text-black/55 hover:bg-black/[0.04] dark:text-white/55 dark:hover:bg-white/[0.04]"
             }`}
           >
             <span className="w-4 text-center text-sm">{icon}</span>
             <span>{label}</span>
             {(counts[id] ?? 0) > 0 && (
-              <span className="ml-auto rounded-full bg-black/[0.08] px-1.5 py-0.5 text-[10px]">{counts[id]}</span>
+              <span className="ml-auto rounded-full bg-black/[0.08] px-1.5 py-0.5 text-[10px] dark:bg-white/[0.08]">{counts[id]}</span>
             )}
           </button>
         ))}

@@ -65,7 +65,7 @@ export function hasValue(supplier: Supplier, key: string): boolean {
 }
 
 export function riskTone(score: number) {
-  if (!Number.isFinite(score)) return "bg-black/[0.04] text-black/40 ring-black/10";
+  if (!Number.isFinite(score)) return "bg-black/[0.04] text-black/40 ring-black/10 dark:bg-white/[0.04] dark:text-white/40 dark:ring-white/10";
   return score >= 75
     ? "bg-red-50 text-red-700 ring-red-200"
     : score >= 50
@@ -113,19 +113,19 @@ export function percentileRank(suppliers: Supplier[], supplier: Supplier, key: s
 export function MetricBar({ label, score, emphasis }: { label: string; score: number; emphasis?: boolean }) {
   if (!Number.isFinite(score)) {
     return (
-      <div className="flex items-center justify-between border-b border-black/[0.05] py-2 text-xs">
-        <span className="truncate text-black/55">{label}</span>
-        <span className="font-mono text-black/35">N/A</span>
+      <div className="flex items-center justify-between border-b border-black/[0.05] py-2 text-xs dark:border-white/[0.05]">
+        <span className="truncate text-black/55 dark:text-white/55">{label}</span>
+        <span className="font-mono text-black/35 dark:text-white/35">N/A</span>
       </div>
     );
   }
   return (
     <div className={emphasis ? "rounded-lg bg-red-50 p-2.5 ring-1 ring-red-100" : "py-2"}>
       <div className="mb-1.5 flex items-center justify-between gap-3 text-xs">
-        <span className="truncate text-black/65">{label}</span>
-        <span className={`font-mono font-semibold ${score >= 75 ? "text-red-700" : score >= 50 ? "text-amber-700" : "text-black/65"}`}>{score}</span>
+        <span className="truncate text-black/65 dark:text-white/65">{label}</span>
+        <span className={`font-mono font-semibold ${score >= 75 ? "text-red-700" : score >= 50 ? "text-amber-700" : "text-black/65 dark:text-white/65"}`}>{score}</span>
       </div>
-      <div className="h-1.5 overflow-hidden rounded-full bg-black/[0.07]">
+      <div className="h-1.5 overflow-hidden rounded-full bg-black/[0.07] dark:bg-white/[0.07]">
         <div className={`h-full rounded-full ${riskBarColor(score)}`} style={{ width: `${Math.min(score, 100)}%` }} />
       </div>
     </div>
@@ -140,13 +140,13 @@ export function MarketMetric({ metric, suppliers, selected, onRemove }: { metric
 
   if (current === null || values.length === 0) {
     return (
-      <div className="rounded-lg border border-black/[0.08] bg-black/[0.02] p-3">
+      <div className="rounded-lg border border-black/[0.08] bg-black/[0.02] p-3 dark:border-white/[0.08] dark:bg-white/[0.02]">
         <div className="flex items-start justify-between gap-3">
-          <p className="text-[11px] text-black/45">{metric.label}</p>
+          <p className="text-[11px] text-black/45 dark:text-white/45">{metric.label}</p>
           {onRemove && <RemoveButton onClick={onRemove} label={`Remove ${metric.label}`} />}
         </div>
         <p className="mt-1 text-sm font-semibold">N/A</p>
-        <p className="mt-1 text-[11px] text-black/35">Not reported for this supplier</p>
+        <p className="mt-1 text-[11px] text-black/35 dark:text-white/35">Not reported for this supplier</p>
       </div>
     );
   }
@@ -162,10 +162,10 @@ export function MarketMetric({ metric, suppliers, selected, onRemove }: { metric
   const favorable = rank >= 50;
 
   return (
-    <div className="rounded-lg border border-black/[0.08] bg-white p-3">
+    <div className="rounded-lg border border-black/[0.08] bg-white p-3 dark:border-white/[0.08] dark:bg-neutral-900">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="text-[11px] text-black/45">{metric.label}</p>
+          <p className="text-[11px] text-black/45 dark:text-white/45">{metric.label}</p>
           <p className="mt-1 text-lg font-semibold tracking-tight">{current.toFixed(2)}{suffix}</p>
         </div>
         <div className="flex items-center gap-2">
@@ -175,16 +175,16 @@ export function MarketMetric({ metric, suppliers, selected, onRemove }: { metric
       </div>
       <div className="mt-3">
         <div className={`relative h-2 rounded-full bg-gradient-to-r ${metric.lowerIsBetter ? "from-emerald-200 via-amber-200 to-red-200" : "from-red-200 via-amber-200 to-emerald-200"}`}>
-          <span className="absolute -top-1 h-4 w-0.5 bg-black/35" style={{ left: `${averagePosition}%` }} />
-          <span className={`absolute -top-1.5 h-5 w-1.5 -translate-x-1/2 rounded-full border-2 border-white shadow-sm ${favorable ? "bg-emerald-600" : "bg-amber-600"}`} style={{ left: `${position}%` }} />
+          <span className="absolute -top-1 h-4 w-0.5 bg-black/35 dark:bg-white/35" style={{ left: `${averagePosition}%` }} />
+          <span className={`absolute -top-1.5 h-5 w-1.5 -translate-x-1/2 rounded-full border-2 border-white shadow-sm ${favorable ? "bg-emerald-600" : "bg-amber-600"} dark:border-neutral-900`} style={{ left: `${position}%` }} />
         </div>
-        <div className="mt-1.5 flex justify-between text-[10px] text-black/35">
+        <div className="mt-1.5 flex justify-between text-[10px] text-black/35 dark:text-white/35">
           <span>Lower</span>
           <span>Market average {average.toFixed(2)}{suffix}</span>
           <span>Higher</span>
         </div>
       </div>
-      <p className="mt-2 text-[11px] text-black/50">
+      <p className="mt-2 text-[11px] text-black/50 dark:text-white/50">
         {favorable ? `Better than ${rank}% of suppliers` : `Higher exposure than ${100 - rank}% of suppliers`}
         {metric.lowerIsBetter ? " · lower is better" : " · higher is better"}
       </p>
@@ -194,7 +194,7 @@ export function MarketMetric({ metric, suppliers, selected, onRemove }: { metric
 
 export function RemoveButton({ onClick, label }: { onClick: () => void; label: string }) {
   return (
-    <button type="button" onClick={onClick} aria-label={label} className="rounded-md px-1.5 py-0.5 text-xs text-black/30 hover:bg-black/[0.05] hover:text-black/60">
+    <button type="button" onClick={onClick} aria-label={label} className="rounded-md px-1.5 py-0.5 text-xs text-black/30 hover:bg-black/[0.05] hover:text-black/60 dark:text-white/30 dark:hover:bg-white/[0.05] dark:hover:text-white/60">
       ✕
     </button>
   );

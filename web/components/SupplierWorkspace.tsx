@@ -125,23 +125,23 @@ export function SupplierWorkspace({
     return (
       <div className="min-w-0 flex-1 overflow-y-auto">
         <WorkspaceHeader sidebarOpen={sidebarOpen} onToggleSidebar={onToggleSidebar}>
-          <button onClick={() => onSelect(null)} className="text-xs font-medium text-black/45 hover:text-black">{pageTitle(page)}</button>
-          <span className="text-black/20">/</span>
+          <button onClick={() => onSelect(null)} className="text-xs font-medium text-black/45 hover:text-black dark:text-white/45 dark:hover:text-white">{pageTitle(page)}</button>
+          <span className="text-black/20 dark:text-white/20">/</span>
           <span className="truncate text-sm font-semibold">{selected["Supplier Name"]}</span>
         </WorkspaceHeader>
 
         <div className="mx-auto max-w-5xl space-y-5 p-6">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
-              <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-black/35">Supplier profile</p>
+              <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-black/35 dark:text-white/35">Supplier profile</p>
               <h1 className="mt-1 text-2xl font-semibold tracking-tight">{selected["Supplier Name"]}</h1>
-              <p className="mt-1 font-mono text-xs text-black/40">{selected.supplierID} · {selected["Supply Chain Complexity"]} supply chain · {selected["Sourcing Risk Level"]} sourcing risk</p>
+              <p className="mt-1 font-mono text-xs text-black/40 dark:text-white/40">{selected.supplierID} · {selected["Supply Chain Complexity"]} supply chain · {selected["Sourcing Risk Level"]} sourcing risk</p>
             </div>
             <div className="flex flex-wrap gap-2">
-              <button onClick={() => togglePooled(selected.supplierID)} className={`rounded-lg border px-3 py-2 text-xs font-medium shadow-sm ${inPool ? "border-black/15 bg-black/[0.06] text-black" : "border-black/10 bg-white hover:bg-black/[0.03]"}`}>
+              <button onClick={() => togglePooled(selected.supplierID)} className={`rounded-lg border px-3 py-2 text-xs font-medium shadow-sm ${inPool ? "border-black/15 bg-black/[0.06] text-black dark:border-white/15 dark:bg-white/[0.06] dark:text-white" : "border-black/10 bg-white hover:bg-black/[0.03] dark:border-white/10 dark:bg-neutral-900 dark:hover:bg-white/[0.03]"}`}>
                 {inPool ? "◫ In comparison pool" : "◫ Add to pool"}
               </button>
-              <button onClick={() => onToggleFavourite(selected.supplierID)} className="rounded-lg border border-black/10 bg-white px-3 py-2 text-xs font-medium shadow-sm hover:bg-black/[0.03]">
+              <button onClick={() => onToggleFavourite(selected.supplierID)} className="rounded-lg border border-black/10 bg-white px-3 py-2 text-xs font-medium shadow-sm hover:bg-black/[0.03] dark:border-white/10 dark:bg-neutral-900 dark:hover:bg-white/[0.03]">
                 {favourites.includes(selected.supplierID) ? "★ Favourited" : "☆ Add favourite"}
               </button>
             </div>
@@ -155,13 +155,13 @@ export function SupplierWorkspace({
           </div>
 
           <div className="grid gap-4 lg:grid-cols-[1.1fr_.9fr]">
-            <section className="rounded-xl border border-black/10 bg-white p-5 shadow-sm">
+            <section className="rounded-xl border border-black/10 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-neutral-900">
               <div className="flex items-start justify-between">
                 <div>
                   <h2 className="text-sm font-semibold">Signals that stand out</h2>
-                  <p className="mt-1 text-xs text-black/45">Compared with the full supplier dataset.</p>
+                  <p className="mt-1 text-xs text-black/45 dark:text-white/45">Compared with the full supplier dataset.</p>
                 </div>
-                <span className="rounded-full bg-black/[0.04] px-2 py-1 text-[10px] text-black/45">{reported.length} reported signals</span>
+                <span className="rounded-full bg-black/[0.04] px-2 py-1 text-[10px] text-black/45 dark:bg-white/[0.04] dark:text-white/45">{reported.length} reported signals</span>
               </div>
               {strongest && weakest ? (
                 <div className="mt-4 grid gap-3 sm:grid-cols-2">
@@ -169,7 +169,7 @@ export function SupplierWorkspace({
                   <Insight label="Weakest signal" metric={weakest.label} score={value(selected, weakest.key)} />
                 </div>
               ) : (
-                <p className="mt-4 text-xs text-black/40">No risk signals are reported for this supplier.</p>
+                <p className="mt-4 text-xs text-black/40 dark:text-white/40">No risk signals are reported for this supplier.</p>
               )}
             </section>
 
@@ -181,9 +181,9 @@ export function SupplierWorkspace({
             </section>
           </div>
 
-          <section className="rounded-xl border border-black/10 bg-white p-5 shadow-sm">
+          <section className="rounded-xl border border-black/10 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-neutral-900">
             <h2 className="text-sm font-semibold">Risk profile</h2>
-            <p className="mt-1 text-xs text-black/45">0 is safest, 100 is highest risk. Unreported signals show as N/A.</p>
+            <p className="mt-1 text-xs text-black/45 dark:text-white/45">0 is safest, 100 is highest risk. Unreported signals show as N/A.</p>
             <div className="mt-3 grid gap-x-8 md:grid-cols-2">
               {RISK_METRICS.map((metric) => (
                 <MetricBar key={metric.key} label={metric.label} score={value(selected, metric.key)} emphasis={metric.key === weakest?.key} />
@@ -191,14 +191,14 @@ export function SupplierWorkspace({
             </div>
           </section>
 
-          <section className="rounded-xl border border-black/10 bg-white p-5 shadow-sm">
+          <section className="rounded-xl border border-black/10 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-neutral-900">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
                 <h2 className="text-sm font-semibold">Market position</h2>
-                <p className="mt-1 text-xs text-black/45">Each marker compares this supplier with every supplier that reports the metric.</p>
+                <p className="mt-1 text-xs text-black/45 dark:text-white/45">Each marker compares this supplier with every supplier that reports the metric.</p>
               </div>
               <div className="flex items-center gap-3">
-                <span className="font-mono text-[10px] text-black/35">● supplier · | average</span>
+                <span className="font-mono text-[10px] text-black/35 dark:text-white/35">● supplier · | average</span>
                 <MetricPicker selected={extraMarketKeys} onToggle={toggleMarketKey} metrics={METRIC_CATALOG} alwaysOn={DEFAULT_MARKET_KEYS} />
               </div>
             </div>
@@ -213,7 +213,7 @@ export function SupplierWorkspace({
                 />
               ))}
             </div>
-            <div className="mt-3 rounded-lg bg-black/[0.025] px-3 py-2 text-[11px] text-black/45">The percentile describes relative standing in this dataset, not an external market forecast. For change rate and exposure, lower values are treated as better.</div>
+            <div className="mt-3 rounded-lg bg-black/[0.025] px-3 py-2 text-[11px] text-black/45 dark:bg-white/[0.025] dark:text-white/45">The percentile describes relative standing in this dataset, not an external market forecast. For change rate and exposure, lower values are treated as better.</div>
           </section>
         </div>
       </div>
@@ -224,15 +224,15 @@ export function SupplierWorkspace({
     <div className="min-w-0 flex-1 overflow-y-auto">
       <WorkspaceHeader sidebarOpen={sidebarOpen} onToggleSidebar={onToggleSidebar}>
         <div>
-          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-black/35">Workspace</p>
+          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-black/35 dark:text-white/35">Workspace</p>
           <h1 className="text-lg font-semibold tracking-tight">{pageTitle(page)}</h1>
         </div>
       </WorkspaceHeader>
 
       <div className="mx-auto max-w-6xl space-y-4 p-6">
         <div>
-          <p className="text-sm text-black/50">Browse, rank, and inspect supplier risk in one deterministic view.</p>
-          <p className="mt-1 text-xs text-black/35">
+          <p className="text-sm text-black/50 dark:text-white/50">Browse, rank, and inspect supplier risk in one deterministic view.</p>
+          <p className="mt-1 text-xs text-black/35 dark:text-white/35">
             Showing {visibleSuppliers.length} of {matching.length} {filterCount > 0 ? "matching " : ""}supplier{matching.length === 1 ? "" : "s"}
             {suppliers.length > 0 && ` · ${suppliers.length} in the dataset`}
             {matching.length > ROW_LIMIT && ` · first ${ROW_LIMIT} shown, narrow the filters to see the rest`}
@@ -241,10 +241,10 @@ export function SupplierWorkspace({
 
         <SupplierFilters filters={filters} onChange={setFilters} showFavouriteToggle={page !== "favourites"} />
 
-        <div className="overflow-hidden rounded-xl border border-black/10 bg-white shadow-sm">
+        <div className="overflow-hidden rounded-xl border border-black/10 bg-white shadow-sm dark:border-white/10 dark:bg-neutral-900">
           <div className="overflow-x-auto">
             <table className="w-full min-w-[820px] border-collapse text-left text-xs">
-              <thead className="bg-black/[0.025] text-[10px] uppercase tracking-wide text-black/40">
+              <thead className="bg-black/[0.025] text-[10px] uppercase tracking-wide text-black/40 dark:bg-white/[0.025] dark:text-white/40">
                 <tr>
                   <th className="w-10 px-4 py-3">★</th>
                   <th className="w-10 px-4 py-3">◫</th>
@@ -258,37 +258,37 @@ export function SupplierWorkspace({
               </thead>
               <tbody>
                 {visibleSuppliers.map((supplier) => (
-                  <tr key={supplier.supplierID} className="border-t border-black/[0.07] hover:bg-black/[0.02]">
+                  <tr key={supplier.supplierID} className="border-t border-black/[0.07] hover:bg-black/[0.02] dark:border-white/[0.07] dark:hover:bg-white/[0.02]">
                     <td className="px-4 py-3">
-                      <button onClick={() => onToggleFavourite(supplier.supplierID)} className={`text-base ${favourites.includes(supplier.supplierID) ? "text-amber-500" : "text-black/20 hover:text-black/45"}`} aria-label="Toggle favourite">★</button>
+                      <button onClick={() => onToggleFavourite(supplier.supplierID)} className={`text-base ${favourites.includes(supplier.supplierID) ? "text-amber-500" : "text-black/20 hover:text-black/45 dark:text-white/20 dark:hover:text-white/45"}`} aria-label="Toggle favourite">★</button>
                     </td>
                     <td className="px-4 py-3">
-                      <button onClick={() => togglePooled(supplier.supplierID)} className={`text-sm ${pool.includes(supplier.supplierID) ? "text-black" : "text-black/20 hover:text-black/45"}`} aria-label="Toggle comparison pool">◫</button>
+                      <button onClick={() => togglePooled(supplier.supplierID)} className={`text-sm ${pool.includes(supplier.supplierID) ? "text-black dark:text-white" : "text-black/20 hover:text-black/45 dark:text-white/20 dark:hover:text-white/45"}`} aria-label="Toggle comparison pool">◫</button>
                     </td>
                     <td className="px-4 py-3">
                       <button onClick={() => onSelect(supplier)} className="text-left">
                         <span className="block font-medium hover:underline">{supplier["Supplier Name"]}</span>
-                        <span className="font-mono text-[10px] text-black/35">{supplier.supplierID}</span>
+                        <span className="font-mono text-[10px] text-black/35 dark:text-white/35">{supplier.supplierID}</span>
                       </button>
                     </td>
                     <td className="px-4 py-3"><span className={`rounded-md px-2 py-1 font-mono text-[11px] ring-1 ${riskTone(value(supplier, "Total_Risk_Index"))}`}>{formatMetric(supplier, "Total_Risk_Index")}</span></td>
-                    <td className="px-4 py-3 font-mono text-black/65">{formatMetric(supplier, "Financial_Health_Score")}</td>
-                    <td className="px-4 py-3 font-mono text-black/65">{formatMetric(supplier, "Supplier Delivery Rating")}</td>
-                    <td className="px-4 py-3 font-mono text-black/65">{formatMoney(supplier["Purchase Order Volume (EUR)"])}</td>
-                    <td className="px-4 py-3"><span className="rounded-full bg-black/[0.05] px-2 py-1 text-[10px] text-black/60">{supplier["Sourcing Risk Level"]}</span></td>
+                    <td className="px-4 py-3 font-mono text-black/65 dark:text-white/65">{formatMetric(supplier, "Financial_Health_Score")}</td>
+                    <td className="px-4 py-3 font-mono text-black/65 dark:text-white/65">{formatMetric(supplier, "Supplier Delivery Rating")}</td>
+                    <td className="px-4 py-3 font-mono text-black/65 dark:text-white/65">{formatMoney(supplier["Purchase Order Volume (EUR)"])}</td>
+                    <td className="px-4 py-3"><span className="rounded-full bg-black/[0.05] px-2 py-1 text-[10px] text-black/60 dark:bg-white/[0.05] dark:text-white/60">{supplier["Sourcing Risk Level"]}</span></td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
           {loaded && visibleSuppliers.length === 0 && (
-            <p className="px-4 py-6 text-center text-xs text-black/40">
+            <p className="px-4 py-6 text-center text-xs text-black/40 dark:text-white/40">
               {page === "favourites" && favourites.length === 0
                 ? "No favourites yet. Star a supplier to pin it here."
                 : "No suppliers match these filters."}
             </p>
           )}
-          {!loaded && <p className="px-4 py-6 text-center text-xs text-black/40">Loading suppliers…</p>}
+          {!loaded && <p className="px-4 py-6 text-center text-xs text-black/40 dark:text-white/40">Loading suppliers…</p>}
         </div>
       </div>
     </div>
@@ -298,19 +298,19 @@ export function SupplierWorkspace({
 function SortableHeader({ label, active, ascending, onClick }: { label: string; active: boolean; ascending: boolean; onClick: () => void }) {
   return (
     <th className="px-4 py-3">
-      <button onClick={onClick} className="inline-flex items-center gap-1 hover:text-black">
+      <button onClick={onClick} className="inline-flex items-center gap-1 hover:text-black dark:hover:text-white">
         {label}
-        <span className={active ? "text-black" : "text-black/20"}>{active ? (ascending ? "↑" : "↓") : "↕"}</span>
+        <span className={active ? "text-black dark:text-white" : "text-black/20 dark:text-white/20"}>{active ? (ascending ? "↑" : "↓") : "↕"}</span>
       </button>
     </th>
   );
 }
 
 function Kpi({ label, value: displayValue, tone = "" }: { label: string; value: string; tone?: string }) {
-  const valueClass = label === "Total risk" ? "text-lg font-semibold text-black" : `mt-2 text-lg font-semibold ${tone}`;
+  const valueClass = label === "Total risk" ? "text-lg font-semibold text-black dark:text-white" : `mt-2 text-lg font-semibold ${tone}`;
   return (
-    <div className="rounded-xl border border-black/10 bg-white p-4 shadow-sm">
-      <p className="text-[10px] uppercase tracking-wide text-black/40">{label}</p>
+    <div className="rounded-xl border border-black/10 bg-white p-4 shadow-sm dark:border-white/10 dark:bg-neutral-900">
+      <p className="text-[10px] uppercase tracking-wide text-black/40 dark:text-white/40">{label}</p>
       <p className={valueClass}>{displayValue}</p>
     </div>
   );
@@ -319,12 +319,12 @@ function Kpi({ label, value: displayValue, tone = "" }: { label: string; value: 
 function Insight({ label, metric, score, good }: { label: string; metric: string; score: number; good?: boolean }) {
   return (
     <div className={`border-l-2 py-1 pl-3 ${good ? "border-emerald-500" : "border-red-500"}`}>
-      <p className="text-[10px] font-medium uppercase tracking-[0.12em] text-black/40">{label}</p>
+      <p className="text-[10px] font-medium uppercase tracking-[0.12em] text-black/40 dark:text-white/40">{label}</p>
       <div className="mt-1 flex items-baseline justify-between gap-3">
-        <p className="text-sm font-semibold text-black/80">{metric}</p>
+        <p className="text-sm font-semibold text-black/80 dark:text-white/80">{metric}</p>
         <span className={`font-mono text-sm font-semibold ${good ? "text-emerald-700" : "text-red-700"}`}>{score}</span>
       </div>
-      <p className="mt-1 text-[11px] text-black/45">{good ? "Lowest reported risk signal" : "Highest reported risk signal"}</p>
+      <p className="mt-1 text-[11px] text-black/45 dark:text-white/45">{good ? "Lowest reported risk signal" : "Highest reported risk signal"}</p>
     </div>
   );
 }

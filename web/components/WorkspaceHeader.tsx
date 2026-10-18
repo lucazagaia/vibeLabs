@@ -12,11 +12,11 @@ export function WorkspaceHeader({
   children: React.ReactNode;
 }) {
   return (
-    <div className="sticky top-0 z-10 flex items-center gap-3 border-b border-black/10 bg-[#f7f8fa]/95 px-6 py-4 backdrop-blur">
+    <div className="sticky top-0 z-10 flex items-center gap-3 border-b border-black/10 bg-[#f7f8fa]/95 px-6 py-4 backdrop-blur dark:border-white/10 dark:bg-neutral-950/95">
       <button
         type="button"
         onClick={onToggleSidebar}
-        className="rounded-lg border border-black/10 bg-white px-2.5 py-1.5 text-xs text-black/60 hover:bg-black/[0.03]"
+        className="rounded-lg border border-black/10 bg-white px-2.5 py-1.5 text-xs text-black/60 hover:bg-black/[0.03] dark:border-white/10 dark:bg-neutral-900 dark:text-white/60 dark:hover:bg-white/[0.03]"
         aria-label={sidebarOpen ? "Hide sidebar" : "Show sidebar"}
       >
         {sidebarOpen ? "←" : "→"}
