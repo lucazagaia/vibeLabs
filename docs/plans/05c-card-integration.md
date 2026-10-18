@@ -133,7 +133,7 @@ Clicking the chip scrolls the dashboard to `#card-{toolCallId}` and highlights i
    - `types.ts`, `bands.ts`, `CardShell` and the three renderers
    - the `/cards` gallery
    - `npm run build` + lint
-   - In the browser pane: screenshots of all 10 fixtures, light and dark, plus phone width for the table. These need no agent, so a teammate can take 5c-2 against the fixtures while 5c-1 runs.
+   - In the browser pane: screenshots of all 10 fixtures, light and dark (desktop only; no mobile layout). These need no agent, so a teammate can take 5c-2 against the fixtures while 5c-1 runs.
 
    **⏸ Pause:** with the screenshots.
 3. **5c-3, integration:**
