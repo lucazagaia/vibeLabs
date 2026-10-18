@@ -18,11 +18,11 @@ export function pageTitle(page: WorkspacePage): string {
 export function WorkspaceSidebar({
   active,
   onChange,
-  favouriteCount,
+  counts,
 }: {
   active: WorkspacePage;
   onChange: (page: WorkspacePage) => void;
-  favouriteCount: number;
+  counts: Partial<Record<WorkspacePage, number>>;
 }) {
   return (
     <aside className="w-48 shrink-0 border-r border-black/10 bg-white px-3 py-4">
@@ -40,8 +40,8 @@ export function WorkspaceSidebar({
           >
             <span className="w-4 text-center text-sm">{icon}</span>
             <span>{label}</span>
-            {id === "favourites" && favouriteCount > 0 && (
-              <span className="ml-auto rounded-full bg-black/[0.08] px-1.5 py-0.5 text-[10px]">{favouriteCount}</span>
+            {(counts[id] ?? 0) > 0 && (
+              <span className="ml-auto rounded-full bg-black/[0.08] px-1.5 py-0.5 text-[10px]">{counts[id]}</span>
             )}
           </button>
         ))}

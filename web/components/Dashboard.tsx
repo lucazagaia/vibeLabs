@@ -3,14 +3,17 @@
 import { useState } from "react";
 
 import { agentLabel } from "./agents";
+import { ComparisonPool } from "./ComparisonPool";
 import { useDashboard } from "./DashboardContext";
 import { HomeView } from "./HomeView";
 import { SupplierWorkspace, type SupplierPage } from "./SupplierWorkspace";
+import type { Supplier } from "./supplierMetrics";
 import { useFavourites } from "./useFavourites";
+import { usePool } from "./usePool";
 import { WorkspaceHeader } from "./WorkspaceHeader";
 import { WorkspaceSidebar, type WorkspacePage } from "./WorkspaceSidebar";
 
-const SUPPLIER_PAGES: SupplierPage[] = ["suppliers", "favourites", "pool"];
+const SUPPLIER_PAGES: SupplierPage[] = ["suppliers", "favourites"];
 
 // The workspace shell: sidebar on the left, the active page beside it. The chat lives outside this
 // component (app/page.tsx) and stays on the right on every page.
@@ -18,11 +21,25 @@ export function Dashboard() {
   const { notices } = useDashboard();
   const [page, setPage] = useState<WorkspacePage>("home");
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [selected, setSelected] = useState<Supplier | null>(null);
   const { favourites, toggleFavourite } = useFavourites();
+  const { pool } = usePool();
+
+  function openPage(next: WorkspacePage) {
+    setPage(next);
+    setSelected(null);
+  }
+
+  function openSupplier(supplier: Supplier) {
+    setPage("suppliers");
+    setSelected(supplier);
+  }
 
   return (
     <div className="relative flex h-full min-h-0 bg-[#f7f8fa]">
-      {sidebarOpen && <WorkspaceSidebar active={page} onChange={setPage} favouriteCount={favourites.length} />}
+      {sidebarOpen && (
+        <WorkspaceSidebar active={page} onChange={openPage} counts={{ favourites: favourites.length, pool: pool.length }} />
+      )}
 
       {/* Pages stay mounted so filters, sorting and scroll survive a trip through the sidebar. */}
       <div
@@ -53,9 +70,20 @@ export function Dashboard() {
             onToggleSidebar={() => setSidebarOpen((open) => !open)}
             favourites={favourites}
             onToggleFavourite={toggleFavourite}
+            selected={selected}
+            onSelect={setSelected}
           />
         </div>
       ))}
+
+      <div className={page === "pool" ? "flex min-w-0 flex-1" : "hidden"} aria-hidden={page !== "pool"}>
+        <ComparisonPool
+          active={page === "pool"}
+          sidebarOpen={sidebarOpen}
+          onToggleSidebar={() => setSidebarOpen((open) => !open)}
+          onOpenSupplier={openSupplier}
+        />
+      </div>
 
       {/* On the supplier pages the agent's notice cards float over the page; Home shows them in full. */}
       {page !== "home" && notices.length > 0 && (
