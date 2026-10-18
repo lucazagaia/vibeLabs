@@ -5,6 +5,10 @@ import { CopilotChat } from "@copilotkit/react-core/v2";
 import { AgentSwitch } from "./AgentSwitch";
 import { AGENTS, type AgentId } from "./agents";
 import { ResearchChatExtras } from "./research/ResearchChatExtras";
+import { ResearchCursor } from "./research/ResearchCursor";
+
+// Research Buddy swaps the chat's "running" dot for a one-line live status.
+const RESEARCH_MESSAGE_VIEW = { cursor: ResearchCursor };
 
 // Separate threads per agent: both chats stay mounted and only the active one is visible, so each keeps
 // its own messages and scroll position, and flipping the switch never mixes histories.
@@ -29,6 +33,7 @@ export function ChatPane({
         >
           <CopilotChat
             agentId={agent.id}
+            messageView={agent.id === "research_buddy" ? RESEARCH_MESSAGE_VIEW : undefined}
             labels={{
               chatInputPlaceholder: agent.placeholder,
               welcomeMessageText: agent.welcome,
