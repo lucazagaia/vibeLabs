@@ -2,17 +2,12 @@
 
 import { useMemo, useState } from "react";
 
+import { CardShell } from "./cards/CardShell";
+import { buildLocalCard } from "./cards/localCard";
 import { MetricPicker } from "./MetricPicker";
 import { usePool } from "./usePool";
 import { useSuppliers } from "./useSuppliers";
-import {
-  formatMetric,
-  metricSpec,
-  rawValue,
-  riskBarColor,
-  RemoveButton,
-  type Supplier,
-} from "./supplierMetrics";
+import { metricSpec, RemoveButton, type Supplier } from "./supplierMetrics";
 import { WorkspaceHeader } from "./WorkspaceHeader";
 
 // Comparison Pool: the buyer collects suppliers here (from a profile page or the search below),
@@ -140,10 +135,14 @@ export function ComparisonPool({
           <p className="rounded-xl border border-dashed border-black/15 px-4 py-8 text-center text-xs text-black/40">
             Tick a metric in the Metrics list to add its widget here.
           </p>
+        ) : pooled.length === 0 ? (
+          <p className="rounded-xl border border-dashed border-black/15 px-4 py-8 text-center text-xs text-black/40">
+            Add suppliers to the pool to fill the {metrics.length === 1 ? "widget" : "widgets"}.
+          </p>
         ) : (
           <div className="grid gap-4 lg:grid-cols-2">
             {metrics.map((key) => (
-              <MetricWidget key={key} metricKey={key} pooled={pooled} suppliers={suppliers} onRemove={() => toggleMetric(key)} />
+              <MetricWidget key={key} metricKey={key} pooled={pooled} onRemove={() => toggleMetric(key)} />
             ))}
           </div>
         )}
@@ -152,75 +151,23 @@ export function ComparisonPool({
   );
 }
 
-// One widget card: every pooled supplier on a single metric, against the market average.
-function MetricWidget({
-  metricKey,
-  pooled,
-  suppliers,
-  onRemove,
-}: {
-  metricKey: string;
-  pooled: Supplier[];
-  suppliers: Supplier[];
-  onRemove: () => void;
-}) {
-  const spec = metricSpec(metricKey);
-  const scored = pooled
-    .map((supplier) => ({ supplier, score: rawValue(supplier, metricKey) }))
-    .filter((row): row is { supplier: Supplier; score: number } => row.score !== null);
-  const marketValues = suppliers.map((supplier) => rawValue(supplier, metricKey)).filter((score): score is number => score !== null);
-  const marketAverage = marketValues.length ? marketValues.reduce((total, score) => total + score, 0) / marketValues.length : null;
-  const best = scored.length
-    ? scored.reduce((winner, row) => ((spec.lowerIsBetter ? row.score < winner.score : row.score > winner.score) ? row : winner))
-    : null;
-  const scale = Math.max(...scored.map((row) => row.score), marketAverage ?? 0, 1);
+// One widget per metric, drawn by the same card renderers the agent's dashboard widgets use.
+function MetricWidget({ metricKey, pooled, onRemove }: { metricKey: string; pooled: Supplier[]; onRemove: () => void }) {
+  const card = useMemo(() => buildLocalCard(metricKey, pooled, `pool-${metricKey}`), [metricKey, pooled]);
 
-  return (
-    <section className="rounded-xl border border-black/10 bg-white p-5 shadow-sm">
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <h2 className="text-sm font-semibold">{spec.label}</h2>
-          <p className="mt-1 text-[11px] text-black/45">
-            {spec.lowerIsBetter ? "Lower is better" : "Higher is better"}
-            {marketAverage !== null && ` · market average ${marketAverage.toFixed(2)}${spec.suffix ?? ""}`}
-          </p>
+  if (!card) {
+    return (
+      <section className="rounded-xl border border-black/10 bg-white p-5 shadow-sm">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <h2 className="text-sm font-semibold">{metricSpec(metricKey).label}</h2>
+            <p className="mt-1 text-[11px] text-black/45">No pooled supplier reports this metric.</p>
+          </div>
+          <RemoveButton onClick={onRemove} label={`Remove ${metricSpec(metricKey).label} widget`} />
         </div>
-        <RemoveButton onClick={onRemove} label={`Remove ${spec.label} widget`} />
-      </div>
+      </section>
+    );
+  }
 
-      {pooled.length === 0 ? (
-        <p className="mt-4 text-xs text-black/40">Add suppliers to the pool to fill this widget.</p>
-      ) : (
-        <div className="mt-4 space-y-3">
-          {pooled.map((supplier) => {
-            const score = rawValue(supplier, metricKey);
-            const isBest = best?.supplier.supplierID === supplier.supplierID;
-            return (
-              <div key={supplier.supplierID}>
-                <div className="flex items-baseline justify-between gap-3 text-xs">
-                  <span className="truncate text-black/65">
-                    {supplier["Supplier Name"]}
-                    {isBest && <span className="ml-2 rounded-full bg-emerald-50 px-1.5 py-0.5 text-[10px] font-medium text-emerald-700">best</span>}
-                  </span>
-                  <span className={`font-mono font-semibold ${score === null ? "text-black/35" : "text-black/70"}`}>{formatMetric(supplier, metricKey)}</span>
-                </div>
-                <div className="relative mt-1.5 h-1.5 rounded-full bg-black/[0.07]">
-                  {score !== null && (
-                    <div
-                      className={`h-full rounded-full ${spec.lowerIsBetter ? riskBarColor((score / scale) * 100) : "bg-sky-500"}`}
-                      style={{ width: `${Math.max((score / scale) * 100, 2)}%` }}
-                    />
-                  )}
-                  {marketAverage !== null && (
-                    <span className="absolute -top-1 h-3.5 w-0.5 bg-black/35" style={{ left: `${Math.min((marketAverage / scale) * 100, 100)}%` }} />
-                  )}
-                </div>
-              </div>
-            );
-          })}
-          <p className="pt-1 text-[10px] text-black/35">| market average across suppliers that report this metric</p>
-        </div>
-      )}
-    </section>
-  );
+  return <CardShell card={card} mode="full" onClose={onRemove} />;
 }

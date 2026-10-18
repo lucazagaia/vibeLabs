@@ -1,10 +1,11 @@
 "use client";
 
-import { Component, type ReactNode } from "react";
+import { Component, useState, type ReactNode } from "react";
 
 import { isPercent, LEVEL_DOT, type Level } from "./bands";
 import { ChartBody } from "./ChartBody";
 import { CompositeCard } from "./CompositeCard";
+import { TableCard } from "./TableCard";
 import type { Card } from "./types";
 
 type Props = {
@@ -21,6 +22,10 @@ type Props = {
 export function CardShell({ card, mode = "full", onOpen, onOpenPanel, onClose, id }: Props) {
   const preview = mode === "preview";
   const composite = card.renderer === "composite";
+  // Every chart card can also be read as a table of its own numbers.
+  const [asTable, setAsTable] = useState(false);
+  const tableToggle = !preview && !composite && card.renderer !== "table";
+  const showTable = tableToggle && asTable;
   // Scatter colours mean quadrant zones (it has its own legend); rank and table colours mean risk bands.
   const banded = !preview && !composite && card.renderer !== "scatter" && card.metrics.some((m) => levelColoured(card, m));
   const meta = composite
@@ -44,6 +49,26 @@ export function CardShell({ card, mode = "full", onOpen, onOpenPanel, onClose, i
           <p className="mt-0.5 text-xs text-black/50 dark:text-white/50">{meta}</p>
         </div>
         <div className="flex shrink-0 items-center gap-1">
+          {tableToggle && (
+            <div role="tablist" aria-label="Card view" className="mr-1 flex gap-0.5 rounded-lg bg-black/5 p-0.5 dark:bg-white/10">
+              {[["Chart", false], ["Table", true]].map(([label, wantsTable]) => (
+                <button
+                  key={String(label)}
+                  type="button"
+                  role="tab"
+                  aria-selected={asTable === wantsTable}
+                  onClick={(e) => { e.stopPropagation(); setAsTable(wantsTable as boolean); }}
+                  className={`rounded-md px-2 py-0.5 text-[11px] font-medium transition-colors ${
+                    asTable === wantsTable
+                      ? "bg-white text-black shadow-sm dark:bg-neutral-800 dark:text-white"
+                      : "text-black/55 hover:text-black dark:text-white/55 dark:hover:text-white"
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          )}
           {preview && onOpen && <span className="text-xs text-sky-700 dark:text-sky-300">Open ↗</span>}
           {onClose && (
             <button
@@ -75,6 +100,8 @@ export function CardShell({ card, mode = "full", onOpen, onOpenPanel, onClose, i
         <CardErrorBoundary>
           {composite ? (
             <CompositeCard card={card} preview={preview} onOpenPanel={onOpenPanel} />
+          ) : showTable ? (
+            <TableCard card={card} />
           ) : (
             <ChartBody card={card} preview={preview} />
           )}
