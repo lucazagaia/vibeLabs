@@ -1,4 +1,5 @@
 import { AIMessage } from "@langchain/core/messages";
+import { domainLinks } from "../links.ts";
 import { getChatModel } from "../model.ts";
 import { rankRedFlags } from "../red-flags.ts";
 import type { ResearchState } from "../state.ts";
@@ -92,7 +93,7 @@ ${JSON.stringify(payload, null, 2)}`;
     ],
     messages: [
       new AIMessage(
-        `## Risk report — ${state.company}\n\n${report.summary}\n\n### Red flags\n${report.redFlagSummary}\n\nAsk a follow-up about this report, or start a new thread for a different company.`,
+        `## Risk report — ${state.company}\n\n${domainLinks(report.summary)}\n\n### Red flags\n${domainLinks(report.redFlagSummary)}\n\nAsk a follow-up about this report, or start a new thread for a different company.`,
       ),
     ],
   };

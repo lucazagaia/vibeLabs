@@ -1,4 +1,5 @@
 import { AIMessage, isHumanMessage } from "@langchain/core/messages";
+import { domainLinks } from "../links.ts";
 import { getChatModel } from "../model.ts";
 import type { ResearchState } from "../state.ts";
 import {
@@ -140,6 +141,6 @@ Return ONLY JSON: {"answer":"markdown string"}`;
     searchBudget: budget,
     followUpBudgetRemaining: budget?.followUpRemaining ?? 0,
     activity: steps,
-    messages: [new AIMessage(answer)],
+    messages: [new AIMessage(domainLinks(answer))],
   };
 }

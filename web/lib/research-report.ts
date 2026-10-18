@@ -103,6 +103,45 @@ export const LANE_TITLES: Record<ResearchLane, string> = {
   news: "News, market sentiment & geopolitical",
 };
 
+/** "https://www.reuters.com/a/b" → "reuters.com". Anything unparsable is returned as is. */
+export function sourceDomain(url: string): string {
+  try {
+    return new URL(url).hostname.replace(/^www\./, "");
+  } catch {
+    return url;
+  }
+}
+
+const PHASE_STATUS: Partial<Record<ResearchAgentState["phase"], string>> = {
+  plan: "Planning the research",
+  research: "Researching",
+  red_flags: "Looking for red flags",
+  synthesize: "Writing the risk report",
+  follow_up: "Checking the report",
+};
+
+// Only activity of the running phase refines the status line; older steps would be stale.
+const PHASE_ACTIVITY: Partial<Record<ResearchAgentState["phase"], ActivityKind[]>> = {
+  research: ["search", "pivot", "reason"],
+  red_flags: ["red_flag"],
+  follow_up: ["follow_up"],
+};
+
+/** One-line live status for a working phase, or null when nothing is running. */
+export function liveStatus(
+  state: Partial<ResearchAgentState> | undefined,
+): { label: string; detail?: string } | null {
+  const phase = state?.phase;
+  const base = phase ? PHASE_STATUS[phase] : undefined;
+  if (!phase || !base) return null;
+  const label =
+    phase === "research" && state?.company ? `Researching ${state.company}` : base;
+  const latest = state?.activity?.at(-1);
+  const detail =
+    latest && PHASE_ACTIVITY[phase]?.includes(latest.kind) ? latest.label : undefined;
+  return { label: `${label}…`, detail };
+}
+
 export const EMPTY_RESEARCH_STATE: ResearchAgentState = {
   company: "",
   phase: "idle",
