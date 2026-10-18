@@ -10,7 +10,7 @@ export const AGENTS = [
     id: "research_buddy",
     label: "Research Buddy",
     placeholder: "Research a real company for supplier risk…",
-    welcome: "Hi, I'm Research Buddy. Name a real public company to research",
+    welcome: "Hi, I'm Research Buddy.",
   },
 ] as const;
 
