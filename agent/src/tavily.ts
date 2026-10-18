@@ -1,4 +1,4 @@
-import { TavilySearch } from "@langchain/tavily";
+import { TavilySearchAPIWrapper } from "@langchain/tavily";
 import type { ResearchLane, ResearchSource } from "./types.ts";
 
 export type TavilySearchTool = {
@@ -125,14 +125,17 @@ function consumeBudget(budget: SearchBudget, kind: SearchArgs["kind"], key: stri
   budget.followUpRemaining -= 1;
 }
 
+/**
+ * Searches are fixed pipeline steps, not model tool calls, so they hit the Tavily API directly.
+ * Running the `TavilySearch` tool inside a node emits `on_tool_end` without a tool_call_id, which
+ * the AG-UI LangGraph adapter turns into invalid TOOL_CALL_* events that abort the chat run.
+ */
 function createSearchTool(args: SearchArgs): TavilySearchTool {
-  const news = args.mode === "news";
-  return new TavilySearch({
-    maxResults: args.maxResults ?? 5,
-    searchDepth: "advanced",
-    topic: news ? "news" : "general",
-    ...(news ? { timeRange: "year" as const } : {}),
-  });
+  const api = new TavilySearchAPIWrapper({});
+  return {
+    invoke: (input) =>
+      api.rawResults({ ...input, maxResults: args.maxResults ?? 5 }),
+  };
 }
 
 export function hitsFromTavilyResult(data: unknown): TavilyHit[] {
