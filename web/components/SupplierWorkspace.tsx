@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 
 import { MetricPicker } from "./MetricPicker";
+import { activeFilterCount, EMPTY_FILTERS, SupplierFilters, type SupplierFilterState } from "./SupplierFilters";
 import { usePool } from "./usePool";
 import { useSuppliers } from "./useSuppliers";
 import {
@@ -14,6 +15,7 @@ import {
   METRIC_CATALOG,
   metricSpec,
   percentileRank,
+  rawValue,
   PERFORMANCE_METRICS,
   riskTone,
   RISK_METRICS,
@@ -27,6 +29,20 @@ type SortKey = "Total_Risk_Index" | "Financial_Health_Score" | "Supplier Deliver
 export type SupplierPage = Extract<WorkspacePage, "suppliers" | "favourites">;
 
 const DEFAULT_MARKET_KEYS = PERFORMANCE_METRICS.map((metric) => metric.key);
+const ROW_LIMIT = 250;
+
+function toNumber(raw: string) {
+  const parsed = Number(raw);
+  return raw.trim() && Number.isFinite(parsed) ? parsed : null;
+}
+
+function withinFloor(score: number | null, floor: number | null) {
+  return floor === null || (score !== null && score >= floor);
+}
+
+function withinCeiling(score: number | null, ceiling: number | null) {
+  return ceiling === null || (score !== null && score <= ceiling);
+}
 
 // The Suppliers and Favourites pages, plus the supplier profile they open. The sidebar, the active
 // page, the selected supplier and the saved lists live in <Dashboard>.
@@ -51,18 +67,41 @@ export function SupplierWorkspace({
 }) {
   const { suppliers, loaded } = useSuppliers(active);
   const { pool, togglePooled } = usePool();
-  const [query, setQuery] = useState("");
-  const [riskFilter, setRiskFilter] = useState("All");
+  const [filters, setFilters] = useState<SupplierFilterState>(EMPTY_FILTERS);
   const [sortKey, setSortKey] = useState<SortKey>("Total_Risk_Index");
   const [ascending, setAscending] = useState(true);
   const [extraMarketKeys, setExtraMarketKeys] = useState<string[]>([]);
 
-  const visibleSuppliers = useMemo(() => suppliers
-    .filter((supplier) => (page === "favourites" ? favourites.includes(supplier.supplierID) : true))
-    .filter((supplier) => !query || `${supplier.supplierID} ${supplier["Supplier Name"]}`.toLowerCase().includes(query.toLowerCase()))
-    .filter((supplier) => riskFilter === "All" || supplier.Total_Risk_Index_Level === riskFilter)
-    .sort((a, b) => (ascending ? 1 : -1) * (value(a, sortKey) - value(b, sortKey)))
-    .slice(0, 250), [ascending, favourites, page, query, riskFilter, sortKey, suppliers]);
+  const matching = useMemo(() => {
+    const needle = filters.query.trim().toLowerCase();
+    const minRisk = toNumber(filters.minRisk);
+    const maxRisk = toNumber(filters.maxRisk);
+    const minDelivery = toNumber(filters.minDelivery);
+    const minVolume = toNumber(filters.minVolume);
+
+    return suppliers
+      .filter((supplier) => {
+        if (page === "favourites" && !favourites.includes(supplier.supplierID)) return false;
+        if (filters.onlyFavourites && !favourites.includes(supplier.supplierID)) return false;
+        if (filters.onlyPool && !pool.includes(supplier.supplierID)) return false;
+        if (needle && !`${supplier.supplierID} ${supplier["Supplier Name"]}`.toLowerCase().includes(needle)) return false;
+        if (filters.riskLevels.length && !filters.riskLevels.includes(supplier.Total_Risk_Index_Level)) return false;
+        if (filters.sourcing.length && !filters.sourcing.includes(supplier["Sourcing Risk Level"])) return false;
+        if (filters.complexity.length && !filters.complexity.includes(supplier["Supply Chain Complexity"])) return false;
+        // A metric that is not reported cannot clear a threshold, so those suppliers drop out.
+        return (
+          withinFloor(rawValue(supplier, "Total_Risk_Index"), minRisk) &&
+          withinCeiling(rawValue(supplier, "Total_Risk_Index"), maxRisk) &&
+          withinFloor(rawValue(supplier, "Supplier Delivery Rating"), minDelivery) &&
+          withinFloor(rawValue(supplier, "Purchase Order Volume (EUR)"), minVolume)
+        );
+      })
+      .sort((a, b) => (ascending ? 1 : -1) * (value(a, sortKey) - value(b, sortKey)));
+  }, [ascending, favourites, filters, page, pool, sortKey, suppliers]);
+
+  const visibleSuppliers = useMemo(() => matching.slice(0, ROW_LIMIT), [matching]);
+
+  const filterCount = activeFilterCount(filters);
 
   function applySort(nextKey: SortKey) {
     if (nextKey === sortKey) setAscending((current) => !current);
@@ -191,18 +230,16 @@ export function SupplierWorkspace({
       </WorkspaceHeader>
 
       <div className="mx-auto max-w-6xl space-y-4 p-6">
-        <div className="flex flex-wrap items-end justify-between gap-3">
-          <div>
-            <p className="text-sm text-black/50">Browse, rank, and inspect supplier risk in one deterministic view.</p>
-            <p className="mt-1 text-xs text-black/35">Showing {visibleSuppliers.length} of {suppliers.length || "…"} suppliers</p>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search supplier or ID" className="w-52 rounded-lg border border-black/10 bg-white px-3 py-2 text-xs outline-none ring-black/10 focus:ring-2" />
-            <select value={riskFilter} onChange={(event) => setRiskFilter(event.target.value)} className="rounded-lg border border-black/10 bg-white px-3 py-2 text-xs">
-              <option>All</option><option>Low</option><option>Medium</option><option>High</option><option>Critical</option>
-            </select>
-          </div>
+        <div>
+          <p className="text-sm text-black/50">Browse, rank, and inspect supplier risk in one deterministic view.</p>
+          <p className="mt-1 text-xs text-black/35">
+            Showing {visibleSuppliers.length} of {matching.length} {filterCount > 0 ? "matching " : ""}supplier{matching.length === 1 ? "" : "s"}
+            {suppliers.length > 0 && ` · ${suppliers.length} in the dataset`}
+            {matching.length > ROW_LIMIT && ` · first ${ROW_LIMIT} shown, narrow the filters to see the rest`}
+          </p>
         </div>
+
+        <SupplierFilters filters={filters} onChange={setFilters} showFavouriteToggle={page !== "favourites"} />
 
         <div className="overflow-hidden rounded-xl border border-black/10 bg-white shadow-sm">
           <div className="overflow-x-auto">
@@ -245,7 +282,11 @@ export function SupplierWorkspace({
             </table>
           </div>
           {loaded && visibleSuppliers.length === 0 && (
-            <p className="px-4 py-6 text-center text-xs text-black/40">{page === "favourites" ? "No favourites yet. Star a supplier to pin it here." : "No suppliers match these filters."}</p>
+            <p className="px-4 py-6 text-center text-xs text-black/40">
+              {page === "favourites" && favourites.length === 0
+                ? "No favourites yet. Star a supplier to pin it here."
+                : "No suppliers match these filters."}
+            </p>
           )}
           {!loaded && <p className="px-4 py-6 text-center text-xs text-black/40">Loading suppliers…</p>}
         </div>
