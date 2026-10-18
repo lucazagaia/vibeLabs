@@ -7,7 +7,7 @@ import type { Card } from "./types";
 /** Suppliers × metrics with colour-banded cells; the replaceability card is a 3×3 grid instead. */
 export function TableCard({ card, preview = false }: { card: Card; preview?: boolean }) {
   if (card.template === "replaceability_complexity_card" && card.facts.grid) return <ReplaceabilityGrid card={card} preview={preview} />;
-  const metrics = preview ? card.metrics.slice(0, 6) : card.metrics;
+  const metrics = preview ? card.metrics.slice(0, 4) : card.metrics;
   const suppliers = preview ? card.suppliers.slice(0, 4) : card.suppliers;
 
   const watch = new Set((card.facts.hiddenWatchouts ?? []).map((h) => `${h.supplierID}|${h.metric}`));

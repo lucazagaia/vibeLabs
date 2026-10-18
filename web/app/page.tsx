@@ -22,7 +22,8 @@ export default function Home() {
         <section className="min-h-0 border-b border-black/10 md:border-r md:border-b-0 dark:border-white/10">
           <ChatPane active={active} onChange={setActive} />
         </section>
-        <section className="min-h-0 bg-black/[0.02] dark:bg-white/[0.02]">
+        {/* min-w-0: wide content (e.g. the 22-column benchmark) scrolls inside its card instead of widening the pane */}
+        <section className="min-h-0 min-w-0 bg-black/[0.02] dark:bg-white/[0.02]">
           {active === "research_buddy" ? (
             <ResearchSidePanel />
           ) : (
