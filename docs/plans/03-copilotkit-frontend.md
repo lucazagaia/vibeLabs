@@ -39,6 +39,8 @@ These decisions are locked from Checkpoint 2:
 | F5 | `<CopilotKit runtimeUrl=… enableInspector>` turns on the **Inspector**, which shows AG-UI events. `CopilotChat` also has `inspectorTools` (default true). | Reference: `components/CopilotKit` | We use the Inspector to verify events per agent. |
 | F6 | `@copilotkit/react-core` and `@copilotkit/runtime` **1.79.1** pin **`@ag-ui/client` to exactly 1.0.2**. The runtime depends on **`zod ^3.25`**, and react-core's peer dependency is `zod >=3.25`. | `npm view … dependencies` | We install `@ag-ui/client@1.0.2` (not 1.0.3), so there aren't two `HttpAgent` copies, and **zod 3** (not 4). |
 | F7 | The ADK backend ends every run with a `STATE_SNAPSHOT` (Step 2, B7). | Step 2 smoke output | We don't use `agent.state` for app data in this step, and the dashboard keeps its own React state. That's harmless for now, and it gets handled properly with the UI-state store. |
+| F8 | *Found while building:* `create-next-app` 16.4 turns on **Cache Components** by default. CopilotKit calls `crypto.randomUUID()` while rendering, which Next rejects in the prerendered shell ("blocking-prerender-random-client"). The chat then never connected, and the send button stayed disabled. | Dev-server error + bundled Next docs (`migrating-to-cache-components.md`) | `<Providers>` is wrapped in **`<Suspense>`** in `layout.tsx`. For the same reason we **don't** generate our own `threadId`s; CopilotKit gives each `agentId` its own thread anyway. |
+| F9 | *Found while building:* the CopilotKit runtime sends **telemetry by default**. It can be turned off with `COPILOTKIT_TELEMETRY_DISABLED=true` (or `DO_NOT_TRACK=1`), which the runtime checks in `telemetry-client`. | Runtime log + source | Set in `web/.env.local.example`. |
 
 ## Files
 
