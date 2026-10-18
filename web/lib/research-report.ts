@@ -1,10 +1,6 @@
-/** Shared research report contract for the agent and future CopilotKit board UI. */
+/** Shared research report contract for the LangGraph agent and CopilotKit progress UI. */
 
-export type ResearchLane =
-  | "financial"
-  | "esg"
-  | "compliance"
-  | "news";
+export type ResearchLane = "financial" | "esg" | "compliance" | "news";
 
 export type FindingSeverity = "low" | "moderate" | "high" | "unknown";
 

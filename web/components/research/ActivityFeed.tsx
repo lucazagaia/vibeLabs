@@ -16,20 +16,20 @@ const KIND_LABEL: Record<ActivityStep["kind"], string> = {
 export function ActivityFeed({ steps }: { steps: ActivityStep[] }) {
   if (!steps.length) {
     return (
-      <p className="text-sm text-[var(--muted)]">
+      <p className="text-sm text-black/50 dark:text-white/50">
         Intermediate steps appear here once research starts.
       </p>
     );
   }
 
   return (
-    <ol className="space-y-2 max-h-[42vh] overflow-y-auto pr-1">
+    <ol className="max-h-[42vh] space-y-2 overflow-y-auto pr-1">
       {[...steps].reverse().map((step) => (
         <li
           key={step.id}
-          className="rounded-xl border border-[var(--glass-border)] bg-black/15 px-3 py-2"
+          className="rounded-xl border border-black/10 bg-black/[0.03] px-3 py-2 dark:border-white/10 dark:bg-white/[0.04]"
         >
-          <div className="flex items-center justify-between gap-2 text-xs uppercase tracking-wide text-[var(--muted)]">
+          <div className="flex items-center justify-between gap-2 text-xs uppercase tracking-wide text-black/40 dark:text-white/40">
             <span>
               {KIND_LABEL[step.kind]}
               {step.lane ? ` · ${step.lane}` : ""}
@@ -37,18 +37,18 @@ export function ActivityFeed({ steps }: { steps: ActivityStep[] }) {
             <span
               className={
                 step.status === "running"
-                  ? "text-[var(--accent)]"
+                  ? "text-teal-600 dark:text-teal-300"
                   : step.status === "skipped"
-                    ? "text-[var(--muted)]"
-                    : "text-[var(--risk-low)]"
+                    ? "text-black/40 dark:text-white/40"
+                    : "text-emerald-600 dark:text-emerald-400"
               }
             >
               {step.status}
             </span>
           </div>
-          <p className="text-sm mt-1">{step.label}</p>
+          <p className="mt-1 text-sm">{step.label}</p>
           {step.detail ? (
-            <p className="text-xs text-[var(--muted)] mt-1 whitespace-pre-wrap">
+            <p className="mt-1 whitespace-pre-wrap text-xs text-black/50 dark:text-white/50">
               {step.detail}
             </p>
           ) : null}
