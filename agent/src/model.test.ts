@@ -3,7 +3,9 @@ import { describe, it } from "node:test";
 import {
   DEFAULT_ORCHESTRATOR_MODEL,
   DEFAULT_WORKER_MODEL,
+  getChatModel,
   modelIdFor,
+  NO_STREAM_TAG,
 } from "./model.ts";
 
 describe("model roles", () => {
@@ -39,6 +41,20 @@ describe("model roles", () => {
     } finally {
       restore("NEBIUS_ORCHESTRATOR_MODEL", previous.orchestrator);
       restore("NEBIUS_MODEL", previous.legacy);
+    }
+  });
+
+  it("never streams internal JSON output to the chat", () => {
+    const previous = process.env.NEBIUS_API_KEY;
+    process.env.NEBIUS_API_KEY = "test-key";
+    try {
+      for (const role of ["orchestrator", "worker"] as const) {
+        const model = getChatModel(role);
+        assert.equal(model.disableStreaming, true);
+        assert.ok(model.tags?.includes(NO_STREAM_TAG));
+      }
+    } finally {
+      restore("NEBIUS_API_KEY", previous);
     }
   });
 });
