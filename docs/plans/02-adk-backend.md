@@ -33,6 +33,8 @@ So the backend serves **two independent ADK agents**:
 | B3 | The README recommends **`ADKAgent.from_app(App(..., resumability_config=ResumabilityConfig(is_resumable=True)))`** whenever the agent pauses for client-side tools and resumes. Every frontend tool is long-running (the run pauses until the browser answers). | ag-ui-adk README ("HITL") | Both agents are wrapped in an ADK `App` with resumability on. |
 | B4 | The quickstart uses `session_timeout_seconds=3600` and `use_in_memory_services=True`. `use_thread_id_as_session_id=True` maps a CopilotKit thread to an ADK session one to one. | CopilotKit ADK quickstart, `ADKAgent` signature | We use the same settings. Persistence comes with the UI-state store later. |
 | B5 | Thought parts (Nemotron `reasoning_content`, confirmed in Step 1) are emitted as AG-UI **REASONING** events, separate from `TEXT_MESSAGE`. | `ag_ui_adk/event_translator.py` | The chat stays clean. Step 3 decides whether to show reasoning. |
+| B6 | *Found while building:* `fastapi 0.143.x` requires `opentelemetry-api>=1.44`, but `google-adk 2.12` caps it at `<=1.42.1`, so the planned `fastapi==0.143.*` pin can't be resolved. | `uv add` resolver output | FastAPI is pinned as `>=0.133,<1` (google-adk's own range). It resolves to **0.141.1**. |
+| B7 | *Found while building:* every run ends with a `STATE_SNAPSHOT` event (the ADK session state) just before `RUN_FINISHED`. | `agui_smoke.py` output | This matters for the concept plan's UI-state store, where the backend store is the source of truth. The frontend must not let this snapshot overwrite app state. Handle it in Step 3 and later. |
 
 ## Files
 
@@ -41,7 +43,7 @@ vibeLabs/
 ├─ data/Siemens.csv                 # git mv from repo root (planned in 00)
 ├─ docs/Siemens_into.md             # git mv from repo root
 └─ agent/
-   ├─ pyproject.toml                # + ag-ui-adk==0.10.*, fastapi==0.143.*, uvicorn[standard]
+   ├─ pyproject.toml                # + ag-ui-adk==0.10.*, fastapi>=0.133,<1 (see B6), uvicorn[standard]
    ├─ main.py                       # FastAPI app: /data, /research, /health
    ├─ buddy/
    │  ├─ paths.py                   # REPO_DIR, DATA_CSV (one place for file paths)
@@ -128,7 +130,7 @@ def build_data_buddy() -> LlmAgent:
 
 ## Execution order, with a pause
 1. Run `git mv Siemens.csv data/` and `git mv Siemens_into.md docs/`, and add `buddy/paths.py`. Update `adk_hello` to import the shared `dataset_info`.
-2. `uv add "ag-ui-adk==0.10.*" "fastapi==0.143.*" "uvicorn[standard]"`, then check that `uv.lock` resolves.
+2. `uv add "ag-ui-adk==0.10.*" "fastapi>=0.133,<1" "uvicorn[standard]"` (see B6), then check that `uv.lock` resolves.
 3. Write `main.py` and the two agent modules.
 4. Start the server in the background with `uv run uvicorn main:app --port 8000`. Check `/health`, `/data/capabilities` and `/research/capabilities`.
 5. Run `agui_smoke.py` S1–S4. Then stop the server.
