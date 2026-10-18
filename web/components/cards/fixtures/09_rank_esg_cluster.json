@@ -207,5 +207,6 @@
       "value": 76.0
     }
   },
-  "summary": "Lower is better. Worst on average across these metrics: SUPP_00008 (66.7). Biggest single spike: SUPP_00008 on safety incidents (76)."
+  "summary": "Lower is better. Worst on average across these metrics: SUPP_00008 (66.7). Biggest single spike: SUPP_00008 on safety incidents (76).",
+  "panels": null
 }

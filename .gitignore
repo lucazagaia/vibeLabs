@@ -3,15 +3,27 @@
 .env.*
 !.env.example
 !.env.local.example
+agent/.env
+deep_research/.env
 
 # Python
 .venv/
+deep_research/.venv/
 __pycache__/
+**/__pycache__/
 *.pyc
+.pytest_cache/
+deep_research/.pytest_cache/
 
 # Node / Next.js
 node_modules/
+agent/node_modules/
+agent/agent/node_modules/
+agent/dist/
+agent/.langgraph_api/
 .next/
+/out/
+/build
 
 # Local databases (incl. ADK CLI session stores)
 *.sqlite
@@ -19,5 +31,17 @@ node_modules/
 *.db
 .adk/
 
-# OS
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# misc
 .DS_Store
+*.pem
+
+# vercel / typescript
+.vercel
+*.tsbuildinfo
+next-env.d.ts

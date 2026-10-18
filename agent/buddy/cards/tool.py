@@ -4,52 +4,23 @@ The agent fills the arguments (understanding the language); everything else here
 The returned card is rendered by the frontend straight from the tool result.
 """
 
-import hashlib
-import json
 import logging
 from typing import Literal
 
 from google.adk.tools import ToolContext
+from google.genai import types
 
-from buddy.cards import data
-from buddy.cards.facts import compute
-from buddy.cards.preflight import preflight
-from buddy.cards.route import route
-from buddy.cards.schema import GLOSSARY, LABELS, VALUE_DIRECTION, Card, Direction, Intent, Mention, MetricKey, ToolResult
+from buddy.cards.build import build_card  # noqa: F401  (re-exported: tests and make_fixtures import it from here)
+from buddy.cards.composite import MAX_PANELS, build_all_metrics, build_composite, panel_groups
+from buddy.cards.schema import GLOSSARY, LABELS, Direction, Intent, Mention, MetricKey, ToolResult
 from buddy.cards.select import select_suppliers
-from buddy.cards.summary import write
-from buddy.cards.validate import clean_enums, needs_choice, resolve_intent, supplier_ids_in
+from buddy.cards.thread import card_supplier_lists, user_texts
+from buddy.cards.validate import (chose_all, clean_enums, cue_metrics, needs_choice, refers_to_list, resolve_intent,
+                                  supplier_ids_in, top_n, wants_all_metrics)
 
 log = logging.getLogger(__name__)
 
-CATEGORY_ORDER = {"Low": 0, "Medium": 1, "High": 2, "Simple": 0, "Moderate": 1, "Complex": 2}
 _results_by_invocation: dict[str, dict] = {}  # one card per agent turn, even if the model calls twice
-
-
-def build_card(intent: str, direction: str, metrics: list[str], ids: list[str]) -> dict:
-    rows = [data.by_id()[i] for i in ids]
-    r = route(intent, direction, metrics, ids)
-    r, shape = preflight(r, rows)
-    facts, flags = compute(r, rows)
-    key = (lambda row: CATEGORY_ORDER[row[r.sort_field]]) if VALUE_DIRECTION[r.sort_field] == "categorical" else (lambda row: row[r.sort_field])
-    rows = sorted(rows, key=lambda row: (key(row), row["supplierID"]), reverse=r.sort_desc)
-    card = {
-        "cardId": hashlib.sha1(json.dumps([r.template, r.metrics, ids, direction]).encode()).hexdigest()[:12],
-        "renderer": r.renderer, "template": r.template, "title": r.title, "intent": intent, "direction": direction,
-        "metrics": r.metrics, "metricLabels": {k: LABELS[k] for k in r.metrics},
-        "valueDirection": {k: VALUE_DIRECTION[k] for k in r.metrics},
-        "sort": {"field": r.sort_field, "direction": "desc" if r.sort_desc else "asc"},
-        "dataShape": shape.model_dump(), "quadrants": r.quadrants,
-        "suppliers": [{
-            "supplierID": row["supplierID"], "supplierName": row["Supplier Name"],
-            "values": {k: row[k] for k in r.metrics},
-            "levels": {f"{k}_Level": row[f"{k}_Level"] for k in r.metrics if f"{k}_Level" in row},
-            "flags": flags[row["supplierID"]],
-        } for row in rows],
-        "facts": facts, "summary": "",
-    }
-    card["summary"] = write(card)
-    return Card.model_validate(card).model_dump()
 
 
 def compare_suppliers(
@@ -68,7 +39,8 @@ def compare_suppliers(
     if invocation and invocation in _results_by_invocation:
         return _results_by_invocation[invocation]  # already answered this turn: same card, no second card
     try:
-        result = _compare(request, intent, direction, mentions, use_compare_tray, rank_by, rank_order, limit, tool_context)
+        result = _compare(request, intent, direction, mentions, supplier_ids, use_compare_tray, rank_by, rank_order, limit,
+                          tool_context)
     except Exception:  # never crash the agent run: a failed card is an answerable error
         log.exception("compare_suppliers failed for request %r", request)
         result = ToolResult(status="error", message="Sorry, I couldn't build that comparison card. Try naming the suppliers "
@@ -78,33 +50,125 @@ def compare_suppliers(
     return result
 
 
-def _compare(request, intent, direction, mentions, use_compare_tray, rank_by, rank_order, limit, tool_context) -> dict:
-    ms =[m if isinstance(m, dict) else m.model_dump() for m in mentions]
+def _compare(request, intent, direction, mentions, supplier_ids, use_compare_tray, rank_by, rank_order, limit,
+             tool_context) -> dict:
+    said = user_texts(tool_context)  # the buyer's messages in this thread
+    latest = said[-1] if said else request
+    texts = f"{request}\n{latest}"
+    all_metrics = wants_all_metrics(texts)
+    take_all = chose_all(latest)  # answered "which one?" with "all of them"
+
+    ms = [m if isinstance(m, dict) else m.model_dump() for m in mentions]
+    cues = cue_metrics(texts)
     for m in ms:
         m["metrics"] = clean_enums("compare", "safest", m["metrics"], None)[2]
-    for m in ms:  # ambiguity -> the buyer chooses one option
-        if needs_choice(m["metrics"], request):
-            options = [f"{LABELS[k]}: {GLOSSARY[k]}" for k in m["metrics"]]
+        narrowed = [k for k in m["metrics"] if k in cues]
+        if len(m["metrics"]) > 1 and len(narrowed) == 1:
+            m["metrics"] = narrowed  # a clear cue word in the buyer's message settles it: no question
+    if all_metrics:
+        ms = []  # "all metrics" / "full analysis": everything, never a 23-option question
+    for m in ms:  # ambiguity -> the buyer chooses one option (or all of them)
+        if not take_all and needs_choice(m["metrics"], request):
+            options = [f"{LABELS[k]}: {GLOSSARY[k]}" for k in m["metrics"]] + ["All of them: one panel per option, side by side"]
             return ToolResult(status="needs_clarification",
                               question=f"'{m['phrase']}' can mean different things. Which one should I compare?",
                               options=options).model_dump(exclude_none=True)
-    metrics = list(dict.fromkeys(k for m in ms for k in m["metrics"]))  # mentions with no metric add nothing
+    groups = [m["metrics"] for m in ms if m["metrics"]]
+    metrics = list(dict.fromkeys(k for g in groups for k in g))
+    if not metrics and not all_metrics:
+        metrics = cues  # the model missed a clear cue word ("bankrupt"): use the buyer's own words
+        groups = [[k] for k in cues]
     intent, direction, metrics, rank_by = clean_enums(intent, direction, metrics, rank_by)
     intent = resolve_intent(intent, metrics)
 
-    # Supplier IDs come only from the buyer's own words; anything else the model passed is dropped.
-    request_ids = supplier_ids_in(request)
-    tray = (tool_context.state.get("ui") or {}).get("compare_tray", []) if tool_context else []
-    sel = select_suppliers(request_ids, tray, use_compare_tray, rank_by, rank_order, limit, direction)
-    if sel.question:
-        return ToolResult(status="needs_clarification", question=sel.question,
-                          options=["Name supplier IDs", "The 10 safest by total risk", "The 10 riskiest by total risk"]
-                          ).model_dump(exclude_none=True)
-    if sel.error:
-        return ToolResult(status="error", message=sel.error).model_dump(exclude_none=True)
+    ids, sel_error = _suppliers(request, latest, said, supplier_ids, use_compare_tray, rank_by, rank_order, limit, direction,
+                                tool_context)
+    if sel_error:
+        return sel_error
 
-    card = build_card(intent, direction, metrics, sel.ids)
+    if all_metrics:
+        card = build_all_metrics(direction, ids)
+    else:
+        panels = panel_groups(groups) if intent == "compare" else [metrics]
+        if 1 < len(panels) <= MAX_PANELS:
+            card = build_composite(direction, panels, ids)
+        else:
+            card = build_card(intent, direction, metrics, ids)
     return ToolResult(status="ok", card=card, summary=card["summary"]).model_dump(exclude_none=True)
+
+
+def _suppliers(request, latest, said, supplier_ids, use_compare_tray, rank_by, rank_order, limit, direction, tool_context):
+    """Who to compare. IDs are never invented: they come from the buyer's messages or from a card already shown.
+
+    1. IDs in the request or the buyer's latest message
+    2. "these" / "this list" / "the top three of them": the last card's suppliers, in card order
+    3. IDs the model passed, if the buyer wrote them earlier in the thread or they were on a card
+    4. the compare tray, or a ranking ("the 10 safest by total risk")
+    5. nothing said at all, but a card is on screen: that card's suppliers
+    """
+    cards = card_supplier_lists(tool_context)
+    last_card = cards[-1] if cards else []
+    grounded = {i for t in said for i in supplier_ids_in(t)} | {i for c in cards for i in c}
+
+    ids = supplier_ids_in(request) or supplier_ids_in(latest)
+    if not ids and last_card and (refers_to_list(request) or refers_to_list(latest)):
+        n = top_n(latest) or top_n(request)
+        ids = last_card[:n] if n else last_card
+    if not ids:
+        ids = [i for i in dict.fromkeys(supplier_ids or []) if i in grounded]
+    tray = (tool_context.state.get("ui") or {}).get("compare_tray", []) if tool_context else []
+    sel = select_suppliers(ids, tray, use_compare_tray, rank_by, rank_order, limit, direction)
+    if sel.question and last_card:
+        sel = select_suppliers(last_card, [], False, None, None, None, direction)
+    if sel.question:
+        return [], ToolResult(status="needs_clarification", question=sel.question,
+                              options=["Name supplier IDs", "The 10 safest by total risk", "The 10 riskiest by total risk"]
+                              ).model_dump(exclude_none=True)
+    if sel.error:
+        return [], ToolResult(status="error", message=sel.error).model_dump(exclude_none=True)
+    return sel.ids, None
+
+
+# What the model needs from a result: never the card itself (the browser gets that from the tool event),
+# but its title and supplier IDs, so follow-ups like "compare the top three of these" can name them.
+MODEL_FIELDS = ("status", "summary", "question", "options", "message")
+
+
+def model_view(response: dict) -> dict:
+    view = {k: v for k, v in response.items() if k in MODEL_FIELDS}
+    card = response.get("card")
+    if isinstance(card, dict):
+        view["card"] = {"title": card.get("title"), "supplierIDs": [s["supplierID"] for s in card.get("suppliers", [])]}
+        if card.get("panels"):
+            view["card"]["panels"] = [p["title"] for p in card["panels"]]
+    return view
+
+
+def slim_card_results(callback_context, llm_request):
+    """before_model_callback: the model sees `compare_suppliers` results without the card's data.
+
+    Seen live: every card (3-25 KB of JSON) stayed in the thread history, and after ~4 comparisons
+    Nemotron started answering with made-up "[ERROR: Max turns (10) exceeded]"-style text. The card is
+    only for the browser; the model replies from `summary` and sees the card's title and supplier IDs.
+    New objects are built so the stored session
+    (and the card the frontend renders) is not modified.
+    """
+    contents = []
+    for content in llm_request.contents:
+        parts = content.parts or []
+        if not any(p.function_response and p.function_response.name == "compare_suppliers" for p in parts):
+            contents.append(content)
+            continue
+        slim_parts = []
+        for p in parts:
+            fr = p.function_response
+            if fr and fr.name == "compare_suppliers" and isinstance(fr.response, dict):
+                slim = model_view(fr.response)
+                p = types.Part(function_response=types.FunctionResponse(id=fr.id, name=fr.name, response=slim))
+            slim_parts.append(p)
+        contents.append(types.Content(role=content.role, parts=slim_parts))
+    llm_request.contents = contents
+    return None
 
 
 compare_suppliers.__doc__ = (

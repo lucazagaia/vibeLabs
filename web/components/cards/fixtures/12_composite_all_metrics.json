@@ -1,0 +1,1812 @@
+{
+  "cardId": "01abfb074fa4",
+  "renderer": "composite",
+  "template": "composite_card",
+  "title": "Full supplier analysis",
+  "intent": "overview",
+  "direction": "safest",
+  "metrics": [
+    "Total_Risk_Index",
+    "Industry_Benchmark_Score",
+    "Media_Sentiment_Score",
+    "External_Intelligence_Score",
+    "Sub_Tier_Visibility_Score",
+    "Labor_Stability_Score",
+    "Financial_Health_Score",
+    "Compliance_Risk_Score",
+    "Safety_Incident_Score",
+    "Environmental_Exposure_Score",
+    "ESG_Performance_Score",
+    "Digital_Security_Score",
+    "Operational_Resilience_Score",
+    "Market_Sentiment_Score",
+    "Quality_Risk_Score",
+    "Governance_Risk_Score",
+    "Geopolitical_Risk_Score",
+    "Political_Stability_Score",
+    "Credit_Rating_Score",
+    "Purchase Order Volume (EUR)",
+    "Supplier Delivery Rating",
+    "Order Confirmation Rate",
+    "Order Change Rate"
+  ],
+  "metricLabels": {
+    "Total_Risk_Index": "Total risk",
+    "Industry_Benchmark_Score": "Industry benchmark",
+    "Media_Sentiment_Score": "Media sentiment",
+    "External_Intelligence_Score": "External intelligence",
+    "Sub_Tier_Visibility_Score": "Sub-tier visibility",
+    "Labor_Stability_Score": "Labor stability",
+    "Financial_Health_Score": "Financial health",
+    "Compliance_Risk_Score": "Compliance risk",
+    "Safety_Incident_Score": "Safety incidents",
+    "Environmental_Exposure_Score": "Environmental exposure",
+    "ESG_Performance_Score": "ESG performance",
+    "Digital_Security_Score": "Digital security",
+    "Operational_Resilience_Score": "Operational resilience",
+    "Market_Sentiment_Score": "Market sentiment",
+    "Quality_Risk_Score": "Quality risk",
+    "Governance_Risk_Score": "Governance risk",
+    "Geopolitical_Risk_Score": "Geopolitical risk",
+    "Political_Stability_Score": "Political stability",
+    "Credit_Rating_Score": "Credit rating",
+    "Purchase Order Volume (EUR)": "Spend (PO volume, EUR)",
+    "Supplier Delivery Rating": "Delivery rating",
+    "Order Confirmation Rate": "Order confirmation rate",
+    "Order Change Rate": "Order change rate"
+  },
+  "valueDirection": {
+    "Total_Risk_Index": "lower_is_better",
+    "Industry_Benchmark_Score": "lower_is_better",
+    "Media_Sentiment_Score": "lower_is_better",
+    "External_Intelligence_Score": "lower_is_better",
+    "Sub_Tier_Visibility_Score": "lower_is_better",
+    "Labor_Stability_Score": "lower_is_better",
+    "Financial_Health_Score": "lower_is_better",
+    "Compliance_Risk_Score": "lower_is_better",
+    "Safety_Incident_Score": "lower_is_better",
+    "Environmental_Exposure_Score": "lower_is_better",
+    "ESG_Performance_Score": "lower_is_better",
+    "Digital_Security_Score": "lower_is_better",
+    "Operational_Resilience_Score": "lower_is_better",
+    "Market_Sentiment_Score": "lower_is_better",
+    "Quality_Risk_Score": "lower_is_better",
+    "Governance_Risk_Score": "lower_is_better",
+    "Geopolitical_Risk_Score": "lower_is_better",
+    "Political_Stability_Score": "lower_is_better",
+    "Credit_Rating_Score": "lower_is_better",
+    "Purchase Order Volume (EUR)": "higher_means_more_exposure",
+    "Supplier Delivery Rating": "higher_is_better",
+    "Order Confirmation Rate": "higher_is_better",
+    "Order Change Rate": "lower_is_better"
+  },
+  "sort": {
+    "field": "Total_Risk_Index",
+    "direction": "asc"
+  },
+  "dataShape": {
+    "flags": [],
+    "scale": "fixed_0_100",
+    "fallbackApplied": null,
+    "notes": []
+  },
+  "referenceBands": [
+    {
+      "label": "Low",
+      "min": 0,
+      "max": 24
+    },
+    {
+      "label": "Medium",
+      "min": 25,
+      "max": 49
+    },
+    {
+      "label": "High",
+      "min": 50,
+      "max": 74
+    },
+    {
+      "label": "Critical",
+      "min": 75,
+      "max": 100
+    }
+  ],
+  "quadrants": null,
+  "suppliers": [
+    {
+      "supplierID": "SUPP_00141",
+      "supplierName": "Elite Industries 335",
+      "values": {},
+      "levels": {},
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00287",
+      "supplierName": "Global Systems 788",
+      "values": {},
+      "levels": {},
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00731",
+      "supplierName": "Strategic Logistics 386",
+      "values": {},
+      "levels": {},
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00012",
+      "supplierName": "Dynamic Group 434",
+      "values": {},
+      "levels": {},
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00450",
+      "supplierName": "Precision Partners 464",
+      "values": {},
+      "levels": {},
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00018",
+      "supplierName": "Global Logistics 175",
+      "values": {},
+      "levels": {},
+      "flags": []
+    }
+  ],
+  "facts": {
+    "template": "composite_card",
+    "panels": [
+      "overall_supplier_benchmark_card",
+      "financial_credit_card",
+      "compliance_governance_card",
+      "esg_workforce_card",
+      "geopolitical_external_card",
+      "reputation_cluster_card",
+      "performance_reliability_card"
+    ]
+  },
+  "summary": "Safest overall: SUPP_00141; riskiest overall: SUPP_00018. Largest spend: SUPP_00731; weakest delivery: SUPP_00018. Watch: SUPP_00141 looks moderate overall (total risk 45) but has critical political stability (78) (+1 more). Detail panels: financial health vs credit rating, compliance vs governance risk, esg and workforce, geopolitical and external exposure, reputation signals & operational performance.",
+  "panels": [
+    {
+      "cardId": "3b472cbf2b88",
+      "renderer": "table",
+      "template": "overall_supplier_benchmark_card",
+      "title": "Overall supplier benchmark",
+      "intent": "overview",
+      "direction": "safest",
+      "metrics": [
+        "Total_Risk_Index",
+        "Industry_Benchmark_Score",
+        "Media_Sentiment_Score",
+        "External_Intelligence_Score",
+        "Sub_Tier_Visibility_Score",
+        "Labor_Stability_Score",
+        "Financial_Health_Score",
+        "Compliance_Risk_Score",
+        "Safety_Incident_Score",
+        "Environmental_Exposure_Score",
+        "ESG_Performance_Score",
+        "Digital_Security_Score",
+        "Operational_Resilience_Score",
+        "Market_Sentiment_Score",
+        "Quality_Risk_Score",
+        "Governance_Risk_Score",
+        "Geopolitical_Risk_Score",
+        "Political_Stability_Score",
+        "Credit_Rating_Score",
+        "Purchase Order Volume (EUR)",
+        "Supplier Delivery Rating",
+        "Order Confirmation Rate"
+      ],
+      "metricLabels": {
+        "Total_Risk_Index": "Total risk",
+        "Industry_Benchmark_Score": "Industry benchmark",
+        "Media_Sentiment_Score": "Media sentiment",
+        "External_Intelligence_Score": "External intelligence",
+        "Sub_Tier_Visibility_Score": "Sub-tier visibility",
+        "Labor_Stability_Score": "Labor stability",
+        "Financial_Health_Score": "Financial health",
+        "Compliance_Risk_Score": "Compliance risk",
+        "Safety_Incident_Score": "Safety incidents",
+        "Environmental_Exposure_Score": "Environmental exposure",
+        "ESG_Performance_Score": "ESG performance",
+        "Digital_Security_Score": "Digital security",
+        "Operational_Resilience_Score": "Operational resilience",
+        "Market_Sentiment_Score": "Market sentiment",
+        "Quality_Risk_Score": "Quality risk",
+        "Governance_Risk_Score": "Governance risk",
+        "Geopolitical_Risk_Score": "Geopolitical risk",
+        "Political_Stability_Score": "Political stability",
+        "Credit_Rating_Score": "Credit rating",
+        "Purchase Order Volume (EUR)": "Spend (PO volume, EUR)",
+        "Supplier Delivery Rating": "Delivery rating",
+        "Order Confirmation Rate": "Order confirmation rate"
+      },
+      "valueDirection": {
+        "Total_Risk_Index": "lower_is_better",
+        "Industry_Benchmark_Score": "lower_is_better",
+        "Media_Sentiment_Score": "lower_is_better",
+        "External_Intelligence_Score": "lower_is_better",
+        "Sub_Tier_Visibility_Score": "lower_is_better",
+        "Labor_Stability_Score": "lower_is_better",
+        "Financial_Health_Score": "lower_is_better",
+        "Compliance_Risk_Score": "lower_is_better",
+        "Safety_Incident_Score": "lower_is_better",
+        "Environmental_Exposure_Score": "lower_is_better",
+        "ESG_Performance_Score": "lower_is_better",
+        "Digital_Security_Score": "lower_is_better",
+        "Operational_Resilience_Score": "lower_is_better",
+        "Market_Sentiment_Score": "lower_is_better",
+        "Quality_Risk_Score": "lower_is_better",
+        "Governance_Risk_Score": "lower_is_better",
+        "Geopolitical_Risk_Score": "lower_is_better",
+        "Political_Stability_Score": "lower_is_better",
+        "Credit_Rating_Score": "lower_is_better",
+        "Purchase Order Volume (EUR)": "higher_means_more_exposure",
+        "Supplier Delivery Rating": "higher_is_better",
+        "Order Confirmation Rate": "higher_is_better"
+      },
+      "sort": {
+        "field": "Total_Risk_Index",
+        "direction": "asc"
+      },
+      "dataShape": {
+        "flags": [],
+        "scale": "fixed_0_100",
+        "fallbackApplied": null,
+        "notes": []
+      },
+      "referenceBands": [
+        {
+          "label": "Low",
+          "min": 0,
+          "max": 24
+        },
+        {
+          "label": "Medium",
+          "min": 25,
+          "max": 49
+        },
+        {
+          "label": "High",
+          "min": 50,
+          "max": 74
+        },
+        {
+          "label": "Critical",
+          "min": 75,
+          "max": 100
+        }
+      ],
+      "quadrants": null,
+      "suppliers": [
+        {
+          "supplierID": "SUPP_00141",
+          "supplierName": "Elite Industries 335",
+          "values": {
+            "Total_Risk_Index": 45.0,
+            "Industry_Benchmark_Score": 39.0,
+            "Media_Sentiment_Score": 33.0,
+            "External_Intelligence_Score": 21.0,
+            "Sub_Tier_Visibility_Score": 57.0,
+            "Labor_Stability_Score": 38.0,
+            "Financial_Health_Score": 42.0,
+            "Compliance_Risk_Score": 66.0,
+            "Safety_Incident_Score": 42.0,
+            "Environmental_Exposure_Score": 70.0,
+            "ESG_Performance_Score": 23.0,
+            "Digital_Security_Score": 40.0,
+            "Operational_Resilience_Score": 28.0,
+            "Market_Sentiment_Score": 27.0,
+            "Quality_Risk_Score": 41.0,
+            "Governance_Risk_Score": 53.0,
+            "Geopolitical_Risk_Score": 65.0,
+            "Political_Stability_Score": 78.0,
+            "Credit_Rating_Score": 43.0,
+            "Purchase Order Volume (EUR)": 23257.53,
+            "Supplier Delivery Rating": 96.82,
+            "Order Confirmation Rate": 90.31
+          },
+          "levels": {
+            "Total_Risk_Index_Level": "Medium",
+            "Industry_Benchmark_Score_Level": "Medium",
+            "Media_Sentiment_Score_Level": "Medium",
+            "External_Intelligence_Score_Level": "Low",
+            "Sub_Tier_Visibility_Score_Level": "High",
+            "Labor_Stability_Score_Level": "Medium",
+            "Financial_Health_Score_Level": "Medium",
+            "Compliance_Risk_Score_Level": "High",
+            "Safety_Incident_Score_Level": "Medium",
+            "Environmental_Exposure_Score_Level": "High",
+            "ESG_Performance_Score_Level": "Low",
+            "Digital_Security_Score_Level": "Medium",
+            "Operational_Resilience_Score_Level": "Medium",
+            "Market_Sentiment_Score_Level": "Medium",
+            "Quality_Risk_Score_Level": "Medium",
+            "Governance_Risk_Score_Level": "High",
+            "Geopolitical_Risk_Score_Level": "High",
+            "Political_Stability_Score_Level": "Critical",
+            "Credit_Rating_Score_Level": "Medium"
+          },
+          "flags": [
+            "best",
+            "hidden_watchout"
+          ]
+        },
+        {
+          "supplierID": "SUPP_00287",
+          "supplierName": "Global Systems 788",
+          "values": {
+            "Total_Risk_Index": 48.0,
+            "Industry_Benchmark_Score": 33.0,
+            "Media_Sentiment_Score": 21.0,
+            "External_Intelligence_Score": 33.0,
+            "Sub_Tier_Visibility_Score": 50.0,
+            "Labor_Stability_Score": 46.0,
+            "Financial_Health_Score": 49.0,
+            "Compliance_Risk_Score": 26.0,
+            "Safety_Incident_Score": 52.0,
+            "Environmental_Exposure_Score": 62.0,
+            "ESG_Performance_Score": 51.0,
+            "Digital_Security_Score": 49.0,
+            "Operational_Resilience_Score": 56.0,
+            "Market_Sentiment_Score": 31.0,
+            "Quality_Risk_Score": 56.0,
+            "Governance_Risk_Score": 40.0,
+            "Geopolitical_Risk_Score": 78.0,
+            "Political_Stability_Score": 58.0,
+            "Credit_Rating_Score": 38.0,
+            "Purchase Order Volume (EUR)": 993199.36,
+            "Supplier Delivery Rating": 82.51,
+            "Order Confirmation Rate": 88.27
+          },
+          "levels": {
+            "Total_Risk_Index_Level": "Medium",
+            "Industry_Benchmark_Score_Level": "Medium",
+            "Media_Sentiment_Score_Level": "Low",
+            "External_Intelligence_Score_Level": "Medium",
+            "Sub_Tier_Visibility_Score_Level": "High",
+            "Labor_Stability_Score_Level": "Medium",
+            "Financial_Health_Score_Level": "Medium",
+            "Compliance_Risk_Score_Level": "Medium",
+            "Safety_Incident_Score_Level": "High",
+            "Environmental_Exposure_Score_Level": "High",
+            "ESG_Performance_Score_Level": "High",
+            "Digital_Security_Score_Level": "Medium",
+            "Operational_Resilience_Score_Level": "High",
+            "Market_Sentiment_Score_Level": "Medium",
+            "Quality_Risk_Score_Level": "High",
+            "Governance_Risk_Score_Level": "Medium",
+            "Geopolitical_Risk_Score_Level": "Critical",
+            "Political_Stability_Score_Level": "High",
+            "Credit_Rating_Score_Level": "Medium"
+          },
+          "flags": [
+            "hidden_watchout"
+          ]
+        },
+        {
+          "supplierID": "SUPP_00731",
+          "supplierName": "Strategic Logistics 386",
+          "values": {
+            "Total_Risk_Index": 57.0,
+            "Industry_Benchmark_Score": 51.0,
+            "Media_Sentiment_Score": 56.0,
+            "External_Intelligence_Score": 54.0,
+            "Sub_Tier_Visibility_Score": 63.0,
+            "Labor_Stability_Score": 65.0,
+            "Financial_Health_Score": 53.0,
+            "Compliance_Risk_Score": 45.0,
+            "Safety_Incident_Score": 51.0,
+            "Environmental_Exposure_Score": 62.0,
+            "ESG_Performance_Score": 45.0,
+            "Digital_Security_Score": 62.0,
+            "Operational_Resilience_Score": 52.0,
+            "Market_Sentiment_Score": 63.0,
+            "Quality_Risk_Score": 65.0,
+            "Governance_Risk_Score": 72.0,
+            "Geopolitical_Risk_Score": 48.0,
+            "Political_Stability_Score": 58.0,
+            "Credit_Rating_Score": 76.0,
+            "Purchase Order Volume (EUR)": 5028900.83,
+            "Supplier Delivery Rating": 85.02,
+            "Order Confirmation Rate": 95.83
+          },
+          "levels": {
+            "Total_Risk_Index_Level": "High",
+            "Industry_Benchmark_Score_Level": "High",
+            "Media_Sentiment_Score_Level": "High",
+            "External_Intelligence_Score_Level": "High",
+            "Sub_Tier_Visibility_Score_Level": "High",
+            "Labor_Stability_Score_Level": "High",
+            "Financial_Health_Score_Level": "High",
+            "Compliance_Risk_Score_Level": "Medium",
+            "Safety_Incident_Score_Level": "High",
+            "Environmental_Exposure_Score_Level": "High",
+            "ESG_Performance_Score_Level": "Medium",
+            "Digital_Security_Score_Level": "High",
+            "Operational_Resilience_Score_Level": "High",
+            "Market_Sentiment_Score_Level": "High",
+            "Quality_Risk_Score_Level": "High",
+            "Governance_Risk_Score_Level": "High",
+            "Geopolitical_Risk_Score_Level": "Medium",
+            "Political_Stability_Score_Level": "High",
+            "Credit_Rating_Score_Level": "Critical"
+          },
+          "flags": []
+        },
+        {
+          "supplierID": "SUPP_00012",
+          "supplierName": "Dynamic Group 434",
+          "values": {
+            "Total_Risk_Index": 60.0,
+            "Industry_Benchmark_Score": 50.0,
+            "Media_Sentiment_Score": 50.0,
+            "External_Intelligence_Score": 50.0,
+            "Sub_Tier_Visibility_Score": 77.0,
+            "Labor_Stability_Score": 33.0,
+            "Financial_Health_Score": 54.0,
+            "Compliance_Risk_Score": 54.0,
+            "Safety_Incident_Score": 70.0,
+            "Environmental_Exposure_Score": 42.0,
+            "ESG_Performance_Score": 68.0,
+            "Digital_Security_Score": 79.0,
+            "Operational_Resilience_Score": 91.0,
+            "Market_Sentiment_Score": 53.0,
+            "Quality_Risk_Score": 55.0,
+            "Governance_Risk_Score": 65.0,
+            "Geopolitical_Risk_Score": 45.0,
+            "Political_Stability_Score": 40.0,
+            "Credit_Rating_Score": 57.0,
+            "Purchase Order Volume (EUR)": 489626.69,
+            "Supplier Delivery Rating": 85.54,
+            "Order Confirmation Rate": 87.25
+          },
+          "levels": {
+            "Total_Risk_Index_Level": "High",
+            "Industry_Benchmark_Score_Level": "High",
+            "Media_Sentiment_Score_Level": "High",
+            "External_Intelligence_Score_Level": "High",
+            "Sub_Tier_Visibility_Score_Level": "Critical",
+            "Labor_Stability_Score_Level": "Medium",
+            "Financial_Health_Score_Level": "High",
+            "Compliance_Risk_Score_Level": "High",
+            "Safety_Incident_Score_Level": "High",
+            "Environmental_Exposure_Score_Level": "Medium",
+            "ESG_Performance_Score_Level": "High",
+            "Digital_Security_Score_Level": "Critical",
+            "Operational_Resilience_Score_Level": "Critical",
+            "Market_Sentiment_Score_Level": "High",
+            "Quality_Risk_Score_Level": "High",
+            "Governance_Risk_Score_Level": "High",
+            "Geopolitical_Risk_Score_Level": "Medium",
+            "Political_Stability_Score_Level": "Medium",
+            "Credit_Rating_Score_Level": "High"
+          },
+          "flags": []
+        },
+        {
+          "supplierID": "SUPP_00450",
+          "supplierName": "Precision Partners 464",
+          "values": {
+            "Total_Risk_Index": 62.0,
+            "Industry_Benchmark_Score": 72.0,
+            "Media_Sentiment_Score": 73.0,
+            "External_Intelligence_Score": 62.0,
+            "Sub_Tier_Visibility_Score": 64.0,
+            "Labor_Stability_Score": 29.0,
+            "Financial_Health_Score": 65.0,
+            "Compliance_Risk_Score": 73.0,
+            "Safety_Incident_Score": 38.0,
+            "Environmental_Exposure_Score": 75.0,
+            "ESG_Performance_Score": 41.0,
+            "Digital_Security_Score": 55.0,
+            "Operational_Resilience_Score": 68.0,
+            "Market_Sentiment_Score": 79.0,
+            "Quality_Risk_Score": 67.0,
+            "Governance_Risk_Score": 70.0,
+            "Geopolitical_Risk_Score": 63.0,
+            "Political_Stability_Score": 43.0,
+            "Credit_Rating_Score": 58.0,
+            "Purchase Order Volume (EUR)": 3100563.42,
+            "Supplier Delivery Rating": 86.06,
+            "Order Confirmation Rate": 75.57
+          },
+          "levels": {
+            "Total_Risk_Index_Level": "High",
+            "Industry_Benchmark_Score_Level": "High",
+            "Media_Sentiment_Score_Level": "High",
+            "External_Intelligence_Score_Level": "High",
+            "Sub_Tier_Visibility_Score_Level": "High",
+            "Labor_Stability_Score_Level": "Medium",
+            "Financial_Health_Score_Level": "High",
+            "Compliance_Risk_Score_Level": "High",
+            "Safety_Incident_Score_Level": "Medium",
+            "Environmental_Exposure_Score_Level": "Critical",
+            "ESG_Performance_Score_Level": "Medium",
+            "Digital_Security_Score_Level": "High",
+            "Operational_Resilience_Score_Level": "High",
+            "Market_Sentiment_Score_Level": "Critical",
+            "Quality_Risk_Score_Level": "High",
+            "Governance_Risk_Score_Level": "High",
+            "Geopolitical_Risk_Score_Level": "High",
+            "Political_Stability_Score_Level": "Medium",
+            "Credit_Rating_Score_Level": "High"
+          },
+          "flags": []
+        },
+        {
+          "supplierID": "SUPP_00018",
+          "supplierName": "Global Logistics 175",
+          "values": {
+            "Total_Risk_Index": 80.0,
+            "Industry_Benchmark_Score": 91.0,
+            "Media_Sentiment_Score": 88.0,
+            "External_Intelligence_Score": 91.0,
+            "Sub_Tier_Visibility_Score": 51.0,
+            "Labor_Stability_Score": 90.0,
+            "Financial_Health_Score": 70.0,
+            "Compliance_Risk_Score": 98.0,
+            "Safety_Incident_Score": 85.0,
+            "Environmental_Exposure_Score": 74.0,
+            "ESG_Performance_Score": 87.0,
+            "Digital_Security_Score": 67.0,
+            "Operational_Resilience_Score": 95.0,
+            "Market_Sentiment_Score": 87.0,
+            "Quality_Risk_Score": 74.0,
+            "Governance_Risk_Score": 99.0,
+            "Geopolitical_Risk_Score": 77.0,
+            "Political_Stability_Score": 68.0,
+            "Credit_Rating_Score": 59.0,
+            "Purchase Order Volume (EUR)": 1686602.02,
+            "Supplier Delivery Rating": 76.88,
+            "Order Confirmation Rate": 76.18
+          },
+          "levels": {
+            "Total_Risk_Index_Level": "Critical",
+            "Industry_Benchmark_Score_Level": "Critical",
+            "Media_Sentiment_Score_Level": "Critical",
+            "External_Intelligence_Score_Level": "Critical",
+            "Sub_Tier_Visibility_Score_Level": "High",
+            "Labor_Stability_Score_Level": "Critical",
+            "Financial_Health_Score_Level": "High",
+            "Compliance_Risk_Score_Level": "Critical",
+            "Safety_Incident_Score_Level": "Critical",
+            "Environmental_Exposure_Score_Level": "High",
+            "ESG_Performance_Score_Level": "Critical",
+            "Digital_Security_Score_Level": "High",
+            "Operational_Resilience_Score_Level": "Critical",
+            "Market_Sentiment_Score_Level": "Critical",
+            "Quality_Risk_Score_Level": "High",
+            "Governance_Risk_Score_Level": "Critical",
+            "Geopolitical_Risk_Score_Level": "Critical",
+            "Political_Stability_Score_Level": "High",
+            "Credit_Rating_Score_Level": "High"
+          },
+          "flags": [
+            "worst"
+          ]
+        }
+      ],
+      "facts": {
+        "template": "overall_supplier_benchmark_card",
+        "metric": "Total_Risk_Index",
+        "best": {
+          "supplierID": "SUPP_00141",
+          "value": 45.0
+        },
+        "worst": {
+          "supplierID": "SUPP_00018",
+          "value": 80.0
+        },
+        "spread": 35.0,
+        "hiddenWatchouts": [
+          {
+            "supplierID": "SUPP_00141",
+            "totalRisk": 45.0,
+            "metric": "Political_Stability_Score",
+            "value": 78.0
+          },
+          {
+            "supplierID": "SUPP_00287",
+            "totalRisk": 48.0,
+            "metric": "Geopolitical_Risk_Score",
+            "value": 78.0
+          }
+        ],
+        "safestOverall": "SUPP_00141",
+        "riskiestOverall": "SUPP_00018",
+        "largestExposure": "SUPP_00731",
+        "weakestDelivery": "SUPP_00018"
+      },
+      "summary": "Safest overall: SUPP_00141; riskiest overall: SUPP_00018. Largest spend: SUPP_00731; weakest delivery: SUPP_00018. Watch: SUPP_00141 looks moderate overall (total risk 45) but has critical political stability (78) (+1 more).",
+      "panels": null
+    },
+    {
+      "cardId": "b60a3d45427b",
+      "renderer": "scatter",
+      "template": "financial_credit_card",
+      "title": "Financial health vs credit rating",
+      "intent": "compare",
+      "direction": "safest",
+      "metrics": [
+        "Financial_Health_Score",
+        "Credit_Rating_Score"
+      ],
+      "metricLabels": {
+        "Financial_Health_Score": "Financial health",
+        "Credit_Rating_Score": "Credit rating"
+      },
+      "valueDirection": {
+        "Financial_Health_Score": "lower_is_better",
+        "Credit_Rating_Score": "lower_is_better"
+      },
+      "sort": {
+        "field": "Financial_Health_Score",
+        "direction": "asc"
+      },
+      "dataShape": {
+        "flags": [],
+        "scale": "fixed_0_100",
+        "fallbackApplied": null,
+        "notes": []
+      },
+      "referenceBands": [
+        {
+          "label": "Low",
+          "min": 0,
+          "max": 24
+        },
+        {
+          "label": "Medium",
+          "min": 25,
+          "max": 49
+        },
+        {
+          "label": "High",
+          "min": 50,
+          "max": 74
+        },
+        {
+          "label": "Critical",
+          "min": 75,
+          "max": 100
+        }
+      ],
+      "quadrants": {
+        "x": "Financial_Health_Score",
+        "y": "Credit_Rating_Score",
+        "xThreshold": 50.0,
+        "yThreshold": 50.0,
+        "labels": {
+          "topLeft": "Credit-specific concern",
+          "topRight": "Serious financial concern",
+          "bottomLeft": "Low financial risk",
+          "bottomRight": "Health concern not in credit score"
+        },
+        "goodZone": "bottomLeft"
+      },
+      "suppliers": [
+        {
+          "supplierID": "SUPP_00141",
+          "supplierName": "Elite Industries 335",
+          "values": {
+            "Financial_Health_Score": 42.0,
+            "Credit_Rating_Score": 43.0
+          },
+          "levels": {
+            "Financial_Health_Score_Level": "Medium",
+            "Credit_Rating_Score_Level": "Medium"
+          },
+          "flags": [
+            "best",
+            "hidden_watchout"
+          ]
+        },
+        {
+          "supplierID": "SUPP_00287",
+          "supplierName": "Global Systems 788",
+          "values": {
+            "Financial_Health_Score": 49.0,
+            "Credit_Rating_Score": 38.0
+          },
+          "levels": {
+            "Financial_Health_Score_Level": "Medium",
+            "Credit_Rating_Score_Level": "Medium"
+          },
+          "flags": [
+            "hidden_watchout"
+          ]
+        },
+        {
+          "supplierID": "SUPP_00731",
+          "supplierName": "Strategic Logistics 386",
+          "values": {
+            "Financial_Health_Score": 53.0,
+            "Credit_Rating_Score": 76.0
+          },
+          "levels": {
+            "Financial_Health_Score_Level": "High",
+            "Credit_Rating_Score_Level": "Critical"
+          },
+          "flags": []
+        },
+        {
+          "supplierID": "SUPP_00012",
+          "supplierName": "Dynamic Group 434",
+          "values": {
+            "Financial_Health_Score": 54.0,
+            "Credit_Rating_Score": 57.0
+          },
+          "levels": {
+            "Financial_Health_Score_Level": "High",
+            "Credit_Rating_Score_Level": "High"
+          },
+          "flags": []
+        },
+        {
+          "supplierID": "SUPP_00450",
+          "supplierName": "Precision Partners 464",
+          "values": {
+            "Financial_Health_Score": 65.0,
+            "Credit_Rating_Score": 58.0
+          },
+          "levels": {
+            "Financial_Health_Score_Level": "High",
+            "Credit_Rating_Score_Level": "High"
+          },
+          "flags": []
+        },
+        {
+          "supplierID": "SUPP_00018",
+          "supplierName": "Global Logistics 175",
+          "values": {
+            "Financial_Health_Score": 70.0,
+            "Credit_Rating_Score": 59.0
+          },
+          "levels": {
+            "Financial_Health_Score_Level": "High",
+            "Credit_Rating_Score_Level": "High"
+          },
+          "flags": [
+            "worst"
+          ]
+        }
+      ],
+      "facts": {
+        "template": "financial_credit_card",
+        "metric": "Financial_Health_Score",
+        "best": {
+          "supplierID": "SUPP_00141",
+          "value": 42.0
+        },
+        "worst": {
+          "supplierID": "SUPP_00018",
+          "value": 70.0
+        },
+        "spread": 28.0,
+        "hiddenWatchouts": [
+          {
+            "supplierID": "SUPP_00141",
+            "totalRisk": 45.0,
+            "metric": "Political_Stability_Score",
+            "value": 78.0
+          },
+          {
+            "supplierID": "SUPP_00287",
+            "totalRisk": 48.0,
+            "metric": "Geopolitical_Risk_Score",
+            "value": 78.0
+          }
+        ],
+        "quadrant": {
+          "concernZone": "topRight",
+          "concernLabel": "Serious financial concern",
+          "inConcernZone": [
+            "SUPP_00012",
+            "SUPP_00018",
+            "SUPP_00450",
+            "SUPP_00731"
+          ],
+          "inGoodZone": [
+            "SUPP_00141",
+            "SUPP_00287"
+          ]
+        }
+      },
+      "summary": "Lower is better for financial health. Best: SUPP_00141 (42); worst: SUPP_00018 (70). In the 'Serious financial concern' zone: SUPP_00012, SUPP_00018, SUPP_00450, SUPP_00731. Watch: SUPP_00141 looks moderate overall (total risk 45) but has critical political stability (78) (+1 more).",
+      "panels": null
+    },
+    {
+      "cardId": "4aa0263d7242",
+      "renderer": "scatter",
+      "template": "compliance_governance_card",
+      "title": "Compliance vs governance risk",
+      "intent": "compare",
+      "direction": "safest",
+      "metrics": [
+        "Compliance_Risk_Score",
+        "Governance_Risk_Score"
+      ],
+      "metricLabels": {
+        "Compliance_Risk_Score": "Compliance risk",
+        "Governance_Risk_Score": "Governance risk"
+      },
+      "valueDirection": {
+        "Compliance_Risk_Score": "lower_is_better",
+        "Governance_Risk_Score": "lower_is_better"
+      },
+      "sort": {
+        "field": "Compliance_Risk_Score",
+        "direction": "asc"
+      },
+      "dataShape": {
+        "flags": [],
+        "scale": "fixed_0_100",
+        "fallbackApplied": null,
+        "notes": []
+      },
+      "referenceBands": [
+        {
+          "label": "Low",
+          "min": 0,
+          "max": 24
+        },
+        {
+          "label": "Medium",
+          "min": 25,
+          "max": 49
+        },
+        {
+          "label": "High",
+          "min": 50,
+          "max": 74
+        },
+        {
+          "label": "Critical",
+          "min": 75,
+          "max": 100
+        }
+      ],
+      "quadrants": {
+        "x": "Compliance_Risk_Score",
+        "y": "Governance_Risk_Score",
+        "xThreshold": 50.0,
+        "yThreshold": 50.0,
+        "labels": {
+          "topLeft": "Internal controls / ethics concern",
+          "topRight": "Regulatory and controls concern",
+          "bottomLeft": "Low concern",
+          "bottomRight": "Legal / fines concern"
+        },
+        "goodZone": "bottomLeft"
+      },
+      "suppliers": [
+        {
+          "supplierID": "SUPP_00287",
+          "supplierName": "Global Systems 788",
+          "values": {
+            "Compliance_Risk_Score": 26.0,
+            "Governance_Risk_Score": 40.0
+          },
+          "levels": {
+            "Compliance_Risk_Score_Level": "Medium",
+            "Governance_Risk_Score_Level": "Medium"
+          },
+          "flags": [
+            "best",
+            "hidden_watchout"
+          ]
+        },
+        {
+          "supplierID": "SUPP_00731",
+          "supplierName": "Strategic Logistics 386",
+          "values": {
+            "Compliance_Risk_Score": 45.0,
+            "Governance_Risk_Score": 72.0
+          },
+          "levels": {
+            "Compliance_Risk_Score_Level": "Medium",
+            "Governance_Risk_Score_Level": "High"
+          },
+          "flags": []
+        },
+        {
+          "supplierID": "SUPP_00012",
+          "supplierName": "Dynamic Group 434",
+          "values": {
+            "Compliance_Risk_Score": 54.0,
+            "Governance_Risk_Score": 65.0
+          },
+          "levels": {
+            "Compliance_Risk_Score_Level": "High",
+            "Governance_Risk_Score_Level": "High"
+          },
+          "flags": []
+        },
+        {
+          "supplierID": "SUPP_00141",
+          "supplierName": "Elite Industries 335",
+          "values": {
+            "Compliance_Risk_Score": 66.0,
+            "Governance_Risk_Score": 53.0
+          },
+          "levels": {
+            "Compliance_Risk_Score_Level": "High",
+            "Governance_Risk_Score_Level": "High"
+          },
+          "flags": [
+            "hidden_watchout"
+          ]
+        },
+        {
+          "supplierID": "SUPP_00450",
+          "supplierName": "Precision Partners 464",
+          "values": {
+            "Compliance_Risk_Score": 73.0,
+            "Governance_Risk_Score": 70.0
+          },
+          "levels": {
+            "Compliance_Risk_Score_Level": "High",
+            "Governance_Risk_Score_Level": "High"
+          },
+          "flags": []
+        },
+        {
+          "supplierID": "SUPP_00018",
+          "supplierName": "Global Logistics 175",
+          "values": {
+            "Compliance_Risk_Score": 98.0,
+            "Governance_Risk_Score": 99.0
+          },
+          "levels": {
+            "Compliance_Risk_Score_Level": "Critical",
+            "Governance_Risk_Score_Level": "Critical"
+          },
+          "flags": [
+            "worst"
+          ]
+        }
+      ],
+      "facts": {
+        "template": "compliance_governance_card",
+        "metric": "Compliance_Risk_Score",
+        "best": {
+          "supplierID": "SUPP_00287",
+          "value": 26.0
+        },
+        "worst": {
+          "supplierID": "SUPP_00018",
+          "value": 98.0
+        },
+        "spread": 72.0,
+        "hiddenWatchouts": [
+          {
+            "supplierID": "SUPP_00141",
+            "totalRisk": 45.0,
+            "metric": "Political_Stability_Score",
+            "value": 78.0
+          },
+          {
+            "supplierID": "SUPP_00287",
+            "totalRisk": 48.0,
+            "metric": "Geopolitical_Risk_Score",
+            "value": 78.0
+          }
+        ],
+        "quadrant": {
+          "concernZone": "topRight",
+          "concernLabel": "Regulatory and controls concern",
+          "inConcernZone": [
+            "SUPP_00012",
+            "SUPP_00018",
+            "SUPP_00141",
+            "SUPP_00450"
+          ],
+          "inGoodZone": [
+            "SUPP_00287"
+          ]
+        }
+      },
+      "summary": "Lower is better for compliance risk. Best: SUPP_00287 (26); worst: SUPP_00018 (98). In the 'Regulatory and controls concern' zone: SUPP_00012, SUPP_00018, SUPP_00141, SUPP_00450. Watch: SUPP_00141 looks moderate overall (total risk 45) but has critical political stability (78) (+1 more).",
+      "panels": null
+    },
+    {
+      "cardId": "5bfffe8ae93a",
+      "renderer": "rank",
+      "template": "esg_workforce_card",
+      "title": "ESG and workforce",
+      "intent": "compare",
+      "direction": "safest",
+      "metrics": [
+        "ESG_Performance_Score",
+        "Labor_Stability_Score",
+        "Safety_Incident_Score"
+      ],
+      "metricLabels": {
+        "ESG_Performance_Score": "ESG performance",
+        "Labor_Stability_Score": "Labor stability",
+        "Safety_Incident_Score": "Safety incidents"
+      },
+      "valueDirection": {
+        "ESG_Performance_Score": "lower_is_better",
+        "Labor_Stability_Score": "lower_is_better",
+        "Safety_Incident_Score": "lower_is_better"
+      },
+      "sort": {
+        "field": "ESG_Performance_Score",
+        "direction": "asc"
+      },
+      "dataShape": {
+        "flags": [],
+        "scale": "fixed_0_100",
+        "fallbackApplied": null,
+        "notes": []
+      },
+      "referenceBands": [
+        {
+          "label": "Low",
+          "min": 0,
+          "max": 24
+        },
+        {
+          "label": "Medium",
+          "min": 25,
+          "max": 49
+        },
+        {
+          "label": "High",
+          "min": 50,
+          "max": 74
+        },
+        {
+          "label": "Critical",
+          "min": 75,
+          "max": 100
+        }
+      ],
+      "quadrants": null,
+      "suppliers": [
+        {
+          "supplierID": "SUPP_00141",
+          "supplierName": "Elite Industries 335",
+          "values": {
+            "ESG_Performance_Score": 23.0,
+            "Labor_Stability_Score": 38.0,
+            "Safety_Incident_Score": 42.0
+          },
+          "levels": {
+            "ESG_Performance_Score_Level": "Low",
+            "Labor_Stability_Score_Level": "Medium",
+            "Safety_Incident_Score_Level": "Medium"
+          },
+          "flags": [
+            "best",
+            "hidden_watchout"
+          ]
+        },
+        {
+          "supplierID": "SUPP_00450",
+          "supplierName": "Precision Partners 464",
+          "values": {
+            "ESG_Performance_Score": 41.0,
+            "Labor_Stability_Score": 29.0,
+            "Safety_Incident_Score": 38.0
+          },
+          "levels": {
+            "ESG_Performance_Score_Level": "Medium",
+            "Labor_Stability_Score_Level": "Medium",
+            "Safety_Incident_Score_Level": "Medium"
+          },
+          "flags": []
+        },
+        {
+          "supplierID": "SUPP_00731",
+          "supplierName": "Strategic Logistics 386",
+          "values": {
+            "ESG_Performance_Score": 45.0,
+            "Labor_Stability_Score": 65.0,
+            "Safety_Incident_Score": 51.0
+          },
+          "levels": {
+            "ESG_Performance_Score_Level": "Medium",
+            "Labor_Stability_Score_Level": "High",
+            "Safety_Incident_Score_Level": "High"
+          },
+          "flags": []
+        },
+        {
+          "supplierID": "SUPP_00287",
+          "supplierName": "Global Systems 788",
+          "values": {
+            "ESG_Performance_Score": 51.0,
+            "Labor_Stability_Score": 46.0,
+            "Safety_Incident_Score": 52.0
+          },
+          "levels": {
+            "ESG_Performance_Score_Level": "High",
+            "Labor_Stability_Score_Level": "Medium",
+            "Safety_Incident_Score_Level": "High"
+          },
+          "flags": [
+            "hidden_watchout"
+          ]
+        },
+        {
+          "supplierID": "SUPP_00012",
+          "supplierName": "Dynamic Group 434",
+          "values": {
+            "ESG_Performance_Score": 68.0,
+            "Labor_Stability_Score": 33.0,
+            "Safety_Incident_Score": 70.0
+          },
+          "levels": {
+            "ESG_Performance_Score_Level": "High",
+            "Labor_Stability_Score_Level": "Medium",
+            "Safety_Incident_Score_Level": "High"
+          },
+          "flags": []
+        },
+        {
+          "supplierID": "SUPP_00018",
+          "supplierName": "Global Logistics 175",
+          "values": {
+            "ESG_Performance_Score": 87.0,
+            "Labor_Stability_Score": 90.0,
+            "Safety_Incident_Score": 85.0
+          },
+          "levels": {
+            "ESG_Performance_Score_Level": "Critical",
+            "Labor_Stability_Score_Level": "Critical",
+            "Safety_Incident_Score_Level": "Critical"
+          },
+          "flags": [
+            "worst"
+          ]
+        }
+      ],
+      "facts": {
+        "template": "esg_workforce_card",
+        "metric": "ESG_Performance_Score",
+        "best": {
+          "supplierID": "SUPP_00141",
+          "value": 23.0
+        },
+        "worst": {
+          "supplierID": "SUPP_00018",
+          "value": 87.0
+        },
+        "spread": 64.0,
+        "hiddenWatchouts": [
+          {
+            "supplierID": "SUPP_00141",
+            "totalRisk": 45.0,
+            "metric": "Political_Stability_Score",
+            "value": 78.0
+          },
+          {
+            "supplierID": "SUPP_00287",
+            "totalRisk": 48.0,
+            "metric": "Geopolitical_Risk_Score",
+            "value": 78.0
+          }
+        ],
+        "worstAverage": {
+          "supplierID": "SUPP_00018",
+          "value": 87.3,
+          "metrics": [
+            "ESG_Performance_Score",
+            "Labor_Stability_Score",
+            "Safety_Incident_Score"
+          ]
+        },
+        "biggestSpike": {
+          "supplierID": "SUPP_00018",
+          "metric": "Labor_Stability_Score",
+          "value": 90.0
+        }
+      },
+      "summary": "Lower is better. Worst on average across these metrics: SUPP_00018 (87.3). Biggest single spike: SUPP_00018 on labor stability (90). Watch: SUPP_00141 looks moderate overall (total risk 45) but has critical political stability (78) (+1 more).",
+      "panels": null
+    },
+    {
+      "cardId": "eb9a13233058",
+      "renderer": "rank",
+      "template": "geopolitical_external_card",
+      "title": "Geopolitical and external exposure",
+      "intent": "compare",
+      "direction": "safest",
+      "metrics": [
+        "Geopolitical_Risk_Score",
+        "Political_Stability_Score",
+        "Environmental_Exposure_Score"
+      ],
+      "metricLabels": {
+        "Geopolitical_Risk_Score": "Geopolitical risk",
+        "Political_Stability_Score": "Political stability",
+        "Environmental_Exposure_Score": "Environmental exposure"
+      },
+      "valueDirection": {
+        "Geopolitical_Risk_Score": "lower_is_better",
+        "Political_Stability_Score": "lower_is_better",
+        "Environmental_Exposure_Score": "lower_is_better"
+      },
+      "sort": {
+        "field": "Geopolitical_Risk_Score",
+        "direction": "asc"
+      },
+      "dataShape": {
+        "flags": [],
+        "scale": "fixed_0_100",
+        "fallbackApplied": null,
+        "notes": []
+      },
+      "referenceBands": [
+        {
+          "label": "Low",
+          "min": 0,
+          "max": 24
+        },
+        {
+          "label": "Medium",
+          "min": 25,
+          "max": 49
+        },
+        {
+          "label": "High",
+          "min": 50,
+          "max": 74
+        },
+        {
+          "label": "Critical",
+          "min": 75,
+          "max": 100
+        }
+      ],
+      "quadrants": null,
+      "suppliers": [
+        {
+          "supplierID": "SUPP_00012",
+          "supplierName": "Dynamic Group 434",
+          "values": {
+            "Geopolitical_Risk_Score": 45.0,
+            "Political_Stability_Score": 40.0,
+            "Environmental_Exposure_Score": 42.0
+          },
+          "levels": {
+            "Geopolitical_Risk_Score_Level": "Medium",
+            "Political_Stability_Score_Level": "Medium",
+            "Environmental_Exposure_Score_Level": "Medium"
+          },
+          "flags": [
+            "best"
+          ]
+        },
+        {
+          "supplierID": "SUPP_00731",
+          "supplierName": "Strategic Logistics 386",
+          "values": {
+            "Geopolitical_Risk_Score": 48.0,
+            "Political_Stability_Score": 58.0,
+            "Environmental_Exposure_Score": 62.0
+          },
+          "levels": {
+            "Geopolitical_Risk_Score_Level": "Medium",
+            "Political_Stability_Score_Level": "High",
+            "Environmental_Exposure_Score_Level": "High"
+          },
+          "flags": []
+        },
+        {
+          "supplierID": "SUPP_00450",
+          "supplierName": "Precision Partners 464",
+          "values": {
+            "Geopolitical_Risk_Score": 63.0,
+            "Political_Stability_Score": 43.0,
+            "Environmental_Exposure_Score": 75.0
+          },
+          "levels": {
+            "Geopolitical_Risk_Score_Level": "High",
+            "Political_Stability_Score_Level": "Medium",
+            "Environmental_Exposure_Score_Level": "Critical"
+          },
+          "flags": []
+        },
+        {
+          "supplierID": "SUPP_00141",
+          "supplierName": "Elite Industries 335",
+          "values": {
+            "Geopolitical_Risk_Score": 65.0,
+            "Political_Stability_Score": 78.0,
+            "Environmental_Exposure_Score": 70.0
+          },
+          "levels": {
+            "Geopolitical_Risk_Score_Level": "High",
+            "Political_Stability_Score_Level": "Critical",
+            "Environmental_Exposure_Score_Level": "High"
+          },
+          "flags": [
+            "hidden_watchout"
+          ]
+        },
+        {
+          "supplierID": "SUPP_00018",
+          "supplierName": "Global Logistics 175",
+          "values": {
+            "Geopolitical_Risk_Score": 77.0,
+            "Political_Stability_Score": 68.0,
+            "Environmental_Exposure_Score": 74.0
+          },
+          "levels": {
+            "Geopolitical_Risk_Score_Level": "Critical",
+            "Political_Stability_Score_Level": "High",
+            "Environmental_Exposure_Score_Level": "High"
+          },
+          "flags": []
+        },
+        {
+          "supplierID": "SUPP_00287",
+          "supplierName": "Global Systems 788",
+          "values": {
+            "Geopolitical_Risk_Score": 78.0,
+            "Political_Stability_Score": 58.0,
+            "Environmental_Exposure_Score": 62.0
+          },
+          "levels": {
+            "Geopolitical_Risk_Score_Level": "Critical",
+            "Political_Stability_Score_Level": "High",
+            "Environmental_Exposure_Score_Level": "High"
+          },
+          "flags": [
+            "worst",
+            "hidden_watchout"
+          ]
+        }
+      ],
+      "facts": {
+        "template": "geopolitical_external_card",
+        "metric": "Geopolitical_Risk_Score",
+        "best": {
+          "supplierID": "SUPP_00012",
+          "value": 45.0
+        },
+        "worst": {
+          "supplierID": "SUPP_00287",
+          "value": 78.0
+        },
+        "spread": 33.0,
+        "hiddenWatchouts": [
+          {
+            "supplierID": "SUPP_00141",
+            "totalRisk": 45.0,
+            "metric": "Political_Stability_Score",
+            "value": 78.0
+          },
+          {
+            "supplierID": "SUPP_00287",
+            "totalRisk": 48.0,
+            "metric": "Geopolitical_Risk_Score",
+            "value": 78.0
+          }
+        ],
+        "worstAverage": {
+          "supplierID": "SUPP_00018",
+          "value": 73.0,
+          "metrics": [
+            "Geopolitical_Risk_Score",
+            "Political_Stability_Score",
+            "Environmental_Exposure_Score"
+          ]
+        },
+        "biggestSpike": {
+          "supplierID": "SUPP_00141",
+          "metric": "Political_Stability_Score",
+          "value": 78.0
+        }
+      },
+      "summary": "Lower is better. Worst on average across these metrics: SUPP_00018 (73). Biggest single spike: SUPP_00141 on political stability (78). Watch: SUPP_00141 looks moderate overall (total risk 45) but has critical political stability (78) (+1 more).",
+      "panels": null
+    },
+    {
+      "cardId": "ef7d7a0ab3d4",
+      "renderer": "rank",
+      "template": "reputation_cluster_card",
+      "title": "Reputation signals",
+      "intent": "compare",
+      "direction": "safest",
+      "metrics": [
+        "Media_Sentiment_Score",
+        "Market_Sentiment_Score",
+        "External_Intelligence_Score",
+        "Industry_Benchmark_Score"
+      ],
+      "metricLabels": {
+        "Media_Sentiment_Score": "Media sentiment",
+        "Market_Sentiment_Score": "Market sentiment",
+        "External_Intelligence_Score": "External intelligence",
+        "Industry_Benchmark_Score": "Industry benchmark"
+      },
+      "valueDirection": {
+        "Media_Sentiment_Score": "lower_is_better",
+        "Market_Sentiment_Score": "lower_is_better",
+        "External_Intelligence_Score": "lower_is_better",
+        "Industry_Benchmark_Score": "lower_is_better"
+      },
+      "sort": {
+        "field": "Media_Sentiment_Score",
+        "direction": "asc"
+      },
+      "dataShape": {
+        "flags": [],
+        "scale": "fixed_0_100",
+        "fallbackApplied": null,
+        "notes": []
+      },
+      "referenceBands": [
+        {
+          "label": "Low",
+          "min": 0,
+          "max": 24
+        },
+        {
+          "label": "Medium",
+          "min": 25,
+          "max": 49
+        },
+        {
+          "label": "High",
+          "min": 50,
+          "max": 74
+        },
+        {
+          "label": "Critical",
+          "min": 75,
+          "max": 100
+        }
+      ],
+      "quadrants": null,
+      "suppliers": [
+        {
+          "supplierID": "SUPP_00287",
+          "supplierName": "Global Systems 788",
+          "values": {
+            "Media_Sentiment_Score": 21.0,
+            "Market_Sentiment_Score": 31.0,
+            "External_Intelligence_Score": 33.0,
+            "Industry_Benchmark_Score": 33.0
+          },
+          "levels": {
+            "Media_Sentiment_Score_Level": "Low",
+            "Market_Sentiment_Score_Level": "Medium",
+            "External_Intelligence_Score_Level": "Medium",
+            "Industry_Benchmark_Score_Level": "Medium"
+          },
+          "flags": [
+            "best",
+            "hidden_watchout"
+          ]
+        },
+        {
+          "supplierID": "SUPP_00141",
+          "supplierName": "Elite Industries 335",
+          "values": {
+            "Media_Sentiment_Score": 33.0,
+            "Market_Sentiment_Score": 27.0,
+            "External_Intelligence_Score": 21.0,
+            "Industry_Benchmark_Score": 39.0
+          },
+          "levels": {
+            "Media_Sentiment_Score_Level": "Medium",
+            "Market_Sentiment_Score_Level": "Medium",
+            "External_Intelligence_Score_Level": "Low",
+            "Industry_Benchmark_Score_Level": "Medium"
+          },
+          "flags": [
+            "hidden_watchout"
+          ]
+        },
+        {
+          "supplierID": "SUPP_00012",
+          "supplierName": "Dynamic Group 434",
+          "values": {
+            "Media_Sentiment_Score": 50.0,
+            "Market_Sentiment_Score": 53.0,
+            "External_Intelligence_Score": 50.0,
+            "Industry_Benchmark_Score": 50.0
+          },
+          "levels": {
+            "Media_Sentiment_Score_Level": "High",
+            "Market_Sentiment_Score_Level": "High",
+            "External_Intelligence_Score_Level": "High",
+            "Industry_Benchmark_Score_Level": "High"
+          },
+          "flags": []
+        },
+        {
+          "supplierID": "SUPP_00731",
+          "supplierName": "Strategic Logistics 386",
+          "values": {
+            "Media_Sentiment_Score": 56.0,
+            "Market_Sentiment_Score": 63.0,
+            "External_Intelligence_Score": 54.0,
+            "Industry_Benchmark_Score": 51.0
+          },
+          "levels": {
+            "Media_Sentiment_Score_Level": "High",
+            "Market_Sentiment_Score_Level": "High",
+            "External_Intelligence_Score_Level": "High",
+            "Industry_Benchmark_Score_Level": "High"
+          },
+          "flags": []
+        },
+        {
+          "supplierID": "SUPP_00450",
+          "supplierName": "Precision Partners 464",
+          "values": {
+            "Media_Sentiment_Score": 73.0,
+            "Market_Sentiment_Score": 79.0,
+            "External_Intelligence_Score": 62.0,
+            "Industry_Benchmark_Score": 72.0
+          },
+          "levels": {
+            "Media_Sentiment_Score_Level": "High",
+            "Market_Sentiment_Score_Level": "Critical",
+            "External_Intelligence_Score_Level": "High",
+            "Industry_Benchmark_Score_Level": "High"
+          },
+          "flags": []
+        },
+        {
+          "supplierID": "SUPP_00018",
+          "supplierName": "Global Logistics 175",
+          "values": {
+            "Media_Sentiment_Score": 88.0,
+            "Market_Sentiment_Score": 87.0,
+            "External_Intelligence_Score": 91.0,
+            "Industry_Benchmark_Score": 91.0
+          },
+          "levels": {
+            "Media_Sentiment_Score_Level": "Critical",
+            "Market_Sentiment_Score_Level": "Critical",
+            "External_Intelligence_Score_Level": "Critical",
+            "Industry_Benchmark_Score_Level": "Critical"
+          },
+          "flags": [
+            "worst"
+          ]
+        }
+      ],
+      "facts": {
+        "template": "reputation_cluster_card",
+        "metric": "Media_Sentiment_Score",
+        "best": {
+          "supplierID": "SUPP_00287",
+          "value": 21.0
+        },
+        "worst": {
+          "supplierID": "SUPP_00018",
+          "value": 88.0
+        },
+        "spread": 67.0,
+        "hiddenWatchouts": [
+          {
+            "supplierID": "SUPP_00141",
+            "totalRisk": 45.0,
+            "metric": "Political_Stability_Score",
+            "value": 78.0
+          },
+          {
+            "supplierID": "SUPP_00287",
+            "totalRisk": 48.0,
+            "metric": "Geopolitical_Risk_Score",
+            "value": 78.0
+          }
+        ],
+        "worstAverage": {
+          "supplierID": "SUPP_00018",
+          "value": 89.2,
+          "metrics": [
+            "Media_Sentiment_Score",
+            "Market_Sentiment_Score",
+            "External_Intelligence_Score",
+            "Industry_Benchmark_Score"
+          ]
+        },
+        "biggestSpike": {
+          "supplierID": "SUPP_00018",
+          "metric": "External_Intelligence_Score",
+          "value": 91.0
+        }
+      },
+      "summary": "Lower is better. Worst on average across these metrics: SUPP_00018 (89.2). Biggest single spike: SUPP_00018 on external intelligence (91). Watch: SUPP_00141 looks moderate overall (total risk 45) but has critical political stability (78) (+1 more).",
+      "panels": null
+    },
+    {
+      "cardId": "28c8b0ad9f58",
+      "renderer": "scatter",
+      "template": "performance_reliability_card",
+      "title": "Operational performance",
+      "intent": "compare",
+      "direction": "safest",
+      "metrics": [
+        "Supplier Delivery Rating",
+        "Order Confirmation Rate",
+        "Order Change Rate"
+      ],
+      "metricLabels": {
+        "Supplier Delivery Rating": "Delivery rating",
+        "Order Confirmation Rate": "Order confirmation rate",
+        "Order Change Rate": "Order change rate"
+      },
+      "valueDirection": {
+        "Supplier Delivery Rating": "higher_is_better",
+        "Order Confirmation Rate": "higher_is_better",
+        "Order Change Rate": "lower_is_better"
+      },
+      "sort": {
+        "field": "Supplier Delivery Rating",
+        "direction": "desc"
+      },
+      "dataShape": {
+        "flags": [],
+        "scale": "linear",
+        "fallbackApplied": null,
+        "notes": []
+      },
+      "referenceBands": [
+        {
+          "label": "Low",
+          "min": 0,
+          "max": 24
+        },
+        {
+          "label": "Medium",
+          "min": 25,
+          "max": 49
+        },
+        {
+          "label": "High",
+          "min": 50,
+          "max": 74
+        },
+        {
+          "label": "Critical",
+          "min": 75,
+          "max": 100
+        }
+      ],
+      "quadrants": {
+        "x": "Supplier Delivery Rating",
+        "y": "Order Confirmation Rate",
+        "xThreshold": 85.28,
+        "yThreshold": 87.76,
+        "labels": {
+          "topLeft": "Confirms but delivers late",
+          "topRight": "Reliable",
+          "bottomLeft": "Weak on both",
+          "bottomRight": "Delivers but confirms slowly"
+        },
+        "goodZone": "topRight"
+      },
+      "suppliers": [
+        {
+          "supplierID": "SUPP_00141",
+          "supplierName": "Elite Industries 335",
+          "values": {
+            "Supplier Delivery Rating": 96.82,
+            "Order Confirmation Rate": 90.31,
+            "Order Change Rate": 18.21
+          },
+          "levels": {},
+          "flags": [
+            "best",
+            "hidden_watchout"
+          ]
+        },
+        {
+          "supplierID": "SUPP_00450",
+          "supplierName": "Precision Partners 464",
+          "values": {
+            "Supplier Delivery Rating": 86.06,
+            "Order Confirmation Rate": 75.57,
+            "Order Change Rate": 9.06
+          },
+          "levels": {},
+          "flags": []
+        },
+        {
+          "supplierID": "SUPP_00012",
+          "supplierName": "Dynamic Group 434",
+          "values": {
+            "Supplier Delivery Rating": 85.54,
+            "Order Confirmation Rate": 87.25,
+            "Order Change Rate": 9.06
+          },
+          "levels": {},
+          "flags": []
+        },
+        {
+          "supplierID": "SUPP_00731",
+          "supplierName": "Strategic Logistics 386",
+          "values": {
+            "Supplier Delivery Rating": 85.02,
+            "Order Confirmation Rate": 95.83,
+            "Order Change Rate": 4.97
+          },
+          "levels": {},
+          "flags": []
+        },
+        {
+          "supplierID": "SUPP_00287",
+          "supplierName": "Global Systems 788",
+          "values": {
+            "Supplier Delivery Rating": 82.51,
+            "Order Confirmation Rate": 88.27,
+            "Order Change Rate": 5.26
+          },
+          "levels": {},
+          "flags": [
+            "hidden_watchout"
+          ]
+        },
+        {
+          "supplierID": "SUPP_00018",
+          "supplierName": "Global Logistics 175",
+          "values": {
+            "Supplier Delivery Rating": 76.88,
+            "Order Confirmation Rate": 76.18,
+            "Order Change Rate": 12.32
+          },
+          "levels": {},
+          "flags": [
+            "worst"
+          ]
+        }
+      ],
+      "facts": {
+        "template": "performance_reliability_card",
+        "metric": "Supplier Delivery Rating",
+        "best": {
+          "supplierID": "SUPP_00141",
+          "value": 96.82
+        },
+        "worst": {
+          "supplierID": "SUPP_00018",
+          "value": 76.88
+        },
+        "spread": 19.94,
+        "hiddenWatchouts": [
+          {
+            "supplierID": "SUPP_00141",
+            "totalRisk": 45.0,
+            "metric": "Political_Stability_Score",
+            "value": 78.0
+          },
+          {
+            "supplierID": "SUPP_00287",
+            "totalRisk": 48.0,
+            "metric": "Geopolitical_Risk_Score",
+            "value": 78.0
+          }
+        ],
+        "quadrant": {
+          "concernZone": "bottomLeft",
+          "concernLabel": "Weak on both",
+          "inConcernZone": [
+            "SUPP_00018"
+          ],
+          "inGoodZone": [
+            "SUPP_00141"
+          ]
+        },
+        "highestChangeRate": "SUPP_00141"
+      },
+      "summary": "Higher is better for delivery rating. Best: SUPP_00141 (96.8%); worst: SUPP_00018 (76.9%). In the 'Weak on both' zone: SUPP_00018. Watch: SUPP_00141 looks moderate overall (total risk 45) but has critical political stability (78) (+1 more).",
+      "panels": null
+    }
+  ]
+}

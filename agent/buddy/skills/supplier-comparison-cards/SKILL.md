@@ -19,6 +19,10 @@ Follow these steps in order. Never state a number that did not come from the too
   - the IDs written in the message (SUPP_ followed by 5 digits), copied exactly
   - "these", "my shortlist", "the tray": `use_compare_tray = true`
   - a criterion such as "top 10 safest by total risk": `rank_by`, `rank_order`, `limit`
+  - "these", "this list", "the top three of them", or no suppliers named at all: leave the IDs empty; the
+    tool uses the suppliers of the card already on the dashboard (in its order)
+  - IDs the buyer typed in an earlier message or that were on an earlier card (`card.supplierIDs` in a
+    previous result) may be passed in `supplier_ids`
   - Never make up supplier IDs.
 - Mentions: for EACH separate topic the buyer mentions, add one entry to `mentions`:
   `phrase` = the buyer's words, `metrics` = every metric key that phrase could reasonably mean
@@ -33,6 +37,9 @@ Follow these steps in order. Never state a number that did not come from the too
     [Financial_Health_Score, Credit_Rating_Score]; "reputation" -> [Media_Sentiment_Score,
     Market_Sentiment_Score, External_Intelligence_Score, Industry_Benchmark_Score];
     "legal problems" -> [Compliance_Risk_Score, Governance_Risk_Score].
+  - Several topics ("credit rating, delivery and ESG") are fine: one entry per topic. The tool builds ONE
+    composite card with a chart per topic. Never tell the buyer that only one metric per card is possible.
+  - "All metrics", "full analysis", "everything": leave `mentions` empty; the tool shows every metric.
   - If the buyer asks about any specific topic, `mentions` must not be empty. Leave it empty only
     for fully general requests ("compare these suppliers", "which should we pick").
   - Unsure what a metric means? Load references/metric-map.md.
@@ -57,5 +64,5 @@ exactly, character for character.
   is not in `summary`. Do not call any other tool. Stop.
 - `needs_clarification`: ask `question` and list `options` exactly as given. Stop. When the buyer
   picks an option, call `compare_suppliers` again with the same fields, but replace that mention's
-  `metrics` with the single chosen key.
+  `metrics` with the chosen key. If they answer "all of them", call again with the same fields unchanged.
 - `error`: tell the buyer `message` in one sentence. Stop.

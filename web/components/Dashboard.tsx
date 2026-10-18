@@ -1,106 +1,129 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef } from "react";
 
 import { agentLabel } from "./agents";
-import { ComparisonPool } from "./ComparisonPool";
+import { CardShell } from "./cards/CardShell";
 import { useDashboard } from "./DashboardContext";
-import { HomeView } from "./HomeView";
-import { SupplierWorkspace, type SupplierPage } from "./SupplierWorkspace";
-import type { Supplier } from "./supplierMetrics";
-import { useFavourites } from "./useFavourites";
-import { usePool } from "./usePool";
-import { WorkspaceHeader } from "./WorkspaceHeader";
-import { WorkspaceSidebar, type WorkspacePage } from "./WorkspaceSidebar";
+import { useHashPath, widgetPath } from "./useHashPath";
 
-const SUPPLIER_PAGES: SupplierPage[] = ["suppliers", "favourites"];
-
-// The workspace shell: sidebar on the left, the active page beside it. The chat lives outside this
-// component (app/page.tsx) and stays on the right on every page.
+// Dashboard: a grid of widget previews, filling left to right with the newest first (top-left). Opening one maximizes it over the whole right side,
+// with its path on top: Widgets / Total risk, or Widgets / <composite> / <panel> for one panel of a composite.
 export function Dashboard() {
-  const { notices } = useDashboard();
-  const [page, setPage] = useState<WorkspacePage>("home");
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [selected, setSelected] = useState<Supplier | null>(null);
-  const { favourites, toggleFavourite } = useFavourites();
-  const { pool } = usePool();
+  const { notices, cards, removeCard } = useDashboard();
+  const [path, go] = useHashPath();
+  const [, openId, panelParam] = path;
+  const open = cards.find((c) => c.toolCallId === openId);
 
-  function openPage(next: WorkspacePage) {
-    setPage(next);
-    setSelected(null);
+  // A new card always pops up: leave a maximized card, show the grid, and flash the new card (top-left).
+  const newest = cards[0]?.toolCallId;
+  const seen = useRef(newest);
+  const pathLength = useRef(path.length);
+  useEffect(() => {
+    pathLength.current = path.length;
+  }, [path.length]);
+  useEffect(() => {
+    if (!newest || newest === seen.current) return;
+    seen.current = newest;
+    if (pathLength.current > 1) go(["widgets"]);
+    const timer = setTimeout(() => {
+      const el = document.getElementById(cardElementId(newest));
+      el?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      el?.animate([{ boxShadow: "0 0 0 3px rgb(14 165 233 / 0.6)" }, { boxShadow: "0 0 0 0 rgb(14 165 233 / 0)" }], { duration: 1600 });
+    }, 80);
+    return () => clearTimeout(timer);
+  }, [newest, go]);
+
+  if (open) {
+    const panels = open.card.panels ?? [];
+    const panelIndex = panelParam === undefined ? undefined : Number(panelParam);
+    const panel = panelIndex !== undefined && panels[panelIndex] ? panels[panelIndex] : undefined;
+    return (
+      <div className="flex h-full min-h-0 flex-col">
+        <nav aria-label="Widget path" className="flex items-center gap-1 border-b border-black/10 px-6 py-2.5 text-sm dark:border-white/10">
+          <Crumb onClick={() => go(["widgets"])}>Widgets</Crumb>
+          <span className="text-black/30 dark:text-white/30">/</span>
+          {panel ? (
+            <>
+              <Crumb onClick={() => go(widgetPath(open.toolCallId))}>{open.card.title}</Crumb>
+              <span className="text-black/30 dark:text-white/30">/</span>
+              <span className="truncate font-medium">{panel.title}</span>
+            </>
+          ) : (
+            <span className="truncate font-medium">{open.card.title}</span>
+          )}
+        </nav>
+        <div className="min-h-0 flex-1 overflow-y-auto p-6">
+          <CardShell
+            key={panel ? `${open.toolCallId}/${panelIndex}` : open.toolCallId}
+            card={panel ?? open.card}
+            mode="full"
+            onOpenPanel={panel ? undefined : (i) => go(widgetPath(open.toolCallId, i))}
+            onClose={
+              panel
+                ? undefined
+                : () => {
+                    removeCard(open.toolCallId);
+                    go(["widgets"]);
+                  }
+            }
+          />
+        </div>
+      </div>
+    );
   }
 
-  function openSupplier(supplier: Supplier) {
-    setPage("suppliers");
-    setSelected(supplier);
+  if (notices.length === 0 && cards.length === 0) {
+    return (
+      <div className="flex h-full items-center justify-center p-6 text-sm text-black/50 dark:text-white/50">
+        Ask a Buddy something… results will appear here.
+      </div>
+    );
   }
 
   return (
-    <div className="relative flex h-full min-h-0 bg-[#f7f8fa]">
-      {sidebarOpen && (
-        <WorkspaceSidebar active={page} onChange={openPage} counts={{ favourites: favourites.length, pool: pool.length }} />
+    <div className="h-full space-y-4 overflow-y-auto p-6">
+      {cards.length > 0 && (
+        <div className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,340px),1fr))] gap-4">
+          {cards.map(({ toolCallId, card }) => (
+            <CardShell
+              key={toolCallId}
+              id={cardElementId(toolCallId)}
+              card={card}
+              mode="preview"
+              onOpen={() => go(widgetPath(toolCallId))}
+              onClose={() => removeCard(toolCallId)}
+            />
+          ))}
+        </div>
       )}
-
-      {/* Pages stay mounted so filters, sorting and scroll survive a trip through the sidebar. */}
-      <div
-        className={page === "home" ? "flex min-w-0 flex-1 flex-col overflow-hidden" : "hidden"}
-        aria-hidden={page !== "home"}
-      >
-        <WorkspaceHeader sidebarOpen={sidebarOpen} onToggleSidebar={() => setSidebarOpen((open) => !open)}>
-          <div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-black/35">Workspace</p>
-            <h1 className="text-lg font-semibold tracking-tight">Home</h1>
-          </div>
-        </WorkspaceHeader>
-        <div className="min-h-0 flex-1 overflow-y-auto">
-          <HomeView />
-        </div>
-      </div>
-
-      {SUPPLIER_PAGES.map((supplierPage) => (
-        <div
-          key={supplierPage}
-          className={page === supplierPage ? "flex min-w-0 flex-1" : "hidden"}
-          aria-hidden={page !== supplierPage}
-        >
-          <SupplierWorkspace
-            page={supplierPage}
-            active={page === supplierPage}
-            sidebarOpen={sidebarOpen}
-            onToggleSidebar={() => setSidebarOpen((open) => !open)}
-            favourites={favourites}
-            onToggleFavourite={toggleFavourite}
-            selected={selected}
-            onSelect={setSelected}
-          />
-        </div>
-      ))}
-
-      <div className={page === "pool" ? "flex min-w-0 flex-1" : "hidden"} aria-hidden={page !== "pool"}>
-        <ComparisonPool
-          active={page === "pool"}
-          sidebarOpen={sidebarOpen}
-          onToggleSidebar={() => setSidebarOpen((open) => !open)}
-          onOpenSupplier={openSupplier}
-        />
-      </div>
-
-      {/* On the supplier pages the agent's notice cards float over the page; Home shows them in full. */}
-      {page !== "home" && notices.length > 0 && (
-        <div className="pointer-events-none absolute bottom-4 right-4 z-20 w-72 space-y-2">
+      {notices.length > 0 && (
+        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
           {notices.map((notice) => (
             <article
               key={notice.id}
-              className="pointer-events-auto rounded-xl border border-black/10 bg-white/95 p-3 shadow-lg backdrop-blur"
+              className="rounded-xl border border-black/10 bg-white p-4 shadow-sm dark:border-white/10 dark:bg-neutral-900"
             >
-              <p className="text-[10px] font-medium uppercase tracking-wide text-black/40">
+              <p className="text-xs font-medium uppercase tracking-wide text-black/40 dark:text-white/40">
                 Notice · {agentLabel(notice.agentId)}
               </p>
-              <p className="mt-1 text-xs">{notice.text}</p>
+              <p className="mt-1 text-base">{notice.text}</p>
             </article>
           ))}
         </div>
       )}
     </div>
   );
+}
+
+function Crumb({ children, onClick }: { children: React.ReactNode; onClick: () => void }) {
+  return (
+    <button type="button" onClick={onClick} className="truncate rounded px-1 text-sky-700 hover:bg-sky-500/10 dark:text-sky-300">
+      {children}
+    </button>
+  );
+}
+
+export function cardElementId(toolCallId: string) {
+  return `card-${toolCallId}`;
 }

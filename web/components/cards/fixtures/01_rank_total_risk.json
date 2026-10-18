@@ -179,5 +179,6 @@
       }
     ]
   },
-  "summary": "Lower is better for total risk. Best: SUPP_00141 (45); worst: SUPP_00018 (80). Watch: SUPP_00141 looks moderate overall (total risk 45) but has critical political stability (78) (+2 more)."
+  "summary": "Lower is better for total risk. Best: SUPP_00141 (45); worst: SUPP_00018 (80). Watch: SUPP_00141 looks moderate overall (total risk 45) but has critical political stability (78) (+2 more).",
+  "panels": null
 }

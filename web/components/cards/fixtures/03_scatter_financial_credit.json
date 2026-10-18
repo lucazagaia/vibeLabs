@@ -261,5 +261,6 @@
       ]
     }
   },
-  "summary": "Lower is better for financial health. Best: SUPP_00006 (18); worst: SUPP_00001 (96). In the 'Serious financial concern' zone: SUPP_00001, SUPP_00002, SUPP_00007, SUPP_00008 and others."
+  "summary": "Lower is better for financial health. Best: SUPP_00006 (18); worst: SUPP_00001 (96). In the 'Serious financial concern' zone: SUPP_00001, SUPP_00002, SUPP_00007, SUPP_00008 and others.",
+  "panels": null
 }

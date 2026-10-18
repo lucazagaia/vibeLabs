@@ -1,4 +1,4 @@
-"""Generate 10 fixture cards from data/Siemens.csv with the real card engine (buddy.cards.tool.build_card).
+"""Generate 12 fixture cards from data/Siemens.csv with the real card engine (buddy.cards.tool.build_card).
 
 Each fixture is exactly what `compare_suppliers` sends the frontend and is written to
 web/components/cards/fixtures/. Supplier picks are deterministic (fixed IDs or "first N by supplierID
@@ -26,6 +26,7 @@ def first(pred, n):
 
 
 def main():
+    from buddy.cards.composite import build_all_metrics, build_composite, panel_groups
     from buddy.cards.tool import build_card
 
     OUT.mkdir(parents=True, exist_ok=True)
@@ -52,6 +53,17 @@ def main():
         card = build_card(intent, direction, metrics, ids)
         (OUT / f"{name}.json").write_text(json.dumps(card, indent=2) + "\n")
         print(f"  {name:<30} {card['renderer']:<8} {card['template']:<32} {len(ids):>2} suppliers  flags={card['dataShape']['flags']}")
+
+    # Composite cards (plan 05d): one panel per buyer topic, and "all metrics".
+    ids = [f"SUPP_{i:05d}" for i in (12, 18, 141, 287, 450, 731)]
+    composites = [
+        ("11_composite_topics", build_composite("safest", panel_groups(
+            [["Credit_Rating_Score"], ["Supplier Delivery Rating"], ["ESG_Performance_Score"], ["Purchase Order Volume (EUR)"]]), ids)),
+        ("12_composite_all_metrics", build_all_metrics("safest", ids)),
+    ]
+    for name, card in composites:
+        (OUT / f"{name}.json").write_text(json.dumps(card, indent=2) + "\n")
+        print(f"  {name:<30} composite {len(card['panels'])} panels: {[p['template'] for p in card['panels']]}")
 
 
 if __name__ == "__main__":

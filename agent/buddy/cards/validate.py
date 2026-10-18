@@ -12,6 +12,17 @@ INTENT_ALIASES = {"watch": "watchlist", "red_flags": "watchlist", "overall": "ov
 
 SUPPLIER_ID = re.compile(r"SUPP_\d{5}")
 
+# Words that name exactly one metric (the skill's "clear examples"). Seen live: for "least likely to go
+# bankrupt" the model sometimes listed both financial metrics, or none. A cue in the buyer's own words decides.
+CLEAR_CUES: dict[str, re.Pattern] = {
+    "Financial_Health_Score": re.compile(r"bankrupt|insolven|go(?:es|ing)? under", re.I),
+    "Credit_Rating_Score": re.compile(r"credit ?rating|creditworth", re.I),
+    "Supplier Delivery Rating": re.compile(r"on[- ]time|deliver\w* late|late deliver", re.I),
+    "Order Change Rate": re.compile(r"chang\w* (?:our |the )?orders?", re.I),
+    "Digital_Security_Score": re.compile(r"hack|cyber", re.I),
+    "Sub_Tier_Visibility_Score": re.compile(r"sub-?suppliers?|sub-?tier", re.I),
+}
+
 
 def _name_terms(metric: str) -> str:
     """Plain name a buyer would write, e.g. 'Credit rating' -> 'credit rating', 'Spend (PO volume, EUR)' -> 'spend'."""
@@ -58,3 +69,39 @@ def clean_enums(intent: str, direction: str, metrics: list[str], rank_by: str | 
     metrics = [m for m in metrics if m in METRICS]
     rank_by = rank_by if rank_by in METRICS else None
     return intent, direction, metrics, rank_by
+
+
+def cue_metrics(request: str) -> list[str]:
+    """Metrics the buyer named with an unambiguous cue word, in CLEAR_CUES order."""
+    return [k for k, pattern in CLEAR_CUES.items() if pattern.search(request)]
+
+
+# "All metrics", "full analysis", "everything": the whole picture, never a 23-option question.
+ALL_METRICS = re.compile(r"\ball (?:the |of the )?(?:metrics|scores|kpis|dimensions|categories|risks)\b|\bevery (?:metric|score|dimension)\b"
+                         r"|\bfull (?:analysis|comparison|picture|profile|breakdown)\b|\beverything\b|\bon all\b", re.I)
+# The buyer's answer to "which one?": every candidate instead of one.
+ALL_OF_THEM = re.compile(r"^\W*(?:all of them|all of those|all|both|all (?:two|three|four|five|six)|everything|show all|all options)\b", re.I)
+# "these", "this list", "the top three of them": the suppliers on the last card.
+THIS_LIST = re.compile(r"\b(?:these|those|this list|that list|the list|them|the same (?:suppliers|ones)|above|previous (?:card|list))\b", re.I)
+_NUMBERS = {"two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10}
+TOP_N = re.compile(r"\b(?:top|first|best)\s+(\d+|" + "|".join(_NUMBERS) + r")\b", re.I)
+
+
+def wants_all_metrics(text: str) -> bool:
+    return bool(ALL_METRICS.search(text))
+
+
+def chose_all(text: str) -> bool:
+    return bool(ALL_OF_THEM.match(text))
+
+
+def refers_to_list(text: str) -> bool:
+    return bool(THIS_LIST.search(text))
+
+
+def top_n(text: str) -> int | None:
+    m = TOP_N.search(text)
+    if not m:
+        return None
+    word = m.group(1).lower()
+    return int(word) if word.isdigit() else _NUMBERS[word]

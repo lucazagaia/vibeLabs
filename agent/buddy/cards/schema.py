@@ -145,7 +145,7 @@ class Mention(BaseModel):
 
 # --- Card contract (rendered by the frontend) ---------------------------------------------------
 
-Renderer = Literal["rank", "scatter", "table"]
+Renderer = Literal["rank", "scatter", "table", "composite"]
 Scale = Literal["fixed_0_100", "zoomed", "log", "linear", "percentile", "categorical"]
 
 
@@ -190,6 +190,10 @@ class Card(BaseModel):
     suppliers: list[CardSupplier]
     facts: dict
     summary: str
+    panels: list["Card"] | None = None  # composite only: one full card per buyer topic, each with its own chart
+
+
+Card.model_rebuild()
 
 
 class ToolResult(BaseModel):
