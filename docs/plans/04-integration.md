@@ -36,6 +36,22 @@ These decisions are applied from Checkpoint 3:
 | E5 | Frontend tool | Ask either agent to "Show a notice saying hello" | A card appears on the dashboard |
 | E6 | Model provenance | Agent server log | Requests go to `nebius/nvidia/…` at the Token Factory base URL |
 
+## Results (18 Oct, fresh clone of `feat/copilotkit-frontend`, set up from the README alone)
+
+| # | Result |
+|---|---|
+| E0 | ✅ `uv sync`, `npm ci` and the two env templates worked as written. No README changes were needed. There's a single `@ag-ui/client@1.0.2`. |
+| E1 | ✅ 17/18. Lightning missed the tool once in T7 at `reasoning_effort=none`. A follow-up of 40 calls showed it's noise, not a regression: **`none` called the tool 10/10** both without and with Data Buddy's instruction, and `low` was 9/10 without and 10/10 with it. `none` is also faster: median 246 ms vs 412 ms with the instruction. |
+| E2 | ✅ S1–S4, 4/4. Data Buddy runs no longer contain any `REASONING_*` events. Research Buddy's still do. |
+| E3 | ✅ Data Buddy answered "The dataset contains 10,000 suppliers." with **no "Thought…" cards**. |
+| E4 | ✅ Research Buddy opened a separate, empty thread and replied. Its reasoning cards remain (`medium`). |
+| E5 | ✅ A "Notice · Data Buddy / hello" card appeared on the dashboard. The tool result went back to the agent, and it continued. |
+| E6 | ✅ LiteLLM resolves both agents to provider `nebius` at `https://api.tokenfactory.nebius.com/v1` (not the legacy Studio URL). |
+
+**Observations:**
+- **Typing right after page load:** the first Return didn't submit, because the chat was still connecting. The next message was then sent together with it. The agent handled the combined request correctly (notice, then answer), but that run took about 30–40 s. Watch latency on combined, multi-tool requests.
+- **The fresh clone was deleted after the run,** since it held a copy of `agent/.env`.
+
 ## Out of scope
 - pushing or opening a PR (that's decided at Checkpoint 4)
 - deployment
