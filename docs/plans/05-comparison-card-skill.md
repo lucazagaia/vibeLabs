@@ -1,47 +1,63 @@
-# Step 5: Comparison cards as an ADK Skill (intent → tools → card)
+# Step 5: Comparison cards as an ADK Skill (agent extracts, code decides)
 
 Builds on Adham's [`comparison-card-template-spec.md`](../../comparison-card-template-spec.md), which gets moved to `docs/specs/`. It runs on the walking skeleton (Steps 1–4).
 
 ## Context
 A buyer asks Data Buddy to compare suppliers, and the right comparison card appears on the dashboard. Adham's spec defines what a good card is: templates, routing, a data-shape preflight and interpretation rules.
 
-**Decision:** implement it as an **ADK Skill** (`supplier-comparison-cards`). The skill carries a **fixed, step-by-step procedure**:
-1. understand the intent
-2. call the right tools
-3. open the card
-4. explain it
-
-The tools do the deterministic work: routing, statistics, scales and facts. The procedure tells the model exactly when to call which tool.
+**Decision:** an **ADK Skill** (`supplier-comparison-cards`) with a fixed procedure and a clear division of labour:
+- **The agent understands the request.** It extracts suppliers, metrics, intent and direction into **enum-constrained tool arguments**. Language understanding is the model's strength.
+- **Code decides everything else.** It validates, selects suppliers, picks the template, runs the preflight, works out the facts and writes the summary. The card renders from the tool result.
 
 ## How ADK Skills work (verified in google-adk 2.12)
-- **`SKILL.md`:** frontmatter (`name`, `description`, `metadata`) plus the procedure body. The model loads it with `load_skill`. In `EAGER` discovery mode the catalog sits in the system prompt, so no extra `list_skills` turn is needed.
-- **`references/*.md`:** extra material that loads only when the procedure says so (`load_skill_resource`). It keeps the prompt small.
-- **`metadata.adk_additional_tools: [...]`:** tools that are **only declared to the model once the skill is loaded**. Card tools can't be called outside the procedure.
-- **Wiring:** `SkillToolset(skills=[...], additional_tools=[...], discovery_mode=EAGER)` goes into Data Buddy's `tools`, next to `AGUIToolset()` for the frontend tool `open_card`.
+- **`SKILL.md`:** frontmatter (`name`, `description`, `metadata`) plus the procedure body. The model loads it with `load_skill`. `EAGER` discovery puts the catalog in the system prompt, so no `list_skills` turn is needed.
+- **`references/*.md`:** loaded only when the procedure says so (`load_skill_resource`).
+- **`metadata.adk_additional_tools: [...]`:** the skill's tools are **only declared to the model once the skill is loaded**.
+- **Lifecycle:** a loaded skill stays active for the rest of the session by default.
+- **Wiring:** `SkillToolset(skills=[...], additional_tools=[...], discovery_mode=EAGER)` goes into Data Buddy's `tools`.
 - **Status:** the feature is marked experimental in ADK. The first build sub-step is a smoke test with Nemotron + ag-ui-adk.
 
-## File layout
+## Who decides what
 
-```
-agent/buddy/
-├─ skills/supplier-comparison-cards/
-│  ├─ SKILL.md                     # the procedure (below)
-│  └─ references/
-│     ├─ intents.md                # intent taxonomy + trigger phrases + examples
-│     ├─ metric-map.md             # metric keys, synonyms, clusters, value direction (from the spec)
-│     ├─ card-catalog.md           # templates and when each is used (from the spec)
-│     └─ interpretation-rules.md   # how to explain a card (from the spec)
-├─ cards/                          # deterministic engine behind the tools
-│  ├─ registry.py                  # metric map + clusters + templates as data
-│  ├─ select.py                    # supplier selection (IDs, tray, rank/filter, ≤20)
-│  ├─ route.py                     # spec's "Template Selection Flow" + metric map
-│  ├─ preflight.py                 # data-shape stats, flags, scale, fallbacks
-│  ├─ facts.py                     # safest/riskiest, spread, quadrant outliers, hidden watchouts
-│  └─ tools.py                     # the 3 skill tools (thin wrappers)
-└─ data_buddy/agent.py             # + SkillToolset(EAGER) next to AGUIToolset()
-agent/main.py                      # + GET /api/cards (rebuilds a card from its query spec)
-web/components/cards/              # renderers (see "Frontend")
-```
+| Step | Decided by | How |
+|---|---|---|
+| Recognise a comparison request | **Agent** | The skill description in the system prompt (`EAGER`) |
+| Extract metric *mentions*, intent and direction | **Agent** | For each topic the buyer mentions, one `{phrase, metrics: [candidate keys]}` entry. The tool description includes a one-line glossary per metric. Enums: the 25 metric keys, 5 intents, 2 directions |
+| Is a mention ambiguous? | **Code** | Any mention with more than one candidate becomes `needs_clarification`, and **the buyer chooses one** option. `compare` with no mentions also gets a question |
+| Supplier IDs | **Code** | Regex `SUPP_\d{5}` on the verbatim `request`. The model's `supplier_ids` are only accepted if they appear there |
+| Validate and normalise the arguments | **Code** | Unknown values or missing suppliers become `needs_clarification`. The metric count decides single/pair/cluster, never the agent |
+| Select 2–20 suppliers | **Code** | Explicit IDs, the compare tray (from session state), or ranking criteria |
+| Template, preflight, scale, fallback | **Code** | The spec's selection flow + metric map + preflight rules |
+| Facts + 2–3 sentence summary | **Code** | Facts, then a sentence template per card type |
+| Show the card | **Code** | Frontend renders it from the tool result (`useRenderTool`; the docs confirm a backend tool can be rendered with no client handler) |
+| Reply to the buyer | **Agent** | Relays `summary`, or the clarifying question |
+
+**Model turns:** `load_skill` (first use in a session only) → `compare_suppliers` → reply. That's 3 turns the first time and **2 after that**.
+
+### Evidence (tested 18 Oct on Lightning, reasoning `none`, with this schema)
+**Metric mapping, 34 natural-language requests:**
+
+| Variant | Correct | Invented IDs |
+|---|---|---|
+| Bare enum of 25 keys | 17/34 | 0 |
+| + per-metric glossary | 30/34 | 12 |
+| + targeted rules (fewest metrics, "overall" → Total Risk Index, IDs only if written) | **34/34** | **0** |
+
+The glossary is essential, and so are the explicit rules.
+
+**Ambiguity (16 requests: 6 vague concepts, 10 clear or explicit lists), using nested `mentions`:**
+- The ask decision was correct in **13/16 and 15/16** runs.
+- **0 vague concepts slipped through without a question** (no wrong cards).
+- The only errors were unnecessary questions on clear requests, for example "on time" read as delivery *or* confirmation. More clear-term examples reduce these.
+- **Schema finding:** a flat `metrics` field plus a separate "ambiguous" field did worse (8–10/16). The model then picks a metric itself instead of flagging the ambiguity. Nested `mentions` makes it list the candidates.
+
+**Reasoning budget:** at `low`, a 512-token cap ran out before the arguments were written (`finish_reason=length`). With 2048 tokens it scored 34/34. Any agent with reasoning on gets a cap of at least 2048 tokens.
+
+**Effect:**
+- The model handles varied language: "least likely to go bankrupt" → `Financial_Health_Score`.
+- **There's no parser or synonym table to build.**
+- Everything after extraction is repeatable and unit-testable without an LLM.
+- The card can't be altered by the model.
 
 ## The procedure (draft `SKILL.md`)
 
@@ -49,124 +65,168 @@ web/components/cards/              # renderers (see "Frontend")
 ---
 name: supplier-comparison-cards
 description: >
-  Compare 2-20 suppliers on one or more risk, performance or exposure metrics and show the
-  result as a comparison card on the dashboard. Use whenever the buyer asks to compare, rank,
-  shortlist, choose between, or explain differences between suppliers.
+  Compare 2-20 suppliers on risk, performance or exposure metrics and show a comparison card on
+  the dashboard. Use whenever the buyer asks to compare, rank, shortlist, choose between, or
+  explain differences between suppliers.
 metadata:
-  adk_additional_tools: [resolve_metrics, select_suppliers, plan_card]
+  adk_additional_tools: [compare_suppliers]
 ---
 
 # Procedure: build a supplier comparison card
 
-Follow these steps in order. Do not skip a step. Never state a number that did not come from a tool.
+## Step 1 - Extract the request (fill only what the buyer actually said)
+- Suppliers, one of:
+  - the IDs written in the message (SUPP_ followed by 5 digits), copied exactly
+  - "these", "my shortlist", "the tray": `use_compare_tray = true`
+  - a criterion such as "top 10 safest by total risk": `rank_by`, `rank_order`, `limit`
+- Mentions: for EACH separate topic the buyer mentions, add one entry to `mentions`:
+  `phrase` = the buyer's words, `metrics` = every metric key that phrase could reasonably mean
+  (use the metric glossary in the tool description).
+  - If the phrase clearly names one metric, give exactly ONE key. Clear examples: "bankrupt" ->
+    Financial_Health_Score; "credit rating" -> Credit_Rating_Score; "on time" -> Supplier Delivery
+    Rating; "changing our orders" -> Order Change Rate; "overall" -> Total_Risk_Index;
+    "hacking" -> Digital_Security_Score; "spend" -> Purchase Order Volume (EUR).
+  - If it is a broad concept that could mean several metrics, list ALL candidates and do not pick
+    one yourself (the buyer will be asked). Broad examples: "financial risk" -> [Financial_Health_Score,
+    Credit_Rating_Score]; "reputation" -> [Media_Sentiment_Score, Market_Sentiment_Score,
+    External_Intelligence_Score, Industry_Benchmark_Score]; "legal problems" -> [Compliance_Risk_Score,
+    Governance_Risk_Score].
+  - If the buyer asks about any specific topic, `mentions` must not be empty. Leave it empty only for
+    fully general requests ("compare these suppliers", "which should we pick").
+- Intent, exactly one:
+  - `choose`: which one to pick, justify a choice, shortlist memo
+  - `watchlist`: red flags, why is X risky, hidden risks, surprises
+  - `exposure`: spend, contract exposure, where our money is at risk
+  - `overview`: compare them in general, summarize, overall
+  - `compare`: anything else that names metrics (the default)
+- Direction: `watch` if the buyer asks for the worst, riskiest or problems; otherwise `safest`.
+Never invent supplier IDs or metrics that the buyer did not mention.
 
-## Step 1 - Understand the intent
-Classify the request into exactly one intent (see references/intents.md for trigger phrases):
-- `single_metric`: one metric ("compare their financial health")
-- `metric_pair`: two related metrics ("financial health vs credit rating")
-- `metric_cluster`: 3-6 metrics of one topic ("ESG and workforce", "geopolitical exposure")
-- `overview`: broad comparison ("compare these suppliers", "summarize them")
-- `watchlist`: problems or surprises ("red flags", "why is X risky", "hidden risks")
-- `exposure`: spend or contract exposure ("where is our money at risk")
-- `choose`: decision ("which one should we pick", "justify the choice", "shortlist memo")
-Also decide the direction: `safest` (best first) or `watch` (worst first). The default is `safest`,
-but `watchlist` always means `watch`.
-If the request is too vague to classify, ask ONE short clarifying question and stop.
+## Step 2 - Call the tool once
+Call `compare_suppliers` with the extracted fields and `request` = the buyer's message verbatim.
 
-## Step 2 - Identify the suppliers
-Call `select_suppliers` with what the buyer gave you:
-- explicit IDs (e.g. "SUPP_00012, SUPP_00450"): pass them as `supplier_ids`
-- "these" / "my shortlist" / "the tray": pass `use_compare_tray=true`
-- a criterion ("top 10 by lowest total risk", "Critical financial health"): pass `rank_by` / `filters` / `limit`
-The tool returns 2-20 IDs. If it returns an error (unknown ID, fewer than 2), tell the buyer and stop.
-
-## Step 3 - Resolve the metrics
-Call `resolve_metrics` with the metric words from the request (e.g. ["financial", "credit"]).
-For `overview`, `choose` and `watchlist` you may pass an empty list: the tool supplies the
-default metric set for that intent. If any term is `unknown`, ask which metric was meant and stop.
-
-## Step 4 - Plan the card
-Call `plan_card(intent, direction, metrics, supplier_ids)`. It picks the template, runs the
-data-shape preflight, chooses the scale and any fallback, and returns:
-`card_query` (to open the card), `template`, `title`, `data_shape.notes`, and `facts`.
-Do not choose a template yourself.
-
-## Step 5 - Show the card
-Call the frontend tool `open_card` with `card_query` exactly as returned. Do not change it.
-
-## Step 6 - Explain it
-Reply in 2-3 sentences using only `facts` (rules: references/interpretation-rules.md):
-1. Say whether lower or higher is better for the metric(s).
-2. Name the best and the worst supplier with their values from `facts`.
-3. Add the most important caveat if `facts` contains one: a hidden watchout, an
-   exposure-vs-risk note, "metric does not discriminate in this shortlist", or a scale note from `data_shape.notes`.
+## Step 3 - Reply based on `status`
+- `ok`: the card is already on the dashboard. Reply with `summary` (you may shorten it, but never
+  add a number that is not in `summary`). Stop.
+- `needs_clarification`: ask `question` and list `options` exactly as given. Stop. When the buyer
+  picks an option, call `compare_suppliers` again with the same fields, but replace that mention's
+  `metrics` with the single chosen key.
+- `error`: tell the buyer `message` in one sentence. Stop.
 ```
 
-## The tools (deterministic Python, in `buddy/cards/tools.py`)
+## The tool (`buddy/cards/`)
 
-| Tool | Input | Output | Implements (spec section) |
-|---|---|---|---|
-| `resolve_metrics` | `terms: list[str]`, `intent` | `{metrics: [key…], cluster, unknown: [term…]}` | Metric names + synonyms, clusters, intent default sets |
-| `select_suppliers` | `supplier_ids?`, `use_compare_tray?`, `rank_by?`, `filters?`, `limit≤20` | `{supplier_ids: [...], reason}` or `{error}` | Global assumptions (2–20 suppliers; more than 20 gets ranked down) |
-| `plan_card` | `intent`, `direction`, `metrics`, `supplier_ids` | `{card_query, template, title, data_shape, facts}` | Template Selection Flow, Metric Map, Preflight, Scale Decisions, Fallback Rules, Interpretation inputs |
-| `open_card` (frontend tool) | `card_query` | rendered card | — |
+```python
+compare_suppliers(
+    request: str,                                  # verbatim, for logging and evals
+    intent: Literal["compare", "overview", "watchlist", "exposure", "choose"],
+    direction: Literal["safest", "watch"],
+    mentions: list[Mention] = [],                  # Mention = {phrase: str, metrics: list[MetricKey]}
+                                                   # MetricKey = Literal of the 25 spec metric keys
+    supplier_ids: list[str] = [],                  # kept only if the ID appears in `request` (code-enforced)
+    use_compare_tray: bool = False,
+    rank_by: MetricKey | None = None,
+    rank_order: Literal["lowest", "highest"] | None = None,
+    limit: int | None = None,                      # 2-20
+) -> {"status": "ok" | "needs_clarification" | "error", "card"?, "summary"?, "question"?, "options"?, "message"?}
+```
 
-- **`card_query`** is a small, reproducible spec: `{intent, direction, metrics, supplier_ids, template}`. The browser calls `GET /api/cards?…` with it, and the backend rebuilds the full card deterministically.
-  - **Numbers never pass through the LLM.**
-  - **The card survives a reload,** because only the query spec is stored, which fits the UI-state store design.
-- **`facts`** is a compact, ready-to-say summary:
-  - best and worst supplier, with values
-  - spread
-  - quadrant outliers
-  - hidden watchouts (Low or Medium total risk but a Critical geopolitical, political or environmental score; **306 such suppliers** exist in the data)
-  - "not discriminating" if the values are tightly clustered
+This is the pipeline, all deterministic:
+1. **`validate.py`:**
+   - **Enum values:** reject unknown ones. The schema allows only valid values, but check anyway.
+   - **Supplier IDs:** extracted with the regex `SUPP_\d{5}` from the verbatim `request`. Any model-supplied ID that isn't in the request is dropped, because without that rule the model invented IDs for "these suppliers" in tests.
+   - **Ambiguity → the buyer chooses one:** if a mention has more than one candidate, return `needs_clarification`. For example: `question`: "'financial risk' can mean several things. Which one should I compare?", `options`: ["Financial health (liquidity, bankruptcy risk)", "Credit rating"]. The option labels come from the metric glossary.
+   - **No mentions with `intent = compare`:** `needs_clarification` ("Which aspect should I compare?"), with the cluster names as options. It's a safety net so the code never guesses.
+   - **Suppliers:** unknown IDs, or no suppliers at all → `needs_clarification`, with options such as "use the compare tray" or "top 10 by total risk".
+   - **Normalise `compare`:** decided purely by the metrics.
+     - 1 metric → the spec's single-metric default. For example, Financial Health on its own becomes the **financial/credit scatter**.
+     - 2 metrics that form a spec pair → the pair card.
+     - 3–6 metrics in one cluster → the cluster card.
+     - Mixed metrics → `overview`.
+   - **Empty `metrics`:** filled from the intent's default set (overview, watchlist, exposure, choose).
+2. **`select.py`:** 2–20 suppliers. More than 20 get ranked down by the requested metric or total risk; fewer than 2 is an `error`.
+3. **`route.py`:** the spec's Template Selection Flow + Metric Map, and that template → renderer.
+4. **`preflight.py`:** the spec's data-level statistics and flags, the scale decision and the fallbacks. PO volume is always on a log scale (max/median is 63×).
+5. **`facts.py` + `summary.py`:**
+   - best and worst supplier, spread, quadrant outliers
+   - hidden watchouts: Low or Medium total risk but a Critical geopolitical, political or environmental score (306 in the data)
+   - then a 2–3 sentence `summary` from a template per card type
+6. **Return** `{status: "ok", card, summary}`. The frontend renders `card` from the tool result.
 
 ## Card contract (frozen together before the split)
-The spec's "Recommended Card Data Contract", extended with:
-- `intent`, `direction` and `card_query`
-- `facts`, as above
-- `referenceBands` for risk colours. They're fixed and identical for every score in the data: **Low 0–24, Medium 25–49, High 50–74, Critical 75–100**.
-- `quadrants`: axis thresholds and labels, for scatter templates
-- `scale`, which already exists in `dataShape`. **PO volume is always `log`**, because max/median is 63×.
+The spec's "Recommended Card Data Contract", plus:
+- `renderer`: `rank`, `scatter` or `table` (see below)
+- `intent`, `direction` and `facts`
+- `referenceBands`: **Low 0–24, Medium 25–49, High 50–74, Critical 75–100**. These are identical for every score in the data.
+- `quadrants`: thresholds and labels. Risk axes split at 50 (where the High band starts), and delivery/confirmation split at the shortlist median.
 
-## MVP card set (renderers on the frontend)
+## MVP: the simplest renderer set that still matches the spec
 
-| # | Renderer | Covers these spec templates |
+Every spec template is a **config of one of three renderers**:
+
+| Renderer | Spec templates it renders | Match with the spec |
 |---|---|---|
-| 1 | Ranked lollipop / bar (linear or log) | `ranked_lollipop_card`, `horizontal_bar_card`, `log_exposure_bar_card` |
-| 2 | Scatter with quadrants | `paired_scatter_card`, `quadrant_scatter_card`, `financial_credit_card`, `compliance_governance_card`, `performance_reliability_card`, `exposure_vs_risk_card` |
-| 3 | Heatmap matrix + raw values | `risk_heatmap_matrix_card`, `overall_supplier_benchmark_card`, cluster cards (8–20 suppliers) |
-| 4 | Categorical 3×3 matrix | `categorical_distribution_card`, `replaceability_complexity_card` |
-| 5 | Watchlist rows | `outlier_watchlist_card`, `hidden_outlier_card` |
-| 6 | Decision table | `shortlist_decision_card` |
+| **`rank`**: one sorted axis per metric (lollipop/bar, linear or log). Several metrics give stacked lanes, one per metric | `ranked_lollipop_card`, `horizontal_bar_card`, `log_exposure_bar_card`; **cluster cards** `esg_workforce_card`, `reputation_cluster_card`, `geopolitical_external_card` as a *grouped lollipop set* | ✅ The spec's default for every single-metric lollipop/bar, and its primary option for the cluster cards |
+| **`scatter`**: two axes with quadrants, optional dot size | `paired_scatter_card`, `quadrant_scatter_card`, `financial_credit_card`, `compliance_governance_card`, `performance_reliability_card`, `exposure_vs_risk_card` | ✅ The spec's default for all eight "paired" metrics and every combined two-axis card |
+| **`table`**: rows × columns, with colour-banded cells, raw values and optional row flags or text sections | `risk_heatmap_matrix_card`, `overall_supplier_benchmark_card`, `grouped_metric_table_card`, `categorical_distribution_card`, `replaceability_complexity_card` (3×3 grid), `outlier_watchlist_card`, `hidden_outlier_card`, `shortlist_decision_card`, `operational_chain_card` (spec: "or grouped heatmap") | ✅ The spec's default for these, and its stated fallback of choice ("A clear table is better than a clever but distorted chart") |
 
-**Later:** parallel coordinates and small-multiple radar (the spec's cluster cards for 3–6 suppliers). Until then, `route.py` falls back to the heatmap, which the spec already allows.
+**Deferred:** `parallel_coordinates_card` and `category_profile_radar_card`. Until they exist, `route.py` uses the spec's own fallbacks: grouped bars (`rank`) or the heatmap (`table`).
 
-## Gaps in the spec, resolved here
-1. `signal_share_card` and "grouped lollipop set" are referenced but never defined. They map to the heatmap (#3), or to the lollipop (#1) with several rows.
-2. **Supplier selection** was missing. It's now `select_suppliers`, and more than 20 suppliers get ranked down rather than rejected.
-3. **Intent and direction** were implicit. They're now explicit tool inputs.
-4. **Pixel flags** (`heavy_overlap`, the 12px rule) move to the renderers, because the backend doesn't know screen positions. Data flags stay in `preflight.py`.
-5. **Quadrant cut-offs:** the 0–100 risk axes split at 50 (the High band starts there). Delivery and confirmation split at the shortlist median, and the cut-off is recorded in `quadrants`.
+**Why 3 and not fewer:**
+- Dropping `scatter` would break the spec's default for eight metrics.
+- Dropping `rank` would force a table for single-metric questions, which are the most common.
+
+## File layout
+
+```
+agent/buddy/
+├─ skills/supplier-comparison-cards/
+│  ├─ SKILL.md
+│  └─ references/
+│     ├─ metric-map.md         # the 25 metric keys with synonyms, clusters, direction (the one-line glossary
+│     │                        #  is ALSO in the tool description: tests showed it's needed on every call)
+│     └─ card-catalog.md       # template → renderer, defaults, fallbacks (from the spec)
+├─ cards/  schema.py · validate.py · select.py · route.py · preflight.py · facts.py · summary.py · tool.py
+└─ data_buddy/agent.py        # + SkillToolset(skills=[...], additional_tools=[compare_suppliers], EAGER)
+web/components/cards/          # RankCard, ScatterCard, TableCard, CardShell
+                               # + useRenderTool("compare_suppliers") → puts the card on the dashboard
+```
 
 ## Work split for two people
-**Together first (about 1 h):** freeze the contract, then generate **8 fixture cards from the real data**, one per renderer plus two preflight edge cases (a tight cluster and an extreme outlier).
+**Together first (about 1 h):**
+- Freeze the contract and the tool schema.
+- Generate **8 fixture cards from the real data**: 2 per renderer, plus a tight cluster and an extreme outlier.
+- Write the **extraction eval table**, starting from the 50 requests already tested (34 metric mapping + 16 ambiguity), each with the expected mentions and whether a question is expected.
 
-| Person A: skill + engine (Python) | Person B: card renderers (React) |
+| Person A: skill + engine (Python) | Person B: renderers (React) |
 |---|---|
-| `SKILL.md` + the 4 reference files (from the spec) | Card shell: title, raw values, `dataShape` notes, interpretation slot |
-| `registry`, `select`, `route`, `preflight` and `facts` | Renderers 1–6 against the fixtures |
-| The 3 tools + `GET /api/cards` | Pixel overlap: deterministic jitter, label offsets, zoom inset |
-| Wiring `SkillToolset` into Data Buddy | The `open_card` frontend tool + dashboard placement |
-| Skill eval: about 15 prompts → expected intent, template and tool sequence | Visual check of each fixture, plus light and dark mode |
+| `SKILL.md` + references (from the spec) | `CardShell`: title, raw values, `dataShape` notes, summary |
+| `schema` (enums) → `validate` → `select` → `route` → `preflight` → `facts` → `summary` | `RankCard`, `ScatterCard`, `TableCard` against the fixtures |
+| `compare_suppliers` tool + `SkillToolset` wiring | Pixel overlap: deterministic jitter, label offsets, zoom inset |
+| Unit tests for validation + routing (every metric in the spec map) | `useRenderTool("compare_suppliers")` → dashboard placement |
 
 ## Verification
-1. **Skill smoke test (first):** with Nemotron + ag-ui-adk, the model loads the skill, and `resolve_metrics` / `select_suppliers` / `plan_card` only appear after `load_skill`.
-2. **Engine unit tests:** routing for every metric in the spec's metric map, preflight flags on the fixtures, and facts checked against pandas.
-3. **Skill eval:** 15 prompts (single metric, pair, cluster, overview, watchlist, exposure, choose, plus vague and unknown inputs). Each must produce the expected intent → tools → template, using an `agui_smoke`-style script.
-4. **In the browser:** "Compare SUPP_00012, SUPP_00450 and SUPP_00731 on financial risk" opens the financial/credit scatter card, with a 2–3 sentence explanation that uses only numbers shown on the card.
+1. **Skill smoke test (first):**
+   - With Nemotron + ag-ui-adk, the skill loads, and `compare_suppliers` appears only after `load_skill`.
+   - The tool's JSON schema lists the enums (the `Literal` types become `enum`).
+2. **No LLM needed:** unit tests for validation, normalisation and routing for every metric in the spec map. Facts are checked against pandas.
+3. **Extraction eval:** the eval table runs through `/data`. Pass bar:
+   - exactly one `compare_suppliers` call
+   - mentions match the expected ones (an equivalent metric choice counts)
+   - **zero invented supplier IDs** (also enforced in code)
+   - **0 vague concepts answered without a question**, so no wrong cards
+   - **at most 10% unnecessary questions** on clear requests
+   - the reply contains only numbers from `summary`
+   - after a clarification, the chosen option produces the card
+4. **In the browser:** "Which of SUPP_00012, SUPP_00450 and SUPP_00731 is least likely to go bankrupt?" renders the financial/credit scatter from the tool result, and the reply matches `summary`.
 
 ## Execution order, with checkpoints
-1. **5a:** move the spec to `docs/specs/`, run the Skill smoke test, freeze the contract, generate the fixtures. **⏸ Checkpoint.**
-2. **5b (in parallel):** Person A builds the engine + skill, and Person B builds the renderers. **⏸ Checkpoint.**
-3. **5c:** integration + skill eval + browser check. **⏸ Checkpoint 5.**
+1. **5a:**
+   - move the spec to `docs/specs/`
+   - run the Skill smoke test, including the enum schema check
+   - freeze the contract and the tool schema
+   - write the fixtures and the extraction eval table
+
+   **⏸ Checkpoint.**
+2. **5b (in parallel):** Person A builds the engine + skill, and Person B builds the 3 renderers. **⏸ Checkpoint.**
+3. **5c:** integration + extraction eval + browser check. **⏸ Checkpoint 5.**
