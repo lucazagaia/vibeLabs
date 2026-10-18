@@ -21,7 +21,7 @@ A message typed in the browser travels:
 
 ```
 Browser (CopilotChat) → Next.js /api/copilotkit (CopilotRuntime) → HttpAgent ──AG-UI/SSE──▶
-FastAPI (ag-ui-adk) → ADK LlmAgent "buddy" → LiteLlm("nebius/…") → Token Factory → Nemotron
+FastAPI (ag-ui-adk) → ADK LlmAgent "data_buddy" | "research_buddy" (picked by a UI switch) → LiteLlm("nebius/…") → Token Factory → Nemotron
 ```
 
 …and the reply streams back. The skeleton proves three mechanisms the real app depends on:
@@ -58,11 +58,12 @@ vibeLabs/
 │  ├─ main.py                   # FastAPI app + ag-ui-adk endpoint + /health
 │  ├─ buddy/
 │  │  ├─ models.py              # Step 1: get_model(role)
-│  │  ├─ supervisor.py          # Step 2: root LlmAgent "buddy"
+│  │  ├─ data_buddy/agent.py    # Step 2: LlmAgent "data_buddy"
+│  │  ├─ research_buddy/agent.py # Step 2: stub LlmAgent "research_buddy"
 │  │  └─ tools/basic.py         # Step 2: dataset_info()
 │  └─ scripts/smoke_models.py   # Step 1: Token Factory smoke test
 └─ web/                         # Next.js (App Router, TS, Tailwind), npm
-   ├─ .env.local.example        # AGENT_URL=http://localhost:8000/
+   ├─ .env.local.example        # AGENT_BASE_URL=http://localhost:8000
    └─ app/
       ├─ api/copilotkit/[[...slug]]/route.ts
       ├─ providers.tsx
@@ -75,8 +76,8 @@ vibeLabs/
 | # | Contract | Producer → consumer | Definition |
 |---|---|---|---|
 | C1 | **Model factory** | Step 1 → Step 2 | `buddy.models.get_model(role: "supervisor" \| "data" \| "research") -> LiteLlm`. Reads `NEBIUS_API_KEY` and `SUPERVISOR_MODEL` / `DATA_BUDDY_MODEL` / `RESEARCH_BUDDY_MODEL`, each a full LiteLLM string. Defaults: `nebius/nvidia/Nemotron-3_5-Lightning` for supervisor and data, `nebius/nvidia/nemotron-3-super-120b-a12b` for research. |
-| C2 | **Agent endpoint** | Step 2 → Step 3 | FastAPI on `http://localhost:8000`. AG-UI `POST /` via `add_adk_fastapi_endpoint`, agent name `buddy`, `GET /health` → `{"ok": true}`. |
-| C3 | **Runtime route** | Step 3 internal | `web/app/api/copilotkit/[[...slug]]/route.ts` uses `CopilotRuntime({ agents: { buddy: new HttpAgent({ url: process.env.AGENT_URL }) }, runner: new InMemoryAgentRunner() })` and `createCopilotRuntimeHandler({ basePath: "/api/copilotkit" })`. The chat uses `agentId="buddy"`. |
+| C2 | **Agent endpoints** | Step 2 → Step 3 | FastAPI on `http://localhost:8000`. AG-UI `POST /data` (agent `data_buddy`) and `POST /research` (agent `research_buddy`) via `add_adk_fastapi_endpoint`. `GET /health` → `{"ok": true, "agents": [...]}`. |
+| C3 | **Runtime route + switch** | Step 3 internal | `web/app/api/copilotkit/[[...slug]]/route.ts` registers **both** agents: `CopilotRuntime({ agents: { data_buddy: new HttpAgent({ url: `${AGENT_BASE_URL}/data` }), research_buddy: new HttpAgent({ url: `${AGENT_BASE_URL}/research` }) }, runner: new InMemoryAgentRunner() })` and `createCopilotRuntimeHandler({ basePath: "/api/copilotkit" })`. A **deterministic switch button** (Data ⇄ Research) sets the chat's `agentId`. There's no orchestrator. |
 | C4 | **Skeleton tools** | Step 2 ↔ Step 3 | Backend: `dataset_info() -> {rows, columns}`. Frontend: `show_notice({ text: string })`, registered with `useFrontendTool`. The names and schemas are fixed now, so both sides can be built independently. |
 
 **Secrets:**
@@ -115,17 +116,18 @@ Each step also runs in two halves, each with its own pause. First the step's det
 ### Step 2: ADK backend
 - **Builds:**
   - `agent/` as a uv project, pinned to `google-adk 2.12.x`, `ag-ui-adk 0.10.x`, `litellm 1.106.x`, `fastapi 0.143.x` and `uvicorn`. Confirm that ag-ui-adk's declared google-adk range allows 2.12.
-  - `main.py`: FastAPI app, `ADKAgent(adk_agent=buddy, app_name="vibelabs", user_id="demo", use_in_memory_services=True)`, `add_adk_fastapi_endpoint(app, …, path="/")`, `/health`.
-  - `buddy/supervisor.py`: root `LlmAgent("buddy")` with a short instruction and the `dataset_info` tool (C4).
-- **Stretch (de-risks the next phase):** add an empty `data_buddy` `AgentTool` that echoes its input. This checks that delegation works and that `SUBAGENT_*` events appear in the **Python** adapter. The concept plan flags this as still unverified.
+  - `main.py`: FastAPI app serving two agents. Each is wrapped in an ADK `App` with `ResumabilityConfig(is_resumable=True)` and in `ADKAgent.from_app(...)`, and mounted with `add_adk_fastapi_endpoint` at `/data` and `/research`. Plus `/health`.
+  - `buddy/data_buddy/agent.py`: `LlmAgent("data_buddy")` with `dataset_info` (C4) and `AGUIToolset()`, so it receives frontend tools.
+  - `buddy/research_buddy/agent.py`: a stub `LlmAgent("research_buddy")` (Super model, no tools yet) that proves the switch.
+- **Decision (18 Oct):** no orchestrator for now; a UI switch picks the agent. The supervisor (`sub_agents` + `mode="single_turn"`) is parked until the end, if there's time. See `02-adk-backend.md`.
 - **Done when:**
   - `uv run uvicorn main:app --port 8000` starts
-  - `curl POST /` with a minimal `RunAgentInput` streams `RUN_STARTED` … `TEXT_MESSAGE_*` … `RUN_FINISHED`
-  - `dataset_info` gets called when you ask about the dataset
+  - `agui_smoke.py` streams `RUN_STARTED` … `TEXT_MESSAGE_*` … `RUN_FINISHED` from both `/data` and `/research`
+  - `dataset_info` gets called when you ask about the dataset, and a `show_notice` frontend tool call is emitted
 - **Dependencies:** C1. Until Step 1 lands, `get_model()` can temporarily return any working LiteLLM model.
 - **⏸ Checkpoint 2:**
-  - Show the streamed AG-UI events from `curl`, the `dataset_info` call, and the result of the delegation stretch (do `SUBAGENT_*` events appear in Python?).
-  - **Questions to settle:** keep the `data_buddy` AgentTool shape? Is in-memory sessions fine for now?
+  - Show the streamed AG-UI events for scenarios S1–S4 (see `02-adk-backend.md`).
+  - **Questions to settle:** are in-memory sessions fine for now? Separate chat thread per agent when switching? Research Buddy's model?
   - Wait for go before Step 3.
 
 ### Step 3: CopilotKit frontend (basic interface over AG-UI)
@@ -135,11 +137,11 @@ Each step also runs in two halves, each with its own pause. First the step's det
   - `route.ts` (C3).
   - `providers.tsx`: `CopilotKit` from `@copilotkit/react-core/v2` with `runtimeUrl="/api/copilotkit"`.
   - `layout.tsx`, importing `@copilotkit/react-core/v2/styles.css`.
-  - `page.tsx`: a two-column skeleton with the CopilotKit chat (`agentId="buddy"`) on the left and an empty "dashboard" area on the right, where `show_notice` cards render (C4).
+  - `page.tsx`: a two-column skeleton. The left side has the CopilotKit chat with a **Data ⇄ Research switch button** above it, which sets `agentId`. The right side is an empty "dashboard" area where `show_notice` cards render (C4).
 - **Done when:**
   - `npm run dev` serves `:3000`
-  - chatting streams replies from Buddy
-  - the CopilotKit Inspector shows AG-UI events for `buddy`
+  - chatting streams replies from whichever agent the switch selects
+  - the CopilotKit Inspector shows AG-UI events for `data_buddy` and `research_buddy`
 - **Dependencies:** C2 for real answers. The UI work can proceed against any AG-UI agent before Step 2 is ready.
 - **⏸ Checkpoint 3:**
   - Show a screenshot of the chat + dashboard skeleton, a streamed reply, and the Inspector events.
@@ -148,8 +150,8 @@ Each step also runs in two halves, each with its own pause. First the step's det
 
 ### Step 4: Integration milestone (after Steps 1–3)
 Run both services and walk the skeleton checklist:
-1. "Hi Buddy" gets a streamed reply from Nemotron.
-2. "How many suppliers are in the dataset?" calls `dataset_info` and Buddy answers 10,000.
+1. "Hi" gets a streamed reply from Data Buddy. Flip the switch, and "Hi" gets a reply from Research Buddy.
+2. "How many suppliers are in the dataset?" (on Data) calls `dataset_info`, and Data Buddy answers 10,000.
 3. "Show a notice saying hello" calls `show_notice`, and a card appears on the right.
 4. The Inspector shows every event, and the agent's terminal shows the LiteLLM call to `nebius/…`.
 

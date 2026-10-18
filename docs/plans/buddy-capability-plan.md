@@ -1,5 +1,12 @@
 # Buddy: capability plan (Google ADK supervisor + Data/Research Buddies, CopilotKit frontend, Nemotron)
 
+> **Decision updates (18 Oct), which supersede the matching parts below:**
+> - **No orchestrator for now.** The user picks **Data Buddy ⇄ Research Buddy with a deterministic switch button**. The two agents are served separately (`/data`, `/research`). The supervisor in sections 2–3 is parked until the end, if there's time.
+> - **If the supervisor comes back,** use ADK 2.x `sub_agents=[...]` with `mode="single_turn"` rather than `AgentTool`. google-adk 2.12 marks direct `AgentTool` use as discouraged.
+> - **The Python ag-ui-adk adapter emits no `SUBAGENT_*` events.** Progress chips would come from rendering the delegation tool call.
+> - **Frontend tools need an `AGUIToolset()` placeholder** on each agent that should see them.
+> - Details: `00-basics-architecture.md` and `02-adk-backend.md`.
+
 ## Context
 vibeLabs is building the Siemens "Supplier Risk Intelligence" app for the Nebius hackathon. For now the UI is deliberately simple: **a chat panel plus an adaptive dashboard** over 10,000 suppliers from `Siemens.csv`. The zoomable "world" view is parked for later. The user chats with one supervisor, **Buddy**. It delegates to two specialists: the **Data Buddy**, planned in detail here, and the **Research Buddy**, which comes later. The right reusable panels appear on the dashboard.
 
