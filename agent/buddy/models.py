@@ -22,7 +22,7 @@ Role = Literal["supervisor", "data", "research"]
 # role -> (model env var, default model, reasoning env var, default effort)
 _ROLES: dict[str, tuple[str, str, str, str]] = {
     "supervisor": ("SUPERVISOR_MODEL", "nebius/nvidia/Nemotron-3_5-Lightning", "SUPERVISOR_REASONING", "low"),
-    "data": ("DATA_BUDDY_MODEL", "nebius/nvidia/Nemotron-3_5-Lightning", "DATA_BUDDY_REASONING", "low"),
+    "data": ("DATA_BUDDY_MODEL", "nebius/nvidia/Nemotron-3_5-Lightning", "DATA_BUDDY_REASONING", "none"),
     "research": ("RESEARCH_BUDDY_MODEL", "nebius/nvidia/nemotron-3-super-120b-a12b", "RESEARCH_BUDDY_REASONING", "medium"),
 }
 
