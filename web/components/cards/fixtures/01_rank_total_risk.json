@@ -1,5 +1,5 @@
 {
-  "cardId": "6127aade3dba",
+  "cardId": "11137a7080a7",
   "renderer": "rank",
   "template": "ranked_lollipop_card",
   "title": "Total risk",
@@ -24,6 +24,28 @@
     "fallbackApplied": null,
     "notes": []
   },
+  "referenceBands": [
+    {
+      "label": "Low",
+      "min": 0,
+      "max": 24
+    },
+    {
+      "label": "Medium",
+      "min": 25,
+      "max": 49
+    },
+    {
+      "label": "High",
+      "min": 50,
+      "max": 74
+    },
+    {
+      "label": "Critical",
+      "min": 75,
+      "max": 100
+    }
+  ],
   "quadrants": null,
   "suppliers": [
     {
@@ -36,7 +58,8 @@
         "Total_Risk_Index_Level": "Medium"
       },
       "flags": [
-        "best"
+        "best",
+        "hidden_watchout"
       ]
     },
     {
@@ -59,7 +82,9 @@
       "levels": {
         "Total_Risk_Index_Level": "Medium"
       },
-      "flags": []
+      "flags": [
+        "hidden_watchout"
+      ]
     },
     {
       "supplierID": "SUPP_01004",
@@ -70,7 +95,9 @@
       "levels": {
         "Total_Risk_Index_Level": "Medium"
       },
-      "flags": []
+      "flags": [
+        "hidden_watchout"
+      ]
     },
     {
       "supplierID": "SUPP_00731",
@@ -120,6 +147,7 @@
     }
   ],
   "facts": {
+    "template": "ranked_lollipop_card",
     "metric": "Total_Risk_Index",
     "best": {
       "supplierID": "SUPP_00141",
@@ -130,7 +158,26 @@
       "value": 80.0
     },
     "spread": 35.0,
-    "notDiscriminating": false
+    "hiddenWatchouts": [
+      {
+        "supplierID": "SUPP_00141",
+        "totalRisk": 45.0,
+        "metric": "Political_Stability_Score",
+        "value": 78.0
+      },
+      {
+        "supplierID": "SUPP_00287",
+        "totalRisk": 48.0,
+        "metric": "Geopolitical_Risk_Score",
+        "value": 78.0
+      },
+      {
+        "supplierID": "SUPP_01004",
+        "totalRisk": 48.0,
+        "metric": "Environmental_Exposure_Score",
+        "value": 76.0
+      }
+    ]
   },
-  "summary": "Lower is better for total risk. Best: SUPP_00141 (45); worst: SUPP_00018 (80)."
+  "summary": "Lower is better for total risk. Best: SUPP_00141 (45); worst: SUPP_00018 (80). Watch: SUPP_00141 looks moderate overall (total risk 45) but has critical political stability (78) (+2 more)."
 }

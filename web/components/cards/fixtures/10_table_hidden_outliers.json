@@ -1,0 +1,255 @@
+{
+  "cardId": "454311f117f4",
+  "renderer": "table",
+  "template": "hidden_outlier_card",
+  "title": "Hidden risks behind low total risk",
+  "intent": "watchlist",
+  "direction": "watch",
+  "metrics": [
+    "Total_Risk_Index",
+    "Geopolitical_Risk_Score",
+    "Political_Stability_Score",
+    "Environmental_Exposure_Score"
+  ],
+  "metricLabels": {
+    "Total_Risk_Index": "Total risk",
+    "Geopolitical_Risk_Score": "Geopolitical risk",
+    "Political_Stability_Score": "Political stability",
+    "Environmental_Exposure_Score": "Environmental exposure"
+  },
+  "valueDirection": {
+    "Total_Risk_Index": "lower_is_better",
+    "Geopolitical_Risk_Score": "lower_is_better",
+    "Political_Stability_Score": "lower_is_better",
+    "Environmental_Exposure_Score": "lower_is_better"
+  },
+  "sort": {
+    "field": "Total_Risk_Index",
+    "direction": "asc"
+  },
+  "dataShape": {
+    "flags": [
+      "extreme_outlier"
+    ],
+    "scale": "fixed_0_100",
+    "fallbackApplied": null,
+    "notes": [
+      "One supplier sits far from the rest and is called out so the others stay readable."
+    ]
+  },
+  "referenceBands": [
+    {
+      "label": "Low",
+      "min": 0,
+      "max": 24
+    },
+    {
+      "label": "Medium",
+      "min": 25,
+      "max": 49
+    },
+    {
+      "label": "High",
+      "min": 50,
+      "max": 74
+    },
+    {
+      "label": "Critical",
+      "min": 75,
+      "max": 100
+    }
+  ],
+  "quadrants": null,
+  "suppliers": [
+    {
+      "supplierID": "SUPP_00003",
+      "supplierName": "Advanced Systems 395",
+      "values": {
+        "Total_Risk_Index": 34.0,
+        "Geopolitical_Risk_Score": 47.0,
+        "Political_Stability_Score": 50.0,
+        "Environmental_Exposure_Score": 37.0
+      },
+      "levels": {
+        "Total_Risk_Index_Level": "Medium",
+        "Geopolitical_Risk_Score_Level": "Medium",
+        "Political_Stability_Score_Level": "High",
+        "Environmental_Exposure_Score_Level": "Medium"
+      },
+      "flags": [
+        "best",
+        "outlier"
+      ]
+    },
+    {
+      "supplierID": "SUPP_00533",
+      "supplierName": "Advanced Manufacturing 657",
+      "values": {
+        "Total_Risk_Index": 44.0,
+        "Geopolitical_Risk_Score": 87.0,
+        "Political_Stability_Score": 58.0,
+        "Environmental_Exposure_Score": 60.0
+      },
+      "levels": {
+        "Total_Risk_Index_Level": "Medium",
+        "Geopolitical_Risk_Score_Level": "Critical",
+        "Political_Stability_Score_Level": "High",
+        "Environmental_Exposure_Score_Level": "High"
+      },
+      "flags": [
+        "hidden_watchout"
+      ]
+    },
+    {
+      "supplierID": "SUPP_00666",
+      "supplierName": "Dynamic Technologies 503",
+      "values": {
+        "Total_Risk_Index": 44.0,
+        "Geopolitical_Risk_Score": 78.0,
+        "Political_Stability_Score": 77.0,
+        "Environmental_Exposure_Score": 81.0
+      },
+      "levels": {
+        "Total_Risk_Index_Level": "Medium",
+        "Geopolitical_Risk_Score_Level": "Critical",
+        "Political_Stability_Score_Level": "Critical",
+        "Environmental_Exposure_Score_Level": "Critical"
+      },
+      "flags": [
+        "hidden_watchout"
+      ]
+    },
+    {
+      "supplierID": "SUPP_00002",
+      "supplierName": "Global Solutions 900",
+      "values": {
+        "Total_Risk_Index": 45.0,
+        "Geopolitical_Risk_Score": 27.0,
+        "Political_Stability_Score": 32.0,
+        "Environmental_Exposure_Score": 30.0
+      },
+      "levels": {
+        "Total_Risk_Index_Level": "Medium",
+        "Geopolitical_Risk_Score_Level": "Medium",
+        "Political_Stability_Score_Level": "Medium",
+        "Environmental_Exposure_Score_Level": "Medium"
+      },
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00004",
+      "supplierName": "Strategic Technologies 948",
+      "values": {
+        "Total_Risk_Index": 47.0,
+        "Geopolitical_Risk_Score": 35.0,
+        "Political_Stability_Score": 36.0,
+        "Environmental_Exposure_Score": 44.0
+      },
+      "levels": {
+        "Total_Risk_Index_Level": "Medium",
+        "Geopolitical_Risk_Score_Level": "Medium",
+        "Political_Stability_Score_Level": "Medium",
+        "Environmental_Exposure_Score_Level": "Medium"
+      },
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00449",
+      "supplierName": "Global Industries 865",
+      "values": {
+        "Total_Risk_Index": 47.0,
+        "Geopolitical_Risk_Score": 78.0,
+        "Political_Stability_Score": 50.0,
+        "Environmental_Exposure_Score": 70.0
+      },
+      "levels": {
+        "Total_Risk_Index_Level": "Medium",
+        "Geopolitical_Risk_Score_Level": "Critical",
+        "Political_Stability_Score_Level": "High",
+        "Environmental_Exposure_Score_Level": "High"
+      },
+      "flags": [
+        "hidden_watchout"
+      ]
+    },
+    {
+      "supplierID": "SUPP_00287",
+      "supplierName": "Global Systems 788",
+      "values": {
+        "Total_Risk_Index": 48.0,
+        "Geopolitical_Risk_Score": 78.0,
+        "Political_Stability_Score": 58.0,
+        "Environmental_Exposure_Score": 62.0
+      },
+      "levels": {
+        "Total_Risk_Index_Level": "Medium",
+        "Geopolitical_Risk_Score_Level": "Critical",
+        "Political_Stability_Score_Level": "High",
+        "Environmental_Exposure_Score_Level": "High"
+      },
+      "flags": [
+        "hidden_watchout"
+      ]
+    },
+    {
+      "supplierID": "SUPP_00001",
+      "supplierName": "Apex Technologies 491",
+      "values": {
+        "Total_Risk_Index": 68.0,
+        "Geopolitical_Risk_Score": 63.0,
+        "Political_Stability_Score": 50.0,
+        "Environmental_Exposure_Score": 47.0
+      },
+      "levels": {
+        "Total_Risk_Index_Level": "High",
+        "Geopolitical_Risk_Score_Level": "High",
+        "Political_Stability_Score_Level": "High",
+        "Environmental_Exposure_Score_Level": "Medium"
+      },
+      "flags": [
+        "worst",
+        "outlier"
+      ]
+    }
+  ],
+  "facts": {
+    "template": "hidden_outlier_card",
+    "metric": "Total_Risk_Index",
+    "best": {
+      "supplierID": "SUPP_00003",
+      "value": 34.0
+    },
+    "worst": {
+      "supplierID": "SUPP_00001",
+      "value": 68.0
+    },
+    "spread": 34.0,
+    "hiddenWatchouts": [
+      {
+        "supplierID": "SUPP_00287",
+        "totalRisk": 48.0,
+        "metric": "Geopolitical_Risk_Score",
+        "value": 78.0
+      },
+      {
+        "supplierID": "SUPP_00449",
+        "totalRisk": 47.0,
+        "metric": "Geopolitical_Risk_Score",
+        "value": 78.0
+      },
+      {
+        "supplierID": "SUPP_00533",
+        "totalRisk": 44.0,
+        "metric": "Geopolitical_Risk_Score",
+        "value": 87.0
+      },
+      {
+        "supplierID": "SUPP_00666",
+        "totalRisk": 44.0,
+        "metric": "Environmental_Exposure_Score",
+        "value": 81.0
+      }
+    ]
+  },
+  "summary": "4 supplier(s) hide a critical external risk behind moderate total risk. Watch: SUPP_00287 looks moderate overall (total risk 48) but has critical geopolitical risk (78) (+3 more)."
+}

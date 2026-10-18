@@ -1,10 +1,10 @@
 {
-  "cardId": "5bb71ef7ac3a",
+  "cardId": "75d73fa0bc16",
   "renderer": "rank",
   "template": "log_exposure_bar_card",
-  "title": "Spend exposure (EUR, log scale)",
-  "intent": "exposure",
-  "direction": "watch",
+  "title": "Spend exposure",
+  "intent": "compare",
+  "direction": "safest",
   "metrics": [
     "Purchase Order Volume (EUR)"
   ],
@@ -26,10 +26,32 @@
     "scale": "log",
     "fallbackApplied": null,
     "notes": [
-      "Spend is heavily skewed; a log scale keeps smaller suppliers readable.",
-      "One supplier sits far from the rest; it is called out so the others stay readable."
+      "Spend is heavily skewed; the log scale keeps smaller suppliers readable.",
+      "One supplier sits far from the rest and is called out so the others stay readable."
     ]
   },
+  "referenceBands": [
+    {
+      "label": "Low",
+      "min": 0,
+      "max": 24
+    },
+    {
+      "label": "Medium",
+      "min": 25,
+      "max": 49
+    },
+    {
+      "label": "High",
+      "min": 50,
+      "max": 74
+    },
+    {
+      "label": "Critical",
+      "min": 75,
+      "max": 100
+    }
+  ],
   "quadrants": null,
   "suppliers": [
     {
@@ -40,7 +62,8 @@
       },
       "levels": {},
       "flags": [
-        "best"
+        "worst",
+        "outlier"
       ]
     },
     {
@@ -123,22 +146,23 @@
       },
       "levels": {},
       "flags": [
-        "worst"
+        "best"
       ]
     }
   ],
   "facts": {
+    "template": "log_exposure_bar_card",
     "metric": "Purchase Order Volume (EUR)",
     "best": {
-      "supplierID": "SUPP_00356",
-      "value": 40829568.73
-    },
-    "worst": {
       "supplierID": "SUPP_00001",
       "value": 129814.45
     },
+    "worst": {
+      "supplierID": "SUPP_00356",
+      "value": 40829568.73
+    },
     "spread": 40699754.28,
-    "notDiscriminating": false
+    "hiddenWatchouts": []
   },
-  "summary": "Spend is exposure, not risk. Highest spend: SUPP_00001 (EUR 129,814); lowest: SUPP_00356 (EUR 40,829,569)."
+  "summary": "Spend is exposure, not risk. Largest: SUPP_00356 (EUR 40,829,569); smallest: SUPP_00001 (EUR 129,814)."
 }

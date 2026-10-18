@@ -1,0 +1,211 @@
+{
+  "cardId": "1d863ec7b9f9",
+  "renderer": "rank",
+  "template": "esg_workforce_card",
+  "title": "ESG and workforce",
+  "intent": "compare",
+  "direction": "safest",
+  "metrics": [
+    "ESG_Performance_Score",
+    "Labor_Stability_Score",
+    "Safety_Incident_Score"
+  ],
+  "metricLabels": {
+    "ESG_Performance_Score": "ESG performance",
+    "Labor_Stability_Score": "Labor stability",
+    "Safety_Incident_Score": "Safety incidents"
+  },
+  "valueDirection": {
+    "ESG_Performance_Score": "lower_is_better",
+    "Labor_Stability_Score": "lower_is_better",
+    "Safety_Incident_Score": "lower_is_better"
+  },
+  "sort": {
+    "field": "ESG_Performance_Score",
+    "direction": "asc"
+  },
+  "dataShape": {
+    "flags": [],
+    "scale": "fixed_0_100",
+    "fallbackApplied": null,
+    "notes": []
+  },
+  "referenceBands": [
+    {
+      "label": "Low",
+      "min": 0,
+      "max": 24
+    },
+    {
+      "label": "Medium",
+      "min": 25,
+      "max": 49
+    },
+    {
+      "label": "High",
+      "min": 50,
+      "max": 74
+    },
+    {
+      "label": "Critical",
+      "min": 75,
+      "max": 100
+    }
+  ],
+  "quadrants": null,
+  "suppliers": [
+    {
+      "supplierID": "SUPP_00006",
+      "supplierName": "Apex Solutions 621",
+      "values": {
+        "ESG_Performance_Score": 19.0,
+        "Labor_Stability_Score": 15.0,
+        "Safety_Incident_Score": 7.0
+      },
+      "levels": {
+        "ESG_Performance_Score_Level": "Low",
+        "Labor_Stability_Score_Level": "Low",
+        "Safety_Incident_Score_Level": "Low"
+      },
+      "flags": [
+        "best"
+      ]
+    },
+    {
+      "supplierID": "SUPP_00004",
+      "supplierName": "Strategic Technologies 948",
+      "values": {
+        "ESG_Performance_Score": 26.0,
+        "Labor_Stability_Score": 25.0,
+        "Safety_Incident_Score": 22.0
+      },
+      "levels": {
+        "ESG_Performance_Score_Level": "Medium",
+        "Labor_Stability_Score_Level": "Medium",
+        "Safety_Incident_Score_Level": "Low"
+      },
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00001",
+      "supplierName": "Apex Technologies 491",
+      "values": {
+        "ESG_Performance_Score": 35.0,
+        "Labor_Stability_Score": 47.0,
+        "Safety_Incident_Score": 46.0
+      },
+      "levels": {
+        "ESG_Performance_Score_Level": "Medium",
+        "Labor_Stability_Score_Level": "Medium",
+        "Safety_Incident_Score_Level": "Medium"
+      },
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00003",
+      "supplierName": "Advanced Systems 395",
+      "values": {
+        "ESG_Performance_Score": 38.0,
+        "Labor_Stability_Score": 27.0,
+        "Safety_Incident_Score": 28.0
+      },
+      "levels": {
+        "ESG_Performance_Score_Level": "Medium",
+        "Labor_Stability_Score_Level": "Medium",
+        "Safety_Incident_Score_Level": "Medium"
+      },
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00002",
+      "supplierName": "Global Solutions 900",
+      "values": {
+        "ESG_Performance_Score": 48.0,
+        "Labor_Stability_Score": 52.0,
+        "Safety_Incident_Score": 59.0
+      },
+      "levels": {
+        "ESG_Performance_Score_Level": "Medium",
+        "Labor_Stability_Score_Level": "High",
+        "Safety_Incident_Score_Level": "High"
+      },
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00005",
+      "supplierName": "Precision Systems 319",
+      "values": {
+        "ESG_Performance_Score": 50.0,
+        "Labor_Stability_Score": 69.0,
+        "Safety_Incident_Score": 52.0
+      },
+      "levels": {
+        "ESG_Performance_Score_Level": "High",
+        "Labor_Stability_Score_Level": "High",
+        "Safety_Incident_Score_Level": "High"
+      },
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00007",
+      "supplierName": "Advanced Logistics 134",
+      "values": {
+        "ESG_Performance_Score": 55.0,
+        "Labor_Stability_Score": 51.0,
+        "Safety_Incident_Score": 47.0
+      },
+      "levels": {
+        "ESG_Performance_Score_Level": "High",
+        "Labor_Stability_Score_Level": "High",
+        "Safety_Incident_Score_Level": "Medium"
+      },
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00008",
+      "supplierName": "Dynamic Technologies 401",
+      "values": {
+        "ESG_Performance_Score": 70.0,
+        "Labor_Stability_Score": 54.0,
+        "Safety_Incident_Score": 76.0
+      },
+      "levels": {
+        "ESG_Performance_Score_Level": "High",
+        "Labor_Stability_Score_Level": "High",
+        "Safety_Incident_Score_Level": "Critical"
+      },
+      "flags": [
+        "worst"
+      ]
+    }
+  ],
+  "facts": {
+    "template": "esg_workforce_card",
+    "metric": "ESG_Performance_Score",
+    "best": {
+      "supplierID": "SUPP_00006",
+      "value": 19.0
+    },
+    "worst": {
+      "supplierID": "SUPP_00008",
+      "value": 70.0
+    },
+    "spread": 51.0,
+    "hiddenWatchouts": [],
+    "worstAverage": {
+      "supplierID": "SUPP_00008",
+      "value": 66.7,
+      "metrics": [
+        "ESG_Performance_Score",
+        "Labor_Stability_Score",
+        "Safety_Incident_Score"
+      ]
+    },
+    "biggestSpike": {
+      "supplierID": "SUPP_00008",
+      "metric": "Safety_Incident_Score",
+      "value": 76.0
+    }
+  },
+  "summary": "Lower is better. Worst on average across these metrics: SUPP_00008 (66.7). Biggest single spike: SUPP_00008 on safety incidents (76)."
+}

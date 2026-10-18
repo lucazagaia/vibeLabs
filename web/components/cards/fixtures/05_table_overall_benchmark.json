@@ -1,8 +1,8 @@
 {
-  "cardId": "0b161b622394",
+  "cardId": "2e08cb4d4b0b",
   "renderer": "table",
   "template": "overall_supplier_benchmark_card",
-  "title": "Overall risk benchmark",
+  "title": "Overall supplier benchmark",
   "intent": "overview",
   "direction": "safest",
   "metrics": [
@@ -24,7 +24,10 @@
     "Governance_Risk_Score",
     "Geopolitical_Risk_Score",
     "Political_Stability_Score",
-    "Credit_Rating_Score"
+    "Credit_Rating_Score",
+    "Purchase Order Volume (EUR)",
+    "Supplier Delivery Rating",
+    "Order Confirmation Rate"
   ],
   "metricLabels": {
     "Total_Risk_Index": "Total risk",
@@ -45,7 +48,10 @@
     "Governance_Risk_Score": "Governance risk",
     "Geopolitical_Risk_Score": "Geopolitical risk",
     "Political_Stability_Score": "Political stability",
-    "Credit_Rating_Score": "Credit rating"
+    "Credit_Rating_Score": "Credit rating",
+    "Purchase Order Volume (EUR)": "Spend (PO volume, EUR)",
+    "Supplier Delivery Rating": "Delivery rating",
+    "Order Confirmation Rate": "Order confirmation rate"
   },
   "valueDirection": {
     "Total_Risk_Index": "lower_is_better",
@@ -66,7 +72,10 @@
     "Governance_Risk_Score": "lower_is_better",
     "Geopolitical_Risk_Score": "lower_is_better",
     "Political_Stability_Score": "lower_is_better",
-    "Credit_Rating_Score": "lower_is_better"
+    "Credit_Rating_Score": "lower_is_better",
+    "Purchase Order Volume (EUR)": "higher_means_more_exposure",
+    "Supplier Delivery Rating": "higher_is_better",
+    "Order Confirmation Rate": "higher_is_better"
   },
   "sort": {
     "field": "Total_Risk_Index",
@@ -78,6 +87,28 @@
     "fallbackApplied": null,
     "notes": []
   },
+  "referenceBands": [
+    {
+      "label": "Low",
+      "min": 0,
+      "max": 24
+    },
+    {
+      "label": "Medium",
+      "min": 25,
+      "max": 49
+    },
+    {
+      "label": "High",
+      "min": 50,
+      "max": 74
+    },
+    {
+      "label": "Critical",
+      "min": 75,
+      "max": 100
+    }
+  ],
   "quadrants": null,
   "suppliers": [
     {
@@ -102,7 +133,10 @@
         "Governance_Risk_Score": 32.0,
         "Geopolitical_Risk_Score": 57.0,
         "Political_Stability_Score": 57.0,
-        "Credit_Rating_Score": 3.0
+        "Credit_Rating_Score": 3.0,
+        "Purchase Order Volume (EUR)": 1721472.75,
+        "Supplier Delivery Rating": 100.0,
+        "Order Confirmation Rate": 84.88
       },
       "levels": {
         "Total_Risk_Index_Level": "Medium",
@@ -151,7 +185,10 @@
         "Governance_Risk_Score": 37.0,
         "Geopolitical_Risk_Score": 47.0,
         "Political_Stability_Score": 50.0,
-        "Credit_Rating_Score": 38.0
+        "Credit_Rating_Score": 38.0,
+        "Purchase Order Volume (EUR)": 3810794.5,
+        "Supplier Delivery Rating": 97.25,
+        "Order Confirmation Rate": 100.0
       },
       "levels": {
         "Total_Risk_Index_Level": "Medium",
@@ -198,7 +235,10 @@
         "Governance_Risk_Score": 1.0,
         "Geopolitical_Risk_Score": 39.0,
         "Political_Stability_Score": 41.0,
-        "Credit_Rating_Score": 40.0
+        "Credit_Rating_Score": 40.0,
+        "Purchase Order Volume (EUR)": 862490.21,
+        "Supplier Delivery Rating": 100.0,
+        "Order Confirmation Rate": 79.15
       },
       "levels": {
         "Total_Risk_Index_Level": "Medium",
@@ -245,7 +285,10 @@
         "Governance_Risk_Score": 43.0,
         "Geopolitical_Risk_Score": 27.0,
         "Political_Stability_Score": 32.0,
-        "Credit_Rating_Score": 60.0
+        "Credit_Rating_Score": 60.0,
+        "Purchase Order Volume (EUR)": 319117.42,
+        "Supplier Delivery Rating": 99.9,
+        "Order Confirmation Rate": 85.99
       },
       "levels": {
         "Total_Risk_Index_Level": "Medium",
@@ -292,7 +335,10 @@
         "Governance_Risk_Score": 59.0,
         "Geopolitical_Risk_Score": 35.0,
         "Political_Stability_Score": 36.0,
-        "Credit_Rating_Score": 41.0
+        "Credit_Rating_Score": 41.0,
+        "Purchase Order Volume (EUR)": 758747.55,
+        "Supplier Delivery Rating": 90.31,
+        "Order Confirmation Rate": 87.15
       },
       "levels": {
         "Total_Risk_Index_Level": "Medium",
@@ -339,7 +385,10 @@
         "Governance_Risk_Score": 62.0,
         "Geopolitical_Risk_Score": 52.0,
         "Political_Stability_Score": 61.0,
-        "Credit_Rating_Score": 60.0
+        "Credit_Rating_Score": 60.0,
+        "Purchase Order Volume (EUR)": 248426.44,
+        "Supplier Delivery Rating": 100.0,
+        "Order Confirmation Rate": 86.44
       },
       "levels": {
         "Total_Risk_Index_Level": "High",
@@ -386,7 +435,10 @@
         "Governance_Risk_Score": 52.0,
         "Geopolitical_Risk_Score": 45.0,
         "Political_Stability_Score": 50.0,
-        "Credit_Rating_Score": 42.0
+        "Credit_Rating_Score": 42.0,
+        "Purchase Order Volume (EUR)": 1009857.48,
+        "Supplier Delivery Rating": 81.52,
+        "Order Confirmation Rate": 87.79
       },
       "levels": {
         "Total_Risk_Index_Level": "High",
@@ -433,7 +485,10 @@
         "Governance_Risk_Score": 63.0,
         "Geopolitical_Risk_Score": 62.0,
         "Political_Stability_Score": 89.0,
-        "Credit_Rating_Score": 66.0
+        "Credit_Rating_Score": 66.0,
+        "Purchase Order Volume (EUR)": 2758829.34,
+        "Supplier Delivery Rating": 100.0,
+        "Order Confirmation Rate": 81.11
       },
       "levels": {
         "Total_Risk_Index_Level": "High",
@@ -480,7 +535,10 @@
         "Governance_Risk_Score": 60.0,
         "Geopolitical_Risk_Score": 63.0,
         "Political_Stability_Score": 50.0,
-        "Credit_Rating_Score": 91.0
+        "Credit_Rating_Score": 91.0,
+        "Purchase Order Volume (EUR)": 129814.45,
+        "Supplier Delivery Rating": 84.27,
+        "Order Confirmation Rate": 77.56
       },
       "levels": {
         "Total_Risk_Index_Level": "High",
@@ -527,7 +585,10 @@
         "Governance_Risk_Score": 97.0,
         "Geopolitical_Risk_Score": 49.0,
         "Political_Stability_Score": 61.0,
-        "Credit_Rating_Score": 73.0
+        "Credit_Rating_Score": 73.0,
+        "Purchase Order Volume (EUR)": 177996.09,
+        "Supplier Delivery Rating": 79.29,
+        "Order Confirmation Rate": 76.07
       },
       "levels": {
         "Total_Risk_Index_Level": "High",
@@ -556,6 +617,7 @@
     }
   ],
   "facts": {
+    "template": "overall_supplier_benchmark_card",
     "metric": "Total_Risk_Index",
     "best": {
       "supplierID": "SUPP_00006",
@@ -566,7 +628,11 @@
       "value": 68.0
     },
     "spread": 43.0,
-    "notDiscriminating": false
+    "hiddenWatchouts": [],
+    "safestOverall": "SUPP_00006",
+    "riskiestOverall": "SUPP_00001",
+    "largestExposure": "SUPP_00003",
+    "weakestDelivery": "SUPP_00008"
   },
-  "summary": "Lower is better for total risk. Best: SUPP_00006 (25); worst: SUPP_00008 (68)."
+  "summary": "Safest overall: SUPP_00006; riskiest overall: SUPP_00001. Largest spend: SUPP_00003; weakest delivery: SUPP_00008."
 }

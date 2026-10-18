@@ -1,5 +1,5 @@
 {
-  "cardId": "088a1e31dd27",
+  "cardId": "de309a702530",
   "renderer": "table",
   "template": "replaceability_complexity_card",
   "title": "Replaceability vs supply chain complexity",
@@ -19,7 +19,7 @@
   },
   "sort": {
     "field": "Sourcing Risk Level",
-    "direction": "asc"
+    "direction": "desc"
   },
   "dataShape": {
     "flags": [],
@@ -27,121 +27,33 @@
     "fallbackApplied": null,
     "notes": []
   },
+  "referenceBands": [
+    {
+      "label": "Low",
+      "min": 0,
+      "max": 24
+    },
+    {
+      "label": "Medium",
+      "min": 25,
+      "max": 49
+    },
+    {
+      "label": "High",
+      "min": 50,
+      "max": 74
+    },
+    {
+      "label": "Critical",
+      "min": 75,
+      "max": 100
+    }
+  ],
   "quadrants": null,
   "suppliers": [
     {
-      "supplierID": "SUPP_00001",
-      "supplierName": "Apex Technologies 491",
-      "values": {
-        "Sourcing Risk Level": "High",
-        "Supply Chain Complexity": "Simple"
-      },
-      "levels": {},
-      "flags": []
-    },
-    {
-      "supplierID": "SUPP_00002",
-      "supplierName": "Global Solutions 900",
-      "values": {
-        "Sourcing Risk Level": "Low",
-        "Supply Chain Complexity": "Simple"
-      },
-      "levels": {},
-      "flags": []
-    },
-    {
-      "supplierID": "SUPP_00003",
-      "supplierName": "Advanced Systems 395",
-      "values": {
-        "Sourcing Risk Level": "Medium",
-        "Supply Chain Complexity": "Moderate"
-      },
-      "levels": {},
-      "flags": []
-    },
-    {
-      "supplierID": "SUPP_00004",
-      "supplierName": "Strategic Technologies 948",
-      "values": {
-        "Sourcing Risk Level": "High",
-        "Supply Chain Complexity": "Complex"
-      },
-      "levels": {},
-      "flags": []
-    },
-    {
-      "supplierID": "SUPP_00005",
-      "supplierName": "Precision Systems 319",
-      "values": {
-        "Sourcing Risk Level": "High",
-        "Supply Chain Complexity": "Moderate"
-      },
-      "levels": {},
-      "flags": []
-    },
-    {
-      "supplierID": "SUPP_00006",
-      "supplierName": "Apex Solutions 621",
-      "values": {
-        "Sourcing Risk Level": "Low",
-        "Supply Chain Complexity": "Moderate"
-      },
-      "levels": {},
-      "flags": []
-    },
-    {
-      "supplierID": "SUPP_00007",
-      "supplierName": "Advanced Logistics 134",
-      "values": {
-        "Sourcing Risk Level": "Medium",
-        "Supply Chain Complexity": "Moderate"
-      },
-      "levels": {},
-      "flags": []
-    },
-    {
-      "supplierID": "SUPP_00008",
-      "supplierName": "Dynamic Technologies 401",
-      "values": {
-        "Sourcing Risk Level": "High",
-        "Supply Chain Complexity": "Complex"
-      },
-      "levels": {},
-      "flags": []
-    },
-    {
-      "supplierID": "SUPP_00009",
-      "supplierName": "Prime Systems 271",
-      "values": {
-        "Sourcing Risk Level": "Medium",
-        "Supply Chain Complexity": "Simple"
-      },
-      "levels": {},
-      "flags": []
-    },
-    {
-      "supplierID": "SUPP_00010",
-      "supplierName": "Apex Industries 470",
-      "values": {
-        "Sourcing Risk Level": "Low",
-        "Supply Chain Complexity": "Moderate"
-      },
-      "levels": {},
-      "flags": []
-    },
-    {
-      "supplierID": "SUPP_00011",
-      "supplierName": "Dynamic Systems 930",
-      "values": {
-        "Sourcing Risk Level": "Medium",
-        "Supply Chain Complexity": "Complex"
-      },
-      "levels": {},
-      "flags": []
-    },
-    {
-      "supplierID": "SUPP_00012",
-      "supplierName": "Dynamic Group 434",
+      "supplierID": "SUPP_00014",
+      "supplierName": "Apex Partners 972",
       "values": {
         "Sourcing Risk Level": "High",
         "Supply Chain Complexity": "Complex"
@@ -160,11 +72,51 @@
       "flags": []
     },
     {
-      "supplierID": "SUPP_00014",
-      "supplierName": "Apex Partners 972",
+      "supplierID": "SUPP_00012",
+      "supplierName": "Dynamic Group 434",
       "values": {
         "Sourcing Risk Level": "High",
         "Supply Chain Complexity": "Complex"
+      },
+      "levels": {},
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00008",
+      "supplierName": "Dynamic Technologies 401",
+      "values": {
+        "Sourcing Risk Level": "High",
+        "Supply Chain Complexity": "Complex"
+      },
+      "levels": {},
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00005",
+      "supplierName": "Precision Systems 319",
+      "values": {
+        "Sourcing Risk Level": "High",
+        "Supply Chain Complexity": "Moderate"
+      },
+      "levels": {},
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00004",
+      "supplierName": "Strategic Technologies 948",
+      "values": {
+        "Sourcing Risk Level": "High",
+        "Supply Chain Complexity": "Complex"
+      },
+      "levels": {},
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00001",
+      "supplierName": "Apex Technologies 491",
+      "values": {
+        "Sourcing Risk Level": "High",
+        "Supply Chain Complexity": "Simple"
       },
       "levels": {},
       "flags": []
@@ -178,9 +130,81 @@
       },
       "levels": {},
       "flags": []
+    },
+    {
+      "supplierID": "SUPP_00011",
+      "supplierName": "Dynamic Systems 930",
+      "values": {
+        "Sourcing Risk Level": "Medium",
+        "Supply Chain Complexity": "Complex"
+      },
+      "levels": {},
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00009",
+      "supplierName": "Prime Systems 271",
+      "values": {
+        "Sourcing Risk Level": "Medium",
+        "Supply Chain Complexity": "Simple"
+      },
+      "levels": {},
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00007",
+      "supplierName": "Advanced Logistics 134",
+      "values": {
+        "Sourcing Risk Level": "Medium",
+        "Supply Chain Complexity": "Moderate"
+      },
+      "levels": {},
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00003",
+      "supplierName": "Advanced Systems 395",
+      "values": {
+        "Sourcing Risk Level": "Medium",
+        "Supply Chain Complexity": "Moderate"
+      },
+      "levels": {},
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00010",
+      "supplierName": "Apex Industries 470",
+      "values": {
+        "Sourcing Risk Level": "Low",
+        "Supply Chain Complexity": "Moderate"
+      },
+      "levels": {},
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00006",
+      "supplierName": "Apex Solutions 621",
+      "values": {
+        "Sourcing Risk Level": "Low",
+        "Supply Chain Complexity": "Moderate"
+      },
+      "levels": {},
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00002",
+      "supplierName": "Global Solutions 900",
+      "values": {
+        "Sourcing Risk Level": "Low",
+        "Supply Chain Complexity": "Simple"
+      },
+      "levels": {},
+      "flags": []
     }
   ],
   "facts": {
+    "template": "replaceability_complexity_card",
+    "hiddenWatchouts": [],
     "grid": {
       "High x Simple": [
         "SUPP_00001"

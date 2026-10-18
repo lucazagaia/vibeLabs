@@ -1,5 +1,5 @@
 {
-  "cardId": "cfd799bfd8ca",
+  "cardId": "8f98748ac193",
   "renderer": "scatter",
   "template": "financial_credit_card",
   "title": "Financial health vs credit rating",
@@ -28,19 +28,41 @@
     "scale": "fixed_0_100",
     "fallbackApplied": null,
     "notes": [
-      "One supplier sits far from the rest; it is called out so the others stay readable."
+      "One supplier sits far from the rest and is called out so the others stay readable."
     ]
   },
+  "referenceBands": [
+    {
+      "label": "Low",
+      "min": 0,
+      "max": 24
+    },
+    {
+      "label": "Medium",
+      "min": 25,
+      "max": 49
+    },
+    {
+      "label": "High",
+      "min": 50,
+      "max": 74
+    },
+    {
+      "label": "Critical",
+      "min": 75,
+      "max": 100
+    }
+  ],
   "quadrants": {
     "x": "Financial_Health_Score",
     "y": "Credit_Rating_Score",
-    "xThreshold": 50,
-    "yThreshold": 50,
+    "xThreshold": 50.0,
+    "yThreshold": 50.0,
     "labels": {
       "topLeft": "Credit-specific concern",
       "topRight": "Serious financial concern",
       "bottomLeft": "Low financial risk",
-      "bottomRight": "Liquidity concern not in credit score"
+      "bottomRight": "Health concern not in credit score"
     },
     "goodZone": "bottomLeft"
   },
@@ -202,11 +224,13 @@
         "Credit_Rating_Score_Level": "Critical"
       },
       "flags": [
-        "worst"
+        "worst",
+        "outlier"
       ]
     }
   ],
   "facts": {
+    "template": "financial_credit_card",
     "metric": "Financial_Health_Score",
     "best": {
       "supplierID": "SUPP_00006",
@@ -217,7 +241,25 @@
       "value": 96.0
     },
     "spread": 78.0,
-    "notDiscriminating": false
+    "hiddenWatchouts": [],
+    "quadrant": {
+      "concernZone": "topRight",
+      "concernLabel": "Serious financial concern",
+      "inConcernZone": [
+        "SUPP_00001",
+        "SUPP_00002",
+        "SUPP_00007",
+        "SUPP_00008",
+        "SUPP_00010",
+        "SUPP_00012"
+      ],
+      "inGoodZone": [
+        "SUPP_00003",
+        "SUPP_00006",
+        "SUPP_00009",
+        "SUPP_00011"
+      ]
+    }
   },
-  "summary": "Lower is better for financial health. Best: SUPP_00006 (18); worst: SUPP_00001 (96)."
+  "summary": "Lower is better for financial health. Best: SUPP_00006 (18); worst: SUPP_00001 (96). In the 'Serious financial concern' zone: SUPP_00001, SUPP_00002, SUPP_00007, SUPP_00008 and others."
 }

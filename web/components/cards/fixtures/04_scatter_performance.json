@@ -1,8 +1,8 @@
 {
-  "cardId": "8913ba6ceed9",
+  "cardId": "7cec20d09df1",
   "renderer": "scatter",
   "template": "performance_reliability_card",
-  "title": "Delivery vs order confirmation",
+  "title": "Operational performance",
   "intent": "compare",
   "direction": "safest",
   "metrics": [
@@ -30,6 +30,28 @@
     "fallbackApplied": null,
     "notes": []
   },
+  "referenceBands": [
+    {
+      "label": "Low",
+      "min": 0,
+      "max": 24
+    },
+    {
+      "label": "Medium",
+      "min": 25,
+      "max": 49
+    },
+    {
+      "label": "High",
+      "min": 50,
+      "max": 74
+    },
+    {
+      "label": "Critical",
+      "min": 75,
+      "max": 100
+    }
+  ],
   "quadrants": {
     "x": "Supplier Delivery Rating",
     "y": "Order Confirmation Rate",
@@ -45,25 +67,12 @@
   },
   "suppliers": [
     {
-      "supplierID": "SUPP_00006",
-      "supplierName": "Apex Solutions 621",
+      "supplierID": "SUPP_00010",
+      "supplierName": "Apex Industries 470",
       "values": {
         "Supplier Delivery Rating": 100.0,
-        "Order Confirmation Rate": 84.88,
-        "Order Change Rate": 8.21
-      },
-      "levels": {},
-      "flags": [
-        "best"
-      ]
-    },
-    {
-      "supplierID": "SUPP_00007",
-      "supplierName": "Advanced Logistics 134",
-      "values": {
-        "Supplier Delivery Rating": 100.0,
-        "Order Confirmation Rate": 86.44,
-        "Order Change Rate": 9.52
+        "Order Confirmation Rate": 81.11,
+        "Order Change Rate": 9.58
       },
       "levels": {},
       "flags": []
@@ -80,15 +89,28 @@
       "flags": []
     },
     {
-      "supplierID": "SUPP_00010",
-      "supplierName": "Apex Industries 470",
+      "supplierID": "SUPP_00007",
+      "supplierName": "Advanced Logistics 134",
       "values": {
         "Supplier Delivery Rating": 100.0,
-        "Order Confirmation Rate": 81.11,
-        "Order Change Rate": 9.58
+        "Order Confirmation Rate": 86.44,
+        "Order Change Rate": 9.52
       },
       "levels": {},
       "flags": []
+    },
+    {
+      "supplierID": "SUPP_00006",
+      "supplierName": "Apex Solutions 621",
+      "values": {
+        "Supplier Delivery Rating": 100.0,
+        "Order Confirmation Rate": 84.88,
+        "Order Change Rate": 8.21
+      },
+      "levels": {},
+      "flags": [
+        "best"
+      ]
     },
     {
       "supplierID": "SUPP_00002",
@@ -215,6 +237,7 @@
     }
   ],
   "facts": {
+    "template": "performance_reliability_card",
     "metric": "Supplier Delivery Rating",
     "best": {
       "supplierID": "SUPP_00006",
@@ -225,7 +248,25 @@
       "value": 79.29
     },
     "spread": 20.71,
-    "notDiscriminating": false
+    "hiddenWatchouts": [],
+    "quadrant": {
+      "concernZone": "bottomLeft",
+      "concernLabel": "Weak on both",
+      "inConcernZone": [
+        "SUPP_00001",
+        "SUPP_00008",
+        "SUPP_00013",
+        "SUPP_00015"
+      ],
+      "inGoodZone": [
+        "SUPP_00002",
+        "SUPP_00003",
+        "SUPP_00004",
+        "SUPP_00007",
+        "SUPP_00011"
+      ]
+    },
+    "highestChangeRate": "SUPP_00009"
   },
-  "summary": "Higher is better for delivery rating. Best: SUPP_00006 (100); worst: SUPP_00008 (79.29)."
+  "summary": "Higher is better for delivery rating. Best: SUPP_00006 (100.0%); worst: SUPP_00008 (79.3%). In the 'Weak on both' zone: SUPP_00001, SUPP_00008, SUPP_00013, SUPP_00015."
 }

@@ -146,7 +146,7 @@ async def quick_eval() -> int:
         cands = [set(m["metrics"]) for m in a["mentions"]]
         # same rules the engine applies (buddy/cards/validate.py)
         ask = any(needs_choice(sorted(x), c["request"]) for x in cands)
-        intent = resolve_intent(a["intent"], a["mentions"])
+        intent = resolve_intent(a["intent"], sorted(picked))
         picked = set().union(*cands) if cands else set()
         invented = [i for i in a["supplier_ids"] if i not in c["request"]]
         ok = bool(calls) and ask == c["ask"] and (c["ask"] or set(c["metrics"]) <= picked) and not invented

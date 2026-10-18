@@ -38,7 +38,8 @@ Follow these steps in order. Never state a number that did not come from the too
   - Unsure what a metric means? Load references/metric-map.md.
 - Intent, exactly one:
   - `choose`: which one to pick, justify a choice, shortlist memo
-  - `watchlist`: red flags, why is X risky, hidden risks, surprises
+  - `watchlist`: red flags, why is X risky, what should I watch, hidden or masked risks
+    ("which hide risks behind a low total risk" is `watchlist`, not `compare`)
   - `exposure`: spend, contract exposure, where our money is at risk
   - `overview`: compare them in general, summarize, overall comparison
   - `compare`: anything else that names a topic (the default)
@@ -51,8 +52,9 @@ exactly, character for character.
 
 ## Step 3 - Reply based on `status`
 
-- `ok`: the card is already on the dashboard. Reply with `summary` (you may shorten it, but never
-  add a number that is not in `summary`). Stop.
+- `ok`: the card is already on the dashboard. Reply with the `summary` text only, as one short
+  paragraph. Do not list the individual values (they are on the card) and never add a number that
+  is not in `summary`. Do not call any other tool. Stop.
 - `needs_clarification`: ask `question` and list `options` exactly as given. Stop. When the buyer
   picks an option, call `compare_suppliers` again with the same fields, but replace that mention's
   `metrics` with the single chosen key.
