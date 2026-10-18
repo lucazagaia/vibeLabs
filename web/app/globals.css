@@ -24,3 +24,48 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Research Buddy: a dim light sweeping across the live status text. */
+.research-shimmer {
+  background: linear-gradient(
+      100deg,
+      currentColor 0%,
+      currentColor 40%,
+      color-mix(in oklab, currentColor 25%, transparent) 50%,
+      currentColor 60%,
+      currentColor 100%
+    )
+    0 0 / 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: research-shimmer 2.2s linear infinite;
+}
+
+@keyframes research-shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -150% 0;
+  }
+}
+
+/* New sources slide in as they arrive. */
+.research-fade-in {
+  animation: research-fade-in 0.35s ease-out both;
+}
+
+@keyframes research-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .research-shimmer,
+  .research-fade-in {
+    animation: none;
+  }
+}

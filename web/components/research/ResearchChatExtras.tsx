@@ -1,13 +1,7 @@
 "use client";
 
-import {
-  useCoAgentStateRender,
-  useLangGraphInterrupt,
-} from "@copilotkit/react-core";
-import type {
-  ClarifierOption,
-  ResearchAgentState,
-} from "@/lib/research-report";
+import { useLangGraphInterrupt } from "@copilotkit/react-core";
+import type { ClarifierOption } from "@/lib/research-report";
 
 type ClarifierInterrupt = {
   type?: string;
@@ -16,30 +10,8 @@ type ClarifierInterrupt = {
   options?: ClarifierOption[];
 };
 
-/** In-chat progress theme + clarifier chips for Research Buddy. */
+/** Clarifier chips for Research Buddy. The live status line is the chat cursor (ResearchCursor). */
 export function ResearchChatExtras() {
-  useCoAgentStateRender<ResearchAgentState>({
-    name: "research_buddy",
-    render: ({ state: live }) => {
-      const latest = live?.activity?.slice(-3) ?? [];
-      if (!latest.length) return null;
-      return (
-        <div className="my-2 space-y-1 rounded-xl border border-teal-500/30 bg-teal-500/5 p-3 text-sm">
-          <p className="text-xs uppercase tracking-wide text-black/50 dark:text-white/50">
-            Live research steps
-          </p>
-          {latest.map((step) => (
-            <p key={step.id}>
-              <span className="text-teal-700 dark:text-teal-300">{step.kind}</span>
-              {" — "}
-              {step.label}
-            </p>
-          ))}
-        </div>
-      );
-    },
-  });
-
   useLangGraphInterrupt<ClarifierInterrupt>({
     agentId: "research_buddy",
     enabled: ({ eventValue }) => eventValue?.type === "clarifier",
