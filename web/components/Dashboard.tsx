@@ -1,17 +1,38 @@
 "use client";
 
+import { useEffect, useRef } from "react";
+
 import { agentLabel } from "./agents";
 import { CardShell } from "./cards/CardShell";
 import { useDashboard } from "./DashboardContext";
 import { useHashPath, widgetPath } from "./useHashPath";
 
-// Dashboard: a grid of widget previews (newest first). Opening one maximizes it over the whole right side,
+// Dashboard: a grid of widget previews, filling left to right with the newest first (top-left). Opening one maximizes it over the whole right side,
 // with its path on top: Widgets / Total risk, or Widgets / <composite> / <panel> for one panel of a composite.
 export function Dashboard() {
   const { notices, cards, removeCard } = useDashboard();
   const [path, go] = useHashPath();
   const [, openId, panelParam] = path;
   const open = cards.find((c) => c.toolCallId === openId);
+
+  // A new card always pops up: leave a maximized card, show the grid, and flash the new card (top-left).
+  const newest = cards[0]?.toolCallId;
+  const seen = useRef(newest);
+  const pathLength = useRef(path.length);
+  useEffect(() => {
+    pathLength.current = path.length;
+  }, [path.length]);
+  useEffect(() => {
+    if (!newest || newest === seen.current) return;
+    seen.current = newest;
+    if (pathLength.current > 1) go(["widgets"]);
+    const timer = setTimeout(() => {
+      const el = document.getElementById(cardElementId(newest));
+      el?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      el?.animate([{ boxShadow: "0 0 0 3px rgb(14 165 233 / 0.6)" }, { boxShadow: "0 0 0 0 rgb(14 165 233 / 0)" }], { duration: 1600 });
+    }, 80);
+    return () => clearTimeout(timer);
+  }, [newest, go]);
 
   if (open) {
     const panels = open.card.panels ?? [];
@@ -63,7 +84,7 @@ export function Dashboard() {
   return (
     <div className="h-full space-y-4 overflow-y-auto p-6">
       {cards.length > 0 && (
-        <div className="grid gap-4 xl:grid-cols-2">
+        <div className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,340px),1fr))] gap-4">
           {cards.map(({ toolCallId, card }) => (
             <CardShell
               key={toolCallId}
