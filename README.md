@@ -66,7 +66,7 @@ cd agent && npm run dev
 cd web && npm run dev
 ```
 
-Open http://localhost:3000.
+Open http://localhost:3000 for the landing page; "Start now" opens the Buddies at http://localhost:3000/dashboard.
 
 **Things to try:**
 - **Data Buddy:** "How many suppliers are in the dataset?"

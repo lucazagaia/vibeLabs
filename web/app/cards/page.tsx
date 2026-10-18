@@ -9,7 +9,7 @@ export default function CardsGallery() {
     <main className="mx-auto w-full max-w-7xl p-4 sm:p-6">
       <header className="mb-4 flex flex-wrap items-baseline justify-between gap-2">
         <h1 className="text-lg font-semibold">Comparison card fixtures ({FIXTURES.length})</h1>
-        <Link href="/" className="text-sm text-black/50 underline-offset-2 hover:underline dark:text-white/50">
+        <Link href="/dashboard" className="text-sm text-black/50 underline-offset-2 hover:underline dark:text-white/50">
           ← Back to the Buddies
         </Link>
       </header>

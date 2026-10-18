@@ -1,33 +1,33 @@
-"use client";
+import Link from "next/link";
 
-import { useState } from "react";
+import WorldRadarMap from "@/components/ui/world-radar-map";
 
-import { ChatPane } from "@/components/ChatPane";
-import { CompareSuppliersTool } from "@/components/CompareSuppliersTool";
-import { Dashboard } from "@/components/Dashboard";
-import { DashboardProvider } from "@/components/DashboardContext";
-import { ShowNoticeTool } from "@/components/ShowNoticeTool";
-import { WorkspaceShell } from "@/components/WorkspaceShell";
-import type { AgentId } from "@/components/agents";
-import { ResearchSidePanel } from "@/components/research/ResearchSidePanel";
-
-export default function Home() {
-  const [active, setActive] = useState<AgentId>("data_buddy");
-
+// Landing page: a world map of container ships on radar, and one way in.
+export default function Landing() {
   return (
-    <DashboardProvider>
-      <ShowNoticeTool />
-      <CompareSuppliersTool />
-      {/* h-dvh + overflow-hidden: the page itself never scrolls; the workspace and chat scroll inside. */}
-      <main className="grid h-dvh grid-cols-1 overflow-hidden md:grid-cols-[minmax(0,1fr)_420px]">
-        {/* min-w-0: wide content (e.g. the 22-column benchmark) scrolls inside its card instead of widening the pane */}
-        <section className="order-2 min-h-0 min-w-0 border-t border-black/10 md:order-1 md:border-t-0 md:border-r dark:border-white/10">
-          <WorkspaceShell home={active === "research_buddy" ? <ResearchSidePanel /> : <Dashboard />} />
-        </section>
-        <section className="order-1 min-h-0 border-b border-black/10 md:order-2 md:border-b-0 dark:border-white/10">
-          <ChatPane active={active} onChange={setActive} />
-        </section>
-      </main>
-    </DashboardProvider>
+    <main className="flex-1 font-sans">
+      <WorldRadarMap height="100dvh">
+        <div className="grid h-full place-items-center">
+          <Link
+            href="/dashboard"
+            className="group inline-flex items-center gap-3 rounded-sm text-2xl font-medium tracking-tight text-white/90 [text-shadow:0_0_24px_rgb(3_5_6/0.9)] transition-colors hover:text-[#5cf2c6] focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-[#5cf2c6] sm:text-3xl"
+          >
+            Start now
+            <svg
+              aria-hidden
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={1.75}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="size-6 transition-transform duration-300 group-hover:translate-x-1.5 sm:size-7"
+            >
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </Link>
+        </div>
+      </WorldRadarMap>
+    </main>
   );
 }
