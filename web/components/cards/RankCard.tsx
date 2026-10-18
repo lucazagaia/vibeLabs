@@ -9,11 +9,12 @@ const BAND_TINTS = ["bg-emerald-500/[0.06]", "bg-amber-400/[0.08]", "bg-orange-5
 const LABEL_COL = "grid-cols-[minmax(0,8.5rem)_1fr] @md:grid-cols-[minmax(0,11rem)_1fr]";
 
 /** Sorted lollipops. One metric: one track per supplier. A cluster: a grouped set, one thin track per metric. */
-export function RankCard({ card }: { card: Card }) {
+export function RankCard({ card, preview = false }: { card: Card; preview?: boolean }) {
   const metrics = card.metrics.filter((m) => card.valueDirection[m] !== "categorical");
   const grouped = metrics.length > 1;
   const axis = makeAxis(grouped ? "fixed_0_100" : card.dataShape.scale, metrics[0], numbers(card, metrics[0]));
   const exposure = card.valueDirection[metrics[0]] === "higher_means_more_exposure";
+  const rows = preview ? card.suppliers.slice(0, grouped ? 3 : 5) : card.suppliers;
 
   return (
     <div className="@container">
@@ -24,7 +25,7 @@ export function RankCard({ card }: { card: Card }) {
         {axis.kind === "log" && " · log scale"}
       </p>
       <ol className={grouped ? "divide-y divide-black/5 dark:divide-white/10" : "space-y-1.5"}>
-        {card.suppliers.map((s) => (
+        {rows.map((s) => (
           <li key={s.supplierID} className={`grid items-center gap-2 ${LABEL_COL} ${grouped ? "py-1.5" : ""}`}>
             <SupplierLabel s={s} exposure={exposure} />
             <div className={grouped ? "space-y-0.5" : ""}>
@@ -35,6 +36,9 @@ export function RankCard({ card }: { card: Card }) {
           </li>
         ))}
       </ol>
+      {rows.length < card.suppliers.length && (
+        <p className="mt-1 text-[11px] text-black/40 dark:text-white/40">+{card.suppliers.length - rows.length} more</p>
+      )}
       <div className={`mt-1 grid gap-2 ${LABEL_COL}`}>
         <div />
         <div className={`grid gap-2 ${grouped ? "grid-cols-[4.5rem_1fr_2.75rem]" : "grid-cols-[1fr_3.75rem]"}`}>

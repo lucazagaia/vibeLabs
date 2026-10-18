@@ -160,5 +160,6 @@
     "spread": 52.0,
     "hiddenWatchouts": []
   },
-  "summary": "Lower is better for total risk. Best: SUPP_00038 (40); worst: SUPP_01366 (92)."
+  "summary": "Lower is better for total risk. Best: SUPP_00038 (40); worst: SUPP_01366 (92).",
+  "panels": null
 }

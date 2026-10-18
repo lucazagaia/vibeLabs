@@ -14,7 +14,7 @@ type Point = { s: CardSupplier; x: number; y: number; r: number; zone: keyof typ
 type Box = { x: number; y: number; w: number; h: number };
 
 /** Two metrics against each other, split into quadrants at the card's thresholds. */
-export function ScatterCard({ card }: { card: Card }) {
+export function ScatterCard({ card, preview = false }: { card: Card; preview?: boolean }) {
   const [ref, width] = useWidth();
   const q = card.quadrants;
   if (!q) return null;
@@ -26,7 +26,7 @@ export function ScatterCard({ card }: { card: Card }) {
   const sizeMetric = card.metrics.find((m) => m !== q.x && m !== q.y && typeof card.suppliers[0]?.values[m] === "number");
   const concern = (card.facts.quadrant as { concernZone?: Corner } | undefined)?.concernZone;
 
-  const height = Math.round(Math.min(420, Math.max(260, width * 0.62)));
+  const height = preview ? Math.round(Math.min(190, Math.max(130, width * 0.5))) : Math.round(Math.min(420, Math.max(260, width * 0.62)));
   const pw = Math.max(1, width - M.left - M.right);
   const ph = height - M.top - M.bottom;
   // Inner padding keeps dots at 0 or 100 (and their size) inside the plot frame.
@@ -35,7 +35,7 @@ export function ScatterCard({ card }: { card: Card }) {
 
   const quadrantLabels = (Object.keys(q.labels) as Corner[]).map((c) => quadrantLabelBox(c, q.labels[c], pw, ph));
   const points = width ? layoutPoints(card, q, px, py, sizeMetric, concern) : [];
-  const labels = width ? placeLabels(points, { x: M.left, y: M.top, w: pw, h: ph }, quadrantLabels) : new Map<string, Box>();
+  const labels = width && !preview ? placeLabels(points, { x: M.left, y: M.top, w: pw, h: ph }, quadrantLabels) : new Map<string, Box>();
   const hidden = points.length - labels.size;
   const corner = (c: Corner): Box => ({
     x: c.endsWith("Left") ? M.left : px(q.xThreshold),
@@ -55,7 +55,7 @@ export function ScatterCard({ card }: { card: Card }) {
           <Grid ax={ax} ay={ay} px={px} py={py} pw={pw} ph={ph} />
           <line x1={px(q.xThreshold)} x2={px(q.xThreshold)} y1={M.top} y2={M.top + ph} className="stroke-black/35 dark:stroke-white/35" strokeDasharray="4 3" />
           <line x1={M.left} x2={M.left + pw} y1={py(q.yThreshold)} y2={py(q.yThreshold)} className="stroke-black/35 dark:stroke-white/35" strokeDasharray="4 3" />
-          {(Object.keys(q.labels) as Corner[]).map((c) => (
+          {!preview && (Object.keys(q.labels) as Corner[]).map((c) => (
             <text
               key={c}
               x={c.endsWith("Left") ? M.left + 6 : M.left + pw - 6}
@@ -69,17 +69,17 @@ export function ScatterCard({ card }: { card: Card }) {
             </text>
           ))}
           {/* axes titles */}
-          <text x={M.left + pw / 2} y={height - 6} textAnchor="middle" fontSize={FONT} className="fill-black/60 dark:fill-white/60">
+          {!preview && <text x={M.left + pw / 2} y={height - 6} textAnchor="middle" fontSize={FONT} className="fill-black/60 dark:fill-white/60">
             {card.metricLabels[q.x]} ({directionHint(card, q.x)}) →
-          </text>
-          <text
+          </text>}
+          {!preview && <text
             transform={`translate(12 ${M.top + ph / 2}) rotate(-90)`}
             textAnchor="middle"
             fontSize={FONT}
             className="fill-black/60 dark:fill-white/60"
           >
             {card.metricLabels[q.y]} ({directionHint(card, q.y)}) →
-          </text>
+          </text>}
           {/* points, then labels on top */}
           {points.map((p) => (
             <circle
@@ -106,14 +106,14 @@ export function ScatterCard({ card }: { card: Card }) {
           })}
         </svg>
       )}
-      {!width && <div style={{ height: 300 }} />}
-      <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-black/50 dark:text-white/50">
+      {!width && <div style={{ height: preview ? 150 : 300 }} />}
+      {!preview && <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-black/50 dark:text-white/50">
         <Legend color={ZONE_FILL.good} text={q.labels[q.goodZone]} />
         {concern && <Legend color={ZONE_FILL.concern} text={q.labels[concern]} />}
         <Legend color={ZONE_FILL.other} text="Mixed" />
         {sizeMetric && <span>Dot size: {card.metricLabels[sizeMetric].toLowerCase()} ({directionHint(card, sizeMetric)})</span>}
         {hidden > 0 && <span>{hidden} label{hidden > 1 ? "s" : ""} hidden to avoid overlap · hover a dot</span>}
-      </div>
+      </div>}
     </div>
   );
 }

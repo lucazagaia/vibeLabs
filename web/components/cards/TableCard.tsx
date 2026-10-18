@@ -5,21 +5,23 @@ import { formatValue, LEVEL_CELL, levelOf, type Level } from "./bands";
 import type { Card } from "./types";
 
 /** Suppliers × metrics with colour-banded cells; the replaceability card is a 3×3 grid instead. */
-export function TableCard({ card }: { card: Card }) {
-  if (card.template === "replaceability_complexity_card" && card.facts.grid) return <ReplaceabilityGrid card={card} />;
+export function TableCard({ card, preview = false }: { card: Card; preview?: boolean }) {
+  if (card.template === "replaceability_complexity_card" && card.facts.grid) return <ReplaceabilityGrid card={card} preview={preview} />;
+  const metrics = preview ? card.metrics.slice(0, 6) : card.metrics;
+  const suppliers = preview ? card.suppliers.slice(0, 4) : card.suppliers;
 
   const watch = new Set((card.facts.hiddenWatchouts ?? []).map((h) => `${h.supplierID}|${h.metric}`));
   const recommended = card.facts.recommended as string | undefined;
 
   return (
     <div className="-mx-1 overflow-x-auto px-1 pb-1">
-      <table className={`border-separate border-spacing-0 text-xs ${card.metrics.length > 3 ? "w-full" : "w-auto"}`}>
+      <table className={`border-separate border-spacing-0 text-xs ${metrics.length > 3 ? "w-full" : "w-auto"}`}>
         <thead>
           <tr className="align-bottom">
             <th className="sticky left-0 z-10 bg-white pr-3 pb-2 text-left font-medium text-black/50 dark:bg-neutral-900 dark:text-white/50">
               Supplier
             </th>
-            {card.metrics.map((m) => (
+            {metrics.map((m) => (
               <th key={m} className="min-w-[4.25rem] px-1 pb-2 text-center text-[11px] leading-tight font-medium text-black/60 dark:text-white/60">
                 {card.metricLabels[m]}
                 {m === card.sort.field && <span className="ml-0.5 text-black/35 dark:text-white/35">{card.sort.direction === "asc" ? "↑" : "↓"}</span>}
@@ -33,7 +35,7 @@ export function TableCard({ card }: { card: Card }) {
           </tr>
         </thead>
         <tbody>
-          {card.suppliers.map((s) => {
+          {suppliers.map((s) => {
             const accent = s.flags.includes("hidden_watchout")
               ? "border-l-amber-500"
               : s.supplierID === recommended
@@ -50,7 +52,7 @@ export function TableCard({ card }: { card: Card }) {
                     {s.supplierName}
                   </div>
                 </td>
-                {card.metrics.map((m) => {
+                {metrics.map((m) => {
                   const level = levelOf(card, s, m);
                   const flagged = watch.has(`${s.supplierID}|${m}`);
                   return (
@@ -69,6 +71,11 @@ export function TableCard({ card }: { card: Card }) {
           })}
         </tbody>
       </table>
+      {preview && (suppliers.length < card.suppliers.length || metrics.length < card.metrics.length) && (
+        <p className="mt-1 text-[11px] text-black/40 dark:text-white/40">
+          {card.suppliers.length} suppliers × {card.metrics.length} metrics · open for all
+        </p>
+      )}
     </div>
   );
 }
@@ -77,7 +84,7 @@ const SOURCING = ["High", "Medium", "Low"] as const; // hard to replace at the t
 const COMPLEXITY = ["Simple", "Moderate", "Complex"] as const;
 const GRID_LEVEL: Level[] = ["Low", "Low", "Medium", "High", "Critical"];
 
-function ReplaceabilityGrid({ card }: { card: Card }) {
+function ReplaceabilityGrid({ card, preview }: { card: Card; preview: boolean }) {
   const grid = card.facts.grid as Record<string, string[]>;
   return (
     <div className="grid grid-cols-[auto_1fr] gap-2">
@@ -92,9 +99,9 @@ function ReplaceabilityGrid({ card }: { card: Card }) {
                 const ids = grid[`${src} x ${cx}`] ?? [];
                 const level = GRID_LEVEL[2 - row + col];
                 return (
-                  <div key={cx} className={`min-h-16 rounded-md p-1.5 ${LEVEL_CELL[level]}`}>
+                  <div key={cx} className={`${preview ? "min-h-8" : "min-h-16"} rounded-md p-1.5 ${LEVEL_CELL[level]}`}>
                     <div className="text-[10px] opacity-70">{ids.length} supplier{ids.length === 1 ? "" : "s"}</div>
-                    <div className="mt-1 flex flex-wrap gap-1">
+                    <div className={preview ? "hidden" : "mt-1 flex flex-wrap gap-1"}>
                       {ids.map((id) => (
                         <span key={id} className="rounded bg-white/70 px-1 font-mono text-[10px] text-black/80 dark:bg-black/30 dark:text-white/85">
                           {id}

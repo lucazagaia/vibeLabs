@@ -268,5 +268,6 @@
     },
     "highestChangeRate": "SUPP_00009"
   },
-  "summary": "Higher is better for delivery rating. Best: SUPP_00006 (100.0%); worst: SUPP_00008 (79.3%). In the 'Weak on both' zone: SUPP_00001, SUPP_00008, SUPP_00013, SUPP_00015."
+  "summary": "Higher is better for delivery rating. Best: SUPP_00006 (100.0%); worst: SUPP_00008 (79.3%). In the 'Weak on both' zone: SUPP_00001, SUPP_00008, SUPP_00013, SUPP_00015.",
+  "panels": null
 }

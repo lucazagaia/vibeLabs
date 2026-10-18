@@ -5,8 +5,8 @@ import { useEffect } from "react";
 import { z } from "zod";
 
 import type { Card, ToolResult } from "./cards/types";
-import { cardElementId } from "./Dashboard";
 import { useDashboard } from "./DashboardContext";
+import { widgetPath } from "./useHashPath";
 
 // The browser half of the backend tool `compare_suppliers` (plan 05c). The tool runs in Python; its
 // result arrives as a string. The chat shows a small chip, and the card itself goes on the dashboard.
@@ -35,14 +35,13 @@ function PlacedChip({ card, toolCallId, addCard }: { card: Card; toolCallId: str
   useEffect(() => addCard(card, toolCallId), [addCard, card, toolCallId]); // idempotent per tool call
 
   const show = () => {
-    const el = document.getElementById(cardElementId(toolCallId));
-    el?.scrollIntoView({ behavior: "smooth", block: "start" });
-    el?.animate([{ boxShadow: "0 0 0 3px rgb(14 165 233 / 0.6)" }, { boxShadow: "0 0 0 0 rgb(14 165 233 / 0)" }], { duration: 1400 });
+    window.location.hash = widgetPath(toolCallId).map(encodeURIComponent).join("/"); // maximize it on the dashboard
   };
 
   return (
     <Chip onClick={show}>
-      ▦ {card.title} · {card.suppliers.length} suppliers · <span className="underline underline-offset-2">on the dashboard</span>
+      ▦ {card.title} · {card.renderer === "composite" ? `${card.panels?.length ?? 0} panels · ` : ""}{card.suppliers.length} suppliers ·{" "}
+      <span className="underline underline-offset-2">open</span>
     </Chip>
   );
 }

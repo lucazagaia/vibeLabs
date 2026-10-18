@@ -1,4 +1,4 @@
-// The 10 engine-built fixture cards (agent/scripts/make_fixtures.py), for the /cards gallery.
+// The 12 engine-built fixture cards (agent/scripts/make_fixtures.py), for the /cards gallery.
 import type { Card } from "../types";
 import f01 from "./01_rank_total_risk.json";
 import f02 from "./02_rank_spend_log.json";
@@ -10,6 +10,8 @@ import f07 from "./07_edge_tight_cluster.json";
 import f08 from "./08_edge_extreme_outlier.json";
 import f09 from "./09_rank_esg_cluster.json";
 import f10 from "./10_table_hidden_outliers.json";
+import f11 from "./11_composite_topics.json";
+import f12 from "./12_composite_all_metrics.json";
 
 export const FIXTURES: { name: string; card: Card }[] = Object.entries({
   "01_rank_total_risk": f01,
@@ -22,4 +24,6 @@ export const FIXTURES: { name: string; card: Card }[] = Object.entries({
   "08_edge_extreme_outlier": f08,
   "09_rank_esg_cluster": f09,
   "10_table_hidden_outliers": f10,
+  "11_composite_topics": f11,
+  "12_composite_all_metrics": f12,
 }).map(([name, card]) => ({ name, card: card as unknown as Card }));

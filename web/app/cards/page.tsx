@@ -13,6 +13,13 @@ export default function CardsGallery() {
           ← Back to the Buddies
         </Link>
       </header>
+      <h2 className="mb-2 text-sm font-medium text-black/60 dark:text-white/60">Dashboard previews</h2>
+      <div className="mb-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {FIXTURES.map(({ name, card }) => (
+          <CardShell key={name} card={card} mode="preview" />
+        ))}
+      </div>
+      <h2 className="mb-2 text-sm font-medium text-black/60 dark:text-white/60">Full cards (maximized view)</h2>
       <div className="grid gap-4 xl:grid-cols-2">
         {FIXTURES.map(({ name, card }) => (
           <section key={name} className={card.metrics.length > 6 ? "min-w-0 xl:col-span-2" : "min-w-0"}>

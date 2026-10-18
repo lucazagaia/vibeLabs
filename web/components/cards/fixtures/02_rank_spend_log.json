@@ -164,5 +164,6 @@
     "spread": 40699754.28,
     "hiddenWatchouts": []
   },
-  "summary": "Spend is exposure, not risk. Largest: SUPP_00356 (EUR 40,829,569); smallest: SUPP_00001 (EUR 129,814)."
+  "summary": "Spend is exposure, not risk. Largest: SUPP_00356 (EUR 40,829,569); smallest: SUPP_00001 (EUR 129,814).",
+  "panels": null
 }

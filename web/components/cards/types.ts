@@ -1,7 +1,7 @@
 // The card contract, hand-copied from agent/buddy/cards/schema.py (docs/specs/card-contract.md).
 // Change both together.
 
-export type Renderer = "rank" | "scatter" | "table";
+export type Renderer = "rank" | "scatter" | "table" | "composite";
 export type Scale = "fixed_0_100" | "zoomed" | "log" | "linear" | "percentile" | "categorical";
 export type ValueDirection = "lower_is_better" | "higher_is_better" | "higher_means_more_exposure" | "categorical";
 export type Corner = "topLeft" | "topRight" | "bottomLeft" | "bottomRight";
@@ -45,6 +45,7 @@ export type Card = {
   suppliers: CardSupplier[];
   facts: Record<string, unknown> & { hiddenWatchouts?: HiddenWatchout[] };
   summary: string;
+  panels?: Card[] | null; // composite only: one full card per buyer topic
 };
 
 export type ToolResult = {

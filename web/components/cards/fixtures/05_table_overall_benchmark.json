@@ -634,5 +634,6 @@
     "largestExposure": "SUPP_00003",
     "weakestDelivery": "SUPP_00008"
   },
-  "summary": "Safest overall: SUPP_00006; riskiest overall: SUPP_00001. Largest spend: SUPP_00003; weakest delivery: SUPP_00008."
+  "summary": "Safest overall: SUPP_00006; riskiest overall: SUPP_00001. Largest spend: SUPP_00003; weakest delivery: SUPP_00008.",
+  "panels": null
 }

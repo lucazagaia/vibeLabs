@@ -93,7 +93,8 @@ def test_tool_ambiguous_asks_buyer_to_choose():
                                direction="safest", mentions=[{"phrase": "financial risk",
                                                               "metrics": ["Financial_Health_Score", "Credit_Rating_Score"]}])
     assert result["status"] == "needs_clarification"
-    assert len(result["options"]) == 2 and result["options"][0].startswith("Financial health")
+    assert len(result["options"]) == 3 and result["options"][0].startswith("Financial health")
+    assert result["options"][-1].startswith("All of them")
 
 
 def test_tool_unknown_supplier_is_an_error():
@@ -209,5 +210,100 @@ def test_model_sees_results_without_the_card():
     req = LlmRequest(contents=[types.Content(role="user", parts=[types.Part(text="hi")]), stored])
     slim_card_results(None, req)
     sent = req.contents[1].parts[0].function_response.response
-    assert sent == {"status": "ok", "summary": full["summary"]}
+    assert sent == {"status": "ok", "summary": full["summary"],
+                    "card": {"title": full["card"]["title"], "supplierIDs": ["SUPP_00012", "SUPP_00450"]}}
     assert "card" in stored.parts[0].function_response.response  # the stored session keeps the card
+
+
+# --- Composite cards and follow-ups (plan 05d) -----------------------------------------------------------
+
+def _thread(*turns):
+    """A fake ADK session: ("user", text) or ("card", [ids]) turns, oldest first."""
+    from types import SimpleNamespace
+
+    from google.genai import types
+
+    events = []
+    for kind, value in turns:
+        if kind == "user":
+            events.append(SimpleNamespace(author="user", content=types.Content(role="user", parts=[types.Part(text=value)])))
+        else:
+            response = {"status": "ok", "card": {"suppliers": [{"supplierID": i} for i in value]}}
+            part = types.Part(function_response=types.FunctionResponse(name="compare_suppliers", response=response))
+            events.append(SimpleNamespace(author="data_buddy", content=types.Content(role="user", parts=[part])))
+    return SimpleNamespace(session=SimpleNamespace(events=events), state={}, invocation_id=None)
+
+
+TOP10 = ["SUPP_00609", "SUPP_03267", "SUPP_03469", "SUPP_00012", "SUPP_00450", "SUPP_00731", "SUPP_00141", "SUPP_00287",
+         "SUPP_00018", "SUPP_00143"]
+
+
+def test_several_topics_make_one_composite_card():
+    r = compare_suppliers(request="Compare SUPP_00012, SUPP_00450 and SUPP_00731 on credit rating, delivery and ESG",
+                          intent="compare", direction="safest",
+                          mentions=[{"phrase": "credit rating", "metrics": ["Credit_Rating_Score"]},
+                                    {"phrase": "delivery", "metrics": ["Supplier Delivery Rating"]},
+                                    {"phrase": "ESG", "metrics": ["ESG_Performance_Score"]}])
+    card = r["card"]
+    Card.model_validate(card)
+    assert card["renderer"] == "composite" and len(card["panels"]) == 3
+    assert [p["template"] for p in card["panels"]][:2] == ["financial_credit_card", "performance_reliability_card"]
+    assert card["panels"][2]["metrics"] == ["ESG_Performance_Score"]  # its chart may fall back to a table (tight values)
+    assert all(p["summary"] in card["summary"] or p["title"] in card["summary"] for p in card["panels"])
+
+
+def test_pairs_and_clusters_stay_one_card():
+    pair = compare_suppliers(request="Compare financial health and credit rating of SUPP_00012 and SUPP_00450", intent="compare",
+                             direction="safest", mentions=[{"phrase": "financial health", "metrics": ["Financial_Health_Score"]},
+                                                           {"phrase": "credit rating", "metrics": ["Credit_Rating_Score"]}])
+    assert pair["card"]["template"] == "financial_credit_card"
+    esg = compare_suppliers(request="Compare SUPP_00012 and SUPP_00450 on ESG, labor and safety", intent="compare", direction="safest",
+                            mentions=[{"phrase": p, "metrics": [k]} for p, k in
+                                      [("ESG", "ESG_Performance_Score"), ("labor", "Labor_Stability_Score"), ("safety", "Safety_Incident_Score")]])
+    assert esg["card"]["template"] == "esg_workforce_card"
+
+
+def test_live_conversation_now_works():
+    # The exact conversation that failed at Checkpoint 5: top 10 -> "top three of this list" -> "all metrics" -> IDs.
+    ctx = _thread(("user", "give me the top 10 suppliers with the best risk scores"), ("card", TOP10),
+                  ("user", "Do a full analysis comparison between the top three of this list"))
+    r = compare_suppliers(request="Do a full analysis comparison between the top three of this list", intent="compare",
+                          direction="safest", tool_context=ctx)
+    assert r["status"] == "ok" and r["card"]["title"] == "Full supplier analysis"
+    assert [s["supplierID"] for s in r["card"]["panels"][0]["suppliers"]] != [] and \
+        {s["supplierID"] for s in r["card"]["suppliers"]} == set(TOP10[:3])
+    assert r["card"]["panels"][0]["template"] == "overall_supplier_benchmark_card" and len(r["card"]["panels"]) == 7
+
+    # "Can you compare on all metrics": no IDs, a 23-candidate mention -> all metrics of the card on screen, no question.
+    ctx = _thread(("user", "give me the top 10"), ("card", TOP10[:3]), ("user", "Can you compare on all metrics"))
+    every = ["Total_Risk_Index", "Financial_Health_Score", "Credit_Rating_Score", "ESG_Performance_Score"]
+    r = compare_suppliers(request="Can you compare on all metrics", intent="compare", direction="safest",
+                          mentions=[{"phrase": "all metrics", "metrics": every}], tool_context=ctx)
+    assert r["status"] == "ok" and r["card"]["renderer"] == "composite"
+
+    # IDs typed in a later message while the model re-sends the old request text.
+    ctx = _thread(("user", "Can you compare on all metrics"), ("user", "SUPP_00609, SUPP_03267, SUPP_03267"))
+    r = compare_suppliers(request="Can you compare on all metrics", intent="compare", direction="safest", tool_context=ctx)
+    assert r["status"] == "ok" and {s["supplierID"] for s in r["card"]["suppliers"]} == {"SUPP_00609", "SUPP_03267"}
+
+
+def test_all_of_them_answers_the_question_with_a_composite():
+    ctx = _thread(("user", "How is the reputation of SUPP_00141 vs SUPP_00287?"), ("user", "All of them"))
+    mention = {"phrase": "reputation", "metrics": ["Media_Sentiment_Score", "Market_Sentiment_Score",
+                                                   "External_Intelligence_Score", "Industry_Benchmark_Score"]}
+    r = compare_suppliers(request="How is the reputation of SUPP_00141 vs SUPP_00287?", intent="compare", direction="safest",
+                          mentions=[mention], tool_context=ctx)
+    assert r["status"] == "ok" and r["card"]["template"] == "reputation_cluster_card"
+
+
+def test_model_ids_must_be_grounded_in_the_thread():
+    ctx = _thread(("user", "Compare SUPP_00012 and SUPP_00450 on total risk"), ("card", ["SUPP_00012", "SUPP_00450"]),
+                  ("user", "Credit rating"))
+    r = compare_suppliers(request="Credit rating", intent="compare", direction="safest", supplier_ids=["SUPP_00012", "SUPP_00450"],
+                          mentions=[{"phrase": "credit rating", "metrics": ["Credit_Rating_Score"]}], tool_context=ctx)
+    assert {s["supplierID"] for s in r["card"]["suppliers"]} == {"SUPP_00012", "SUPP_00450"}
+    # Invented IDs are dropped; with no card on screen and nothing named, the buyer is asked.
+    r = compare_suppliers(request="Credit rating", intent="compare", direction="safest", supplier_ids=["SUPP_00001", "SUPP_00002"],
+                          mentions=[{"phrase": "credit rating", "metrics": ["Credit_Rating_Score"]}],
+                          tool_context=_thread(("user", "Credit rating")))
+    assert r["status"] == "needs_clarification"

@@ -139,5 +139,6 @@
     "spread": 2.0,
     "hiddenWatchouts": []
   },
-  "summary": "Lower is better for total risk. Best: SUPP_00007 (50); worst: SUPP_00016 (52). All total risk values lie within 2 points, so the metric barely separates these suppliers. Values are nearly identical, so a table is shown instead of a chart."
+  "summary": "Lower is better for total risk. Best: SUPP_00007 (50); worst: SUPP_00016 (52). All total risk values lie within 2 points, so the metric barely separates these suppliers. Values are nearly identical, so a table is shown instead of a chart.",
+  "panels": null
 }
