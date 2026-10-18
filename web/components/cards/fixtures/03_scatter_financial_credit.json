@@ -1,0 +1,223 @@
+{
+  "cardId": "cfd799bfd8ca",
+  "renderer": "scatter",
+  "template": "financial_credit_card",
+  "title": "Financial health vs credit rating",
+  "intent": "compare",
+  "direction": "safest",
+  "metrics": [
+    "Financial_Health_Score",
+    "Credit_Rating_Score"
+  ],
+  "metricLabels": {
+    "Financial_Health_Score": "Financial health",
+    "Credit_Rating_Score": "Credit rating"
+  },
+  "valueDirection": {
+    "Financial_Health_Score": "lower_is_better",
+    "Credit_Rating_Score": "lower_is_better"
+  },
+  "sort": {
+    "field": "Financial_Health_Score",
+    "direction": "asc"
+  },
+  "dataShape": {
+    "flags": [
+      "extreme_outlier"
+    ],
+    "scale": "fixed_0_100",
+    "fallbackApplied": null,
+    "notes": [
+      "One supplier sits far from the rest; it is called out so the others stay readable."
+    ]
+  },
+  "quadrants": {
+    "x": "Financial_Health_Score",
+    "y": "Credit_Rating_Score",
+    "xThreshold": 50,
+    "yThreshold": 50,
+    "labels": {
+      "topLeft": "Credit-specific concern",
+      "topRight": "Serious financial concern",
+      "bottomLeft": "Low financial risk",
+      "bottomRight": "Liquidity concern not in credit score"
+    },
+    "goodZone": "bottomLeft"
+  },
+  "suppliers": [
+    {
+      "supplierID": "SUPP_00006",
+      "supplierName": "Apex Solutions 621",
+      "values": {
+        "Financial_Health_Score": 18.0,
+        "Credit_Rating_Score": 3.0
+      },
+      "levels": {
+        "Financial_Health_Score_Level": "Low",
+        "Credit_Rating_Score_Level": "Low"
+      },
+      "flags": [
+        "best"
+      ]
+    },
+    {
+      "supplierID": "SUPP_00003",
+      "supplierName": "Advanced Systems 395",
+      "values": {
+        "Financial_Health_Score": 36.0,
+        "Credit_Rating_Score": 38.0
+      },
+      "levels": {
+        "Financial_Health_Score_Level": "Medium",
+        "Credit_Rating_Score_Level": "Medium"
+      },
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00009",
+      "supplierName": "Prime Systems 271",
+      "values": {
+        "Financial_Health_Score": 37.0,
+        "Credit_Rating_Score": 40.0
+      },
+      "levels": {
+        "Financial_Health_Score_Level": "Medium",
+        "Credit_Rating_Score_Level": "Medium"
+      },
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00011",
+      "supplierName": "Dynamic Systems 930",
+      "values": {
+        "Financial_Health_Score": 42.0,
+        "Credit_Rating_Score": 26.0
+      },
+      "levels": {
+        "Financial_Health_Score_Level": "Medium",
+        "Credit_Rating_Score_Level": "Medium"
+      },
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00012",
+      "supplierName": "Dynamic Group 434",
+      "values": {
+        "Financial_Health_Score": 54.0,
+        "Credit_Rating_Score": 57.0
+      },
+      "levels": {
+        "Financial_Health_Score_Level": "High",
+        "Credit_Rating_Score_Level": "High"
+      },
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00007",
+      "supplierName": "Advanced Logistics 134",
+      "values": {
+        "Financial_Health_Score": 55.0,
+        "Credit_Rating_Score": 60.0
+      },
+      "levels": {
+        "Financial_Health_Score_Level": "High",
+        "Credit_Rating_Score_Level": "High"
+      },
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00008",
+      "supplierName": "Dynamic Technologies 401",
+      "values": {
+        "Financial_Health_Score": 55.0,
+        "Credit_Rating_Score": 73.0
+      },
+      "levels": {
+        "Financial_Health_Score_Level": "High",
+        "Credit_Rating_Score_Level": "High"
+      },
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00005",
+      "supplierName": "Precision Systems 319",
+      "values": {
+        "Financial_Health_Score": 56.0,
+        "Credit_Rating_Score": 42.0
+      },
+      "levels": {
+        "Financial_Health_Score_Level": "High",
+        "Credit_Rating_Score_Level": "Medium"
+      },
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00010",
+      "supplierName": "Apex Industries 470",
+      "values": {
+        "Financial_Health_Score": 56.0,
+        "Credit_Rating_Score": 66.0
+      },
+      "levels": {
+        "Financial_Health_Score_Level": "High",
+        "Credit_Rating_Score_Level": "High"
+      },
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00004",
+      "supplierName": "Strategic Technologies 948",
+      "values": {
+        "Financial_Health_Score": 61.0,
+        "Credit_Rating_Score": 41.0
+      },
+      "levels": {
+        "Financial_Health_Score_Level": "High",
+        "Credit_Rating_Score_Level": "Medium"
+      },
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00002",
+      "supplierName": "Global Solutions 900",
+      "values": {
+        "Financial_Health_Score": 62.0,
+        "Credit_Rating_Score": 60.0
+      },
+      "levels": {
+        "Financial_Health_Score_Level": "High",
+        "Credit_Rating_Score_Level": "High"
+      },
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00001",
+      "supplierName": "Apex Technologies 491",
+      "values": {
+        "Financial_Health_Score": 96.0,
+        "Credit_Rating_Score": 91.0
+      },
+      "levels": {
+        "Financial_Health_Score_Level": "Critical",
+        "Credit_Rating_Score_Level": "Critical"
+      },
+      "flags": [
+        "worst"
+      ]
+    }
+  ],
+  "facts": {
+    "metric": "Financial_Health_Score",
+    "best": {
+      "supplierID": "SUPP_00006",
+      "value": 18.0
+    },
+    "worst": {
+      "supplierID": "SUPP_00001",
+      "value": 96.0
+    },
+    "spread": 78.0,
+    "notDiscriminating": false
+  },
+  "summary": "Lower is better for financial health. Best: SUPP_00006 (18); worst: SUPP_00001 (96)."
+}

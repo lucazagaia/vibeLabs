@@ -1,6 +1,6 @@
 # Step 5: Comparison cards as an ADK Skill (agent extracts, code decides)
 
-Builds on Adham's [`comparison-card-template-spec.md`](../../comparison-card-template-spec.md), which gets moved to `docs/specs/`. It runs on the walking skeleton (Steps 1–4).
+Builds on Adham's [`comparison-card-template-spec.md`](../specs/comparison-card-template-spec.md). It runs on the walking skeleton (Steps 1–4). The frozen contract is in [`docs/specs/card-contract.md`](../specs/card-contract.md).
 
 ## Context
 A buyer asks Data Buddy to compare suppliers, and the right comparison card appears on the dashboard. Adham's spec defines what a good card is: templates, routing, a data-shape preflight and interpretation rules.
@@ -136,7 +136,8 @@ This is the pipeline, all deterministic:
    - **Enum values:** reject unknown ones. The schema allows only valid values, but check anyway.
    - **Supplier IDs:** extracted with the regex `SUPP_\d{5}` from the verbatim `request`. Any model-supplied ID that isn't in the request is dropped, because without that rule the model invented IDs for "these suppliers" in tests.
    - **Ambiguity → the buyer chooses one:** if a mention has more than one candidate, return `needs_clarification`. For example: `question`: "'financial risk' can mean several things. Which one should I compare?", `options`: ["Financial health (liquidity, bankruptcy risk)", "Credit rating"]. The option labels come from the metric glossary.
-   - **No mentions with `intent = compare`:** `needs_clarification` ("Which aspect should I compare?"), with the cluster names as options. It's a safety net so the code never guesses.
+   - **No mentions with `intent = compare`** → `overview`: the spec's overall benchmark card for general comparisons. A question here caused needless asking in 5a.
+   - **Explicit lists aren't ambiguous:** if every candidate's own name appears in the request ("financial health *and* credit rating"), the buyer listed them, so there's no question. This is implemented in `validate.py` (`needs_choice`).
    - **Suppliers:** unknown IDs, or no suppliers at all → `needs_clarification`, with options such as "use the compare tray" or "top 10 by total risk".
    - **Normalise `compare`:** decided purely by the metrics.
      - 1 metric → the spec's single-metric default. For example, Financial Health on its own becomes the **financial/credit scatter**.
@@ -196,7 +197,7 @@ web/components/cards/          # RankCard, ScatterCard, TableCard, CardShell
 **Together first (about 1 h):**
 - Freeze the contract and the tool schema.
 - Generate **8 fixture cards from the real data**: 2 per renderer, plus a tight cluster and an extreme outlier.
-- Write the **extraction eval table**, starting from the 50 requests already tested (34 metric mapping + 16 ambiguity), each with the expected mentions and whether a question is expected.
+- *(Done in 5a:)* a **12-case quick eval**, `agent/evals/quick_eval.json`. It's deliberately small because of hackathon time.
 
 | Person A: skill + engine (Python) | Person B: renderers (React) |
 |---|---|
@@ -210,14 +211,10 @@ web/components/cards/          # RankCard, ScatterCard, TableCard, CardShell
    - With Nemotron + ag-ui-adk, the skill loads, and `compare_suppliers` appears only after `load_skill`.
    - The tool's JSON schema lists the enums (the `Literal` types become `enum`).
 2. **No LLM needed:** unit tests for validation, normalisation and routing for every metric in the spec map. Facts are checked against pandas.
-3. **Extraction eval:** the eval table runs through `/data`. Pass bar:
-   - exactly one `compare_suppliers` call
-   - mentions match the expected ones (an equivalent metric choice counts)
-   - **zero invented supplier IDs** (also enforced in code)
-   - **0 vague concepts answered without a question**, so no wrong cards
-   - **at most 10% unnecessary questions** on clear requests
-   - the reply contains only numbers from `summary`
-   - after a clarification, the chosen option produces the card
+3. **Quick eval, run once before the demo:** `uv run python scripts/skill_smoke.py --quick-eval`, 12 cases. Must hold:
+   - the ask-or-not decision is right in all 12
+   - no invented supplier IDs
+   - (the 5a result was 12/12 on asking, and 10/12 with the exact metric; the other 2 fell back to the overview card)
 4. **In the browser:** "Which of SUPP_00012, SUPP_00450 and SUPP_00731 is least likely to go bankrupt?" renders the financial/credit scatter from the tool result, and the reply matches `summary`.
 
 ## Execution order, with checkpoints
@@ -225,8 +222,8 @@ web/components/cards/          # RankCard, ScatterCard, TableCard, CardShell
    - move the spec to `docs/specs/`
    - run the Skill smoke test, including the enum schema check
    - freeze the contract and the tool schema
-   - write the fixtures and the extraction eval table
+   - write the fixtures and the quick eval
 
    **⏸ Checkpoint.**
 2. **5b (in parallel):** Person A builds the engine + skill, and Person B builds the 3 renderers. **⏸ Checkpoint.**
-3. **5c:** integration + extraction eval + browser check. **⏸ Checkpoint 5.**
+3. **5c:** integration + quick eval + browser check. **⏸ Checkpoint 5.**

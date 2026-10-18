@@ -1,0 +1,231 @@
+{
+  "cardId": "8913ba6ceed9",
+  "renderer": "scatter",
+  "template": "performance_reliability_card",
+  "title": "Delivery vs order confirmation",
+  "intent": "compare",
+  "direction": "safest",
+  "metrics": [
+    "Supplier Delivery Rating",
+    "Order Confirmation Rate",
+    "Order Change Rate"
+  ],
+  "metricLabels": {
+    "Supplier Delivery Rating": "Delivery rating",
+    "Order Confirmation Rate": "Order confirmation rate",
+    "Order Change Rate": "Order change rate"
+  },
+  "valueDirection": {
+    "Supplier Delivery Rating": "higher_is_better",
+    "Order Confirmation Rate": "higher_is_better",
+    "Order Change Rate": "lower_is_better"
+  },
+  "sort": {
+    "field": "Supplier Delivery Rating",
+    "direction": "desc"
+  },
+  "dataShape": {
+    "flags": [],
+    "scale": "linear",
+    "fallbackApplied": null,
+    "notes": []
+  },
+  "quadrants": {
+    "x": "Supplier Delivery Rating",
+    "y": "Order Confirmation Rate",
+    "xThreshold": 90.31,
+    "yThreshold": 85.99,
+    "labels": {
+      "topLeft": "Confirms but delivers late",
+      "topRight": "Reliable",
+      "bottomLeft": "Weak on both",
+      "bottomRight": "Delivers but confirms slowly"
+    },
+    "goodZone": "topRight"
+  },
+  "suppliers": [
+    {
+      "supplierID": "SUPP_00006",
+      "supplierName": "Apex Solutions 621",
+      "values": {
+        "Supplier Delivery Rating": 100.0,
+        "Order Confirmation Rate": 84.88,
+        "Order Change Rate": 8.21
+      },
+      "levels": {},
+      "flags": [
+        "best"
+      ]
+    },
+    {
+      "supplierID": "SUPP_00007",
+      "supplierName": "Advanced Logistics 134",
+      "values": {
+        "Supplier Delivery Rating": 100.0,
+        "Order Confirmation Rate": 86.44,
+        "Order Change Rate": 9.52
+      },
+      "levels": {},
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00009",
+      "supplierName": "Prime Systems 271",
+      "values": {
+        "Supplier Delivery Rating": 100.0,
+        "Order Confirmation Rate": 79.15,
+        "Order Change Rate": 15.77
+      },
+      "levels": {},
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00010",
+      "supplierName": "Apex Industries 470",
+      "values": {
+        "Supplier Delivery Rating": 100.0,
+        "Order Confirmation Rate": 81.11,
+        "Order Change Rate": 9.58
+      },
+      "levels": {},
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00002",
+      "supplierName": "Global Solutions 900",
+      "values": {
+        "Supplier Delivery Rating": 99.9,
+        "Order Confirmation Rate": 85.99,
+        "Order Change Rate": 11.39
+      },
+      "levels": {},
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00003",
+      "supplierName": "Advanced Systems 395",
+      "values": {
+        "Supplier Delivery Rating": 97.25,
+        "Order Confirmation Rate": 100.0,
+        "Order Change Rate": 7.85
+      },
+      "levels": {},
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00011",
+      "supplierName": "Dynamic Systems 930",
+      "values": {
+        "Supplier Delivery Rating": 94.65,
+        "Order Confirmation Rate": 90.7,
+        "Order Change Rate": 5.8
+      },
+      "levels": {},
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00004",
+      "supplierName": "Strategic Technologies 948",
+      "values": {
+        "Supplier Delivery Rating": 90.31,
+        "Order Confirmation Rate": 87.15,
+        "Order Change Rate": 15.75
+      },
+      "levels": {},
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00014",
+      "supplierName": "Apex Partners 972",
+      "values": {
+        "Supplier Delivery Rating": 89.2,
+        "Order Confirmation Rate": 87.72,
+        "Order Change Rate": 2.02
+      },
+      "levels": {},
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00015",
+      "supplierName": "Strategic Industries 695",
+      "values": {
+        "Supplier Delivery Rating": 87.87,
+        "Order Confirmation Rate": 82.64,
+        "Order Change Rate": 11.59
+      },
+      "levels": {},
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00013",
+      "supplierName": "Global Manufacturing 340",
+      "values": {
+        "Supplier Delivery Rating": 86.38,
+        "Order Confirmation Rate": 80.6,
+        "Order Change Rate": 5.17
+      },
+      "levels": {},
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00012",
+      "supplierName": "Dynamic Group 434",
+      "values": {
+        "Supplier Delivery Rating": 85.54,
+        "Order Confirmation Rate": 87.25,
+        "Order Change Rate": 9.06
+      },
+      "levels": {},
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00001",
+      "supplierName": "Apex Technologies 491",
+      "values": {
+        "Supplier Delivery Rating": 84.27,
+        "Order Confirmation Rate": 77.56,
+        "Order Change Rate": 6.12
+      },
+      "levels": {},
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00005",
+      "supplierName": "Precision Systems 319",
+      "values": {
+        "Supplier Delivery Rating": 81.52,
+        "Order Confirmation Rate": 87.79,
+        "Order Change Rate": 6.18
+      },
+      "levels": {},
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00008",
+      "supplierName": "Dynamic Technologies 401",
+      "values": {
+        "Supplier Delivery Rating": 79.29,
+        "Order Confirmation Rate": 76.07,
+        "Order Change Rate": 12.45
+      },
+      "levels": {},
+      "flags": [
+        "worst"
+      ]
+    }
+  ],
+  "facts": {
+    "metric": "Supplier Delivery Rating",
+    "best": {
+      "supplierID": "SUPP_00006",
+      "value": 100.0
+    },
+    "worst": {
+      "supplierID": "SUPP_00008",
+      "value": 79.29
+    },
+    "spread": 20.71,
+    "notDiscriminating": false
+  },
+  "summary": "Higher is better for delivery rating. Best: SUPP_00006 (100); worst: SUPP_00008 (79.29)."
+}

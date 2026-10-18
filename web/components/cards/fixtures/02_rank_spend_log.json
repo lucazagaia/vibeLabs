@@ -1,0 +1,144 @@
+{
+  "cardId": "5bb71ef7ac3a",
+  "renderer": "rank",
+  "template": "log_exposure_bar_card",
+  "title": "Spend exposure (EUR, log scale)",
+  "intent": "exposure",
+  "direction": "watch",
+  "metrics": [
+    "Purchase Order Volume (EUR)"
+  ],
+  "metricLabels": {
+    "Purchase Order Volume (EUR)": "Spend (PO volume, EUR)"
+  },
+  "valueDirection": {
+    "Purchase Order Volume (EUR)": "higher_means_more_exposure"
+  },
+  "sort": {
+    "field": "Purchase Order Volume (EUR)",
+    "direction": "desc"
+  },
+  "dataShape": {
+    "flags": [
+      "skewed_positive",
+      "extreme_outlier"
+    ],
+    "scale": "log",
+    "fallbackApplied": null,
+    "notes": [
+      "Spend is heavily skewed; a log scale keeps smaller suppliers readable.",
+      "One supplier sits far from the rest; it is called out so the others stay readable."
+    ]
+  },
+  "quadrants": null,
+  "suppliers": [
+    {
+      "supplierID": "SUPP_00356",
+      "supplierName": "Precision Technologies 426",
+      "values": {
+        "Purchase Order Volume (EUR)": 40829568.73
+      },
+      "levels": {},
+      "flags": [
+        "best"
+      ]
+    },
+    {
+      "supplierID": "SUPP_00003",
+      "supplierName": "Advanced Systems 395",
+      "values": {
+        "Purchase Order Volume (EUR)": 3810794.5
+      },
+      "levels": {},
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00006",
+      "supplierName": "Apex Solutions 621",
+      "values": {
+        "Purchase Order Volume (EUR)": 1721472.75
+      },
+      "levels": {},
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00005",
+      "supplierName": "Precision Systems 319",
+      "values": {
+        "Purchase Order Volume (EUR)": 1009857.48
+      },
+      "levels": {},
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00009",
+      "supplierName": "Prime Systems 271",
+      "values": {
+        "Purchase Order Volume (EUR)": 862490.21
+      },
+      "levels": {},
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00004",
+      "supplierName": "Strategic Technologies 948",
+      "values": {
+        "Purchase Order Volume (EUR)": 758747.55
+      },
+      "levels": {},
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00002",
+      "supplierName": "Global Solutions 900",
+      "values": {
+        "Purchase Order Volume (EUR)": 319117.42
+      },
+      "levels": {},
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00007",
+      "supplierName": "Advanced Logistics 134",
+      "values": {
+        "Purchase Order Volume (EUR)": 248426.44
+      },
+      "levels": {},
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00008",
+      "supplierName": "Dynamic Technologies 401",
+      "values": {
+        "Purchase Order Volume (EUR)": 177996.09
+      },
+      "levels": {},
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00001",
+      "supplierName": "Apex Technologies 491",
+      "values": {
+        "Purchase Order Volume (EUR)": 129814.45
+      },
+      "levels": {},
+      "flags": [
+        "worst"
+      ]
+    }
+  ],
+  "facts": {
+    "metric": "Purchase Order Volume (EUR)",
+    "best": {
+      "supplierID": "SUPP_00356",
+      "value": 40829568.73
+    },
+    "worst": {
+      "supplierID": "SUPP_00001",
+      "value": 129814.45
+    },
+    "spread": 40699754.28,
+    "notDiscriminating": false
+  },
+  "summary": "Spend is exposure, not risk. Highest spend: SUPP_00001 (EUR 129,814); lowest: SUPP_00356 (EUR 40,829,569)."
+}

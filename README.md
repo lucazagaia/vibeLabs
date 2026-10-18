@@ -81,6 +81,9 @@ cd agent
 uv run python scripts/smoke_models.py           # Nemotron on Token Factory: tool calls, streaming, reasoning
 uv run python scripts/agui_smoke.py             # needs the agent server running: S1–S4 against /data and /research
 uv run adk run scripts/adk_hello                # interactive ADK agent in the terminal (type "exit" to quit)
+uv run python scripts/skill_smoke.py            # comparison-card skill: loading, tool gating, AG-UI events
+uv run python scripts/skill_smoke.py --quick-eval   # 12-case check: right metric, ask-or-not, no invented IDs
+uv run python scripts/make_fixtures.py          # regenerate the 8 fixture cards in web/components/cards/fixtures/
 ```
 
 ## Repo layout

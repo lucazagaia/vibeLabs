@@ -1,0 +1,136 @@
+{
+  "cardId": "6127aade3dba",
+  "renderer": "rank",
+  "template": "ranked_lollipop_card",
+  "title": "Total risk",
+  "intent": "compare",
+  "direction": "safest",
+  "metrics": [
+    "Total_Risk_Index"
+  ],
+  "metricLabels": {
+    "Total_Risk_Index": "Total risk"
+  },
+  "valueDirection": {
+    "Total_Risk_Index": "lower_is_better"
+  },
+  "sort": {
+    "field": "Total_Risk_Index",
+    "direction": "asc"
+  },
+  "dataShape": {
+    "flags": [],
+    "scale": "fixed_0_100",
+    "fallbackApplied": null,
+    "notes": []
+  },
+  "quadrants": null,
+  "suppliers": [
+    {
+      "supplierID": "SUPP_00141",
+      "supplierName": "Elite Industries 335",
+      "values": {
+        "Total_Risk_Index": 45.0
+      },
+      "levels": {
+        "Total_Risk_Index_Level": "Medium"
+      },
+      "flags": [
+        "best"
+      ]
+    },
+    {
+      "supplierID": "SUPP_02410",
+      "supplierName": "Dynamic Industries 491",
+      "values": {
+        "Total_Risk_Index": 47.0
+      },
+      "levels": {
+        "Total_Risk_Index_Level": "Medium"
+      },
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00287",
+      "supplierName": "Global Systems 788",
+      "values": {
+        "Total_Risk_Index": 48.0
+      },
+      "levels": {
+        "Total_Risk_Index_Level": "Medium"
+      },
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_01004",
+      "supplierName": "Strategic Manufacturing 897",
+      "values": {
+        "Total_Risk_Index": 48.0
+      },
+      "levels": {
+        "Total_Risk_Index_Level": "Medium"
+      },
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00731",
+      "supplierName": "Strategic Logistics 386",
+      "values": {
+        "Total_Risk_Index": 57.0
+      },
+      "levels": {
+        "Total_Risk_Index_Level": "High"
+      },
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00012",
+      "supplierName": "Dynamic Group 434",
+      "values": {
+        "Total_Risk_Index": 60.0
+      },
+      "levels": {
+        "Total_Risk_Index_Level": "High"
+      },
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00450",
+      "supplierName": "Precision Partners 464",
+      "values": {
+        "Total_Risk_Index": 62.0
+      },
+      "levels": {
+        "Total_Risk_Index_Level": "High"
+      },
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00018",
+      "supplierName": "Global Logistics 175",
+      "values": {
+        "Total_Risk_Index": 80.0
+      },
+      "levels": {
+        "Total_Risk_Index_Level": "Critical"
+      },
+      "flags": [
+        "worst"
+      ]
+    }
+  ],
+  "facts": {
+    "metric": "Total_Risk_Index",
+    "best": {
+      "supplierID": "SUPP_00141",
+      "value": 45.0
+    },
+    "worst": {
+      "supplierID": "SUPP_00018",
+      "value": 80.0
+    },
+    "spread": 35.0,
+    "notDiscriminating": false
+  },
+  "summary": "Lower is better for total risk. Best: SUPP_00141 (45); worst: SUPP_00018 (80)."
+}

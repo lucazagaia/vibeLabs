@@ -1,0 +1,140 @@
+{
+  "cardId": "6ee568a04f72",
+  "renderer": "rank",
+  "template": "ranked_lollipop_card",
+  "title": "Total risk (one outlier)",
+  "intent": "compare",
+  "direction": "safest",
+  "metrics": [
+    "Total_Risk_Index"
+  ],
+  "metricLabels": {
+    "Total_Risk_Index": "Total risk"
+  },
+  "valueDirection": {
+    "Total_Risk_Index": "lower_is_better"
+  },
+  "sort": {
+    "field": "Total_Risk_Index",
+    "direction": "asc"
+  },
+  "dataShape": {
+    "flags": [
+      "extreme_outlier"
+    ],
+    "scale": "fixed_0_100",
+    "fallbackApplied": null,
+    "notes": [
+      "One supplier sits far from the rest; it is called out so the others stay readable."
+    ]
+  },
+  "quadrants": null,
+  "suppliers": [
+    {
+      "supplierID": "SUPP_00038",
+      "supplierName": "Prime Industries 116",
+      "values": {
+        "Total_Risk_Index": 40.0
+      },
+      "levels": {
+        "Total_Risk_Index_Level": "Medium"
+      },
+      "flags": [
+        "best"
+      ]
+    },
+    {
+      "supplierID": "SUPP_00050",
+      "supplierName": "Apex Solutions 909",
+      "values": {
+        "Total_Risk_Index": 42.0
+      },
+      "levels": {
+        "Total_Risk_Index_Level": "Medium"
+      },
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00021",
+      "supplierName": "Strategic Partners 214",
+      "values": {
+        "Total_Risk_Index": 43.0
+      },
+      "levels": {
+        "Total_Risk_Index_Level": "Medium"
+      },
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00024",
+      "supplierName": "Global Solutions 379",
+      "values": {
+        "Total_Risk_Index": 43.0
+      },
+      "levels": {
+        "Total_Risk_Index_Level": "Medium"
+      },
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00011",
+      "supplierName": "Dynamic Systems 930",
+      "values": {
+        "Total_Risk_Index": 44.0
+      },
+      "levels": {
+        "Total_Risk_Index_Level": "Medium"
+      },
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00002",
+      "supplierName": "Global Solutions 900",
+      "values": {
+        "Total_Risk_Index": 45.0
+      },
+      "levels": {
+        "Total_Risk_Index_Level": "Medium"
+      },
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00053",
+      "supplierName": "Dynamic Industries 705",
+      "values": {
+        "Total_Risk_Index": 45.0
+      },
+      "levels": {
+        "Total_Risk_Index_Level": "Medium"
+      },
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_01366",
+      "supplierName": "Strategic Systems 744",
+      "values": {
+        "Total_Risk_Index": 92.0
+      },
+      "levels": {
+        "Total_Risk_Index_Level": "Critical"
+      },
+      "flags": [
+        "worst"
+      ]
+    }
+  ],
+  "facts": {
+    "metric": "Total_Risk_Index",
+    "best": {
+      "supplierID": "SUPP_00038",
+      "value": 40.0
+    },
+    "worst": {
+      "supplierID": "SUPP_01366",
+      "value": 92.0
+    },
+    "spread": 52.0,
+    "notDiscriminating": false
+  },
+  "summary": "Lower is better for total risk. Best: SUPP_00038 (40); worst: SUPP_01366 (92)."
+}

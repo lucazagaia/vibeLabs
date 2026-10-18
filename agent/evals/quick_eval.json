@@ -1,0 +1,17 @@
+{
+  "_about": "12-case quick check for the comparison-card skill (plan 05). Run once before the demo: uv run python scripts/skill_smoke.py --quick-eval. ask = whether the buyer must be asked to choose (a mention with >1 candidate, or compare with no mentions). metrics = keys that must be picked when ask is false.",
+  "cases": [
+    {"request": "Which of SUPP_00012, SUPP_00450 and SUPP_00731 has the best credit rating?", "ask": false, "metrics": ["Credit_Rating_Score"], "supplier_ids": ["SUPP_00012", "SUPP_00450", "SUPP_00731"]},
+    {"request": "Who delivers on time among SUPP_00012, SUPP_00141 and SUPP_00287?", "ask": false, "metrics": ["Supplier Delivery Rating"], "supplier_ids": ["SUPP_00012", "SUPP_00141", "SUPP_00287"]},
+    {"request": "Which of SUPP_00018 and SUPP_00450 is riskiest overall?", "ask": false, "metrics": ["Total_Risk_Index"], "supplier_ids": ["SUPP_00018", "SUPP_00450"]},
+    {"request": "Is SUPP_00012 or SUPP_00731 more vulnerable to hacking?", "ask": false, "metrics": ["Digital_Security_Score"], "supplier_ids": ["SUPP_00012", "SUPP_00731"]},
+    {"request": "Compare the financial health and credit rating of SUPP_00012, SUPP_00450 and SUPP_00731", "ask": false, "metrics": ["Financial_Health_Score", "Credit_Rating_Score"], "supplier_ids": ["SUPP_00012", "SUPP_00450", "SUPP_00731"]},
+    {"request": "Show ESG, labor stability and safety incidents for SUPP_00001 to SUPP_00003: SUPP_00001, SUPP_00002, SUPP_00003", "ask": false, "metrics": ["ESG_Performance_Score", "Labor_Stability_Score", "Safety_Incident_Score"], "supplier_ids": ["SUPP_00001", "SUPP_00002", "SUPP_00003"]},
+    {"request": "How much do we spend with SUPP_00012, SUPP_00450 and SUPP_00731?", "ask": false, "metrics": ["Purchase Order Volume (EUR)"], "supplier_ids": ["SUPP_00012", "SUPP_00450", "SUPP_00731"]},
+    {"request": "Compare the financial risk of SUPP_00012 and SUPP_00450", "ask": true, "metrics": [], "supplier_ids": ["SUPP_00012", "SUPP_00450"]},
+    {"request": "How is the reputation of SUPP_00141 vs SUPP_00287?", "ask": true, "metrics": [], "supplier_ids": ["SUPP_00141", "SUPP_00287"]},
+    {"request": "Any legal problems with SUPP_00012 or SUPP_00731?", "ask": true, "metrics": [], "supplier_ids": ["SUPP_00012", "SUPP_00731"]},
+    {"request": "Compare SUPP_00012, SUPP_00450 and SUPP_00731", "ask": false, "metrics": [], "supplier_ids": ["SUPP_00012", "SUPP_00450", "SUPP_00731"]},
+    {"request": "Which of these suppliers is safest on total risk?", "ask": false, "metrics": ["Total_Risk_Index"], "supplier_ids": []}
+  ]
+}

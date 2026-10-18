@@ -1,0 +1,118 @@
+{
+  "cardId": "8db89d031b23",
+  "renderer": "rank",
+  "template": "ranked_lollipop_card",
+  "title": "Total risk (tight cluster)",
+  "intent": "compare",
+  "direction": "safest",
+  "metrics": [
+    "Total_Risk_Index"
+  ],
+  "metricLabels": {
+    "Total_Risk_Index": "Total risk"
+  },
+  "valueDirection": {
+    "Total_Risk_Index": "lower_is_better"
+  },
+  "sort": {
+    "field": "Total_Risk_Index",
+    "direction": "asc"
+  },
+  "dataShape": {
+    "flags": [
+      "tight_cluster"
+    ],
+    "scale": "fixed_0_100",
+    "fallbackApplied": null,
+    "notes": [
+      "All values lie within 2 points; the metric barely separates this shortlist."
+    ]
+  },
+  "quadrants": null,
+  "suppliers": [
+    {
+      "supplierID": "SUPP_00007",
+      "supplierName": "Advanced Logistics 134",
+      "values": {
+        "Total_Risk_Index": 50.0
+      },
+      "levels": {
+        "Total_Risk_Index_Level": "High"
+      },
+      "flags": [
+        "best"
+      ]
+    },
+    {
+      "supplierID": "SUPP_00015",
+      "supplierName": "Strategic Industries 695",
+      "values": {
+        "Total_Risk_Index": 50.0
+      },
+      "levels": {
+        "Total_Risk_Index_Level": "High"
+      },
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00027",
+      "supplierName": "Elite Technologies 371",
+      "values": {
+        "Total_Risk_Index": 50.0
+      },
+      "levels": {
+        "Total_Risk_Index_Level": "High"
+      },
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00029",
+      "supplierName": "Advanced Manufacturing 662",
+      "values": {
+        "Total_Risk_Index": 50.0
+      },
+      "levels": {
+        "Total_Risk_Index_Level": "High"
+      },
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00005",
+      "supplierName": "Precision Systems 319",
+      "values": {
+        "Total_Risk_Index": 52.0
+      },
+      "levels": {
+        "Total_Risk_Index_Level": "High"
+      },
+      "flags": []
+    },
+    {
+      "supplierID": "SUPP_00016",
+      "supplierName": "Global Solutions 964",
+      "values": {
+        "Total_Risk_Index": 52.0
+      },
+      "levels": {
+        "Total_Risk_Index_Level": "High"
+      },
+      "flags": [
+        "worst"
+      ]
+    }
+  ],
+  "facts": {
+    "metric": "Total_Risk_Index",
+    "best": {
+      "supplierID": "SUPP_00007",
+      "value": 50.0
+    },
+    "worst": {
+      "supplierID": "SUPP_00016",
+      "value": 52.0
+    },
+    "spread": 2.0,
+    "notDiscriminating": true
+  },
+  "summary": "Lower is better for total risk. Best: SUPP_00007 (50); worst: SUPP_00016 (52). The metric barely separates these suppliers."
+}
