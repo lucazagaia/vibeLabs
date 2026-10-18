@@ -11,7 +11,7 @@ The agent extracts these fields; code decides everything else (plan 05).
 | `request` | string | The buyer's message, verbatim. Supplier IDs are taken from it by regex |
 | `intent` | `compare` \| `overview` \| `watchlist` \| `exposure` \| `choose` | `compare` with no mentions becomes `overview` (code) |
 | `direction` | `safest` \| `watch` | |
-| `mentions` | list of `{phrase, metrics: [MetricKey]}` | More than one candidate that the buyer didn't each name → **the buyer chooses one** |
+| `mentions` | list of `{phrase, metrics: [MetricKey]}` | More than one candidate that the buyer didn't each name → **the buyer chooses one**. A clear cue word in `request` ("bankrupt", "credit rating", "on time", …) narrows the candidates or fills in a missing metric (code, `CLEAR_CUES`) |
 | `supplier_ids` | list of `SUPP_\d{5}` | Kept only if present in `request` |
 | `use_compare_tray`, `rank_by`, `rank_order`, `limit` | | Supplier selection when no IDs are given (2–20) |
 

@@ -150,3 +150,64 @@ def test_invalid_enums_are_normalised_not_fatal():
     r = compare_suppliers(request="Compare SUPP_00012 and SUPP_00450", intent="bogus", direction="bogus",
                           mentions=[{"phrase": "x", "metrics": ["Not_A_Metric"]}])
     assert r["status"] == "ok" and r["card"]["template"] == "overall_supplier_benchmark_card"
+
+
+def test_show_notice_hidden_unless_asked():
+    from types import SimpleNamespace
+
+    from google.adk.models.llm_request import LlmRequest
+    from google.genai import types
+
+    from buddy.data_buddy.agent import hide_notice_unless_asked
+
+    def request():
+        decls = [types.FunctionDeclaration(name="show_notice"), types.FunctionDeclaration(name="compare_suppliers")]
+        req = LlmRequest(config=types.GenerateContentConfig(tools=[types.Tool(function_declarations=decls)]))
+        req.tools_dict.update({"show_notice": object(), "compare_suppliers": object()})
+        return req
+
+    def offered(req):
+        return [d.name for t in req.config.tools for d in t.function_declarations], sorted(req.tools_dict)
+
+    def ctx(text):
+        return SimpleNamespace(user_content=types.Content(role="user", parts=[types.Part(text=text)]))
+
+    req = request()
+    hide_notice_unless_asked(ctx("Compare SUPP_00012 and SUPP_00450"), req)
+    assert offered(req) == (["compare_suppliers"], ["compare_suppliers"])
+    req = request()
+    hide_notice_unless_asked(ctx("Show a notice saying hello"), req)
+    assert offered(req) == (["show_notice", "compare_suppliers"], ["compare_suppliers", "show_notice"])
+
+
+def test_clear_cue_words_decide():
+    req = "Which of SUPP_00012, SUPP_00450 and SUPP_00731 is least likely to go bankrupt?"
+    # Model listed both financial metrics: "bankrupt" settles it, no question.
+    r = compare_suppliers(request=req, intent="compare", direction="safest",
+                          mentions=[{"phrase": "go bankrupt", "metrics": ["Financial_Health_Score", "Credit_Rating_Score"]}])
+    assert r["status"] == "ok" and r["card"]["sort"]["field"] == "Financial_Health_Score"
+    # Model gave no metric at all (seen live: shortlist on total risk): the cue fills it in.
+    r = compare_suppliers(request=req, intent="choose", direction="safest", mentions=[])
+    assert r["status"] == "ok" and r["card"]["template"] == "financial_credit_card"
+    # No cue word: a broad phrase still asks the buyer.
+    r = compare_suppliers(request="Compare the financial risk of SUPP_00012 and SUPP_00450", intent="compare",
+                          direction="safest", mentions=[{"phrase": "financial risk",
+                                                         "metrics": ["Financial_Health_Score", "Credit_Rating_Score"]}])
+    assert r["status"] == "needs_clarification"
+
+
+def test_model_sees_results_without_the_card():
+    from google.adk.models.llm_request import LlmRequest
+    from google.genai import types
+
+    from buddy.cards.tool import slim_card_results
+
+    full = compare_suppliers(request="Compare SUPP_00012 and SUPP_00450 on total risk", intent="compare", direction="safest",
+                             mentions=[{"phrase": "total risk", "metrics": ["Total_Risk_Index"]}])
+    stored = types.Content(role="user", parts=[types.Part(function_response=types.FunctionResponse(
+        id="c1", name="compare_suppliers", response=full))])
+    req = LlmRequest(contents=[types.Content(role="user", parts=[types.Part(text="hi")]), stored])
+    slim_card_results(None, req)
+    sent = req.contents[1].parts[0].function_response.response
+    assert sent == {"status": "ok", "summary": full["summary"]}
+    assert "card" in stored.parts[0].function_response.response  # the stored session keeps the card

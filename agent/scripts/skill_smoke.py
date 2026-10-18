@@ -29,7 +29,7 @@ from google.adk.tools.skill_toolset import SkillDiscoveryMode, SkillToolset  # n
 from google.genai import types  # noqa: E402
 
 from buddy.cards.schema import GLOSSARY, Direction, Intent, Mention, MetricKey  # noqa: E402
-from buddy.cards.validate import needs_choice, resolve_intent  # noqa: E402
+from buddy.cards.validate import cue_metrics, needs_choice, resolve_intent  # noqa: E402
 from buddy.models import get_model  # noqa: E402
 
 SKILL_DIR = AGENT_DIR / "buddy" / "skills" / "supplier-comparison-cards"
@@ -143,11 +143,14 @@ async def quick_eval() -> int:
                                         new_message=types.Content(role="user", parts=[types.Part(text=c["request"])])):
             pass
         a = calls[0] if calls else {"mentions": [], "supplier_ids": [], "intent": None}
+        # same rules the engine applies (buddy/cards/validate.py, tool.py): cue words narrow, then ask-or-not
+        cues = set(cue_metrics(c["request"]))
         cands = [set(m["metrics"]) for m in a["mentions"]]
-        # same rules the engine applies (buddy/cards/validate.py)
+        cands = [x & cues if len(x) > 1 and len(x & cues) == 1 else x for x in cands]
         ask = any(needs_choice(sorted(x), c["request"]) for x in cands)
-        intent = resolve_intent(a["intent"], sorted(picked))
         picked = set().union(*cands) if cands else set()
+        picked = picked or cues
+        intent = resolve_intent(a["intent"], sorted(picked))
         invented = [i for i in a["supplier_ids"] if i not in c["request"]]
         ok = bool(calls) and ask == c["ask"] and (c["ask"] or set(c["metrics"]) <= picked) and not invented
         passed += ok

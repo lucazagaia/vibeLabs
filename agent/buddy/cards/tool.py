@@ -10,6 +10,7 @@ import logging
 from typing import Literal
 
 from google.adk.tools import ToolContext
+from google.genai import types
 
 from buddy.cards import data
 from buddy.cards.facts import compute
@@ -18,7 +19,7 @@ from buddy.cards.route import route
 from buddy.cards.schema import GLOSSARY, LABELS, VALUE_DIRECTION, Card, Direction, Intent, Mention, MetricKey, ToolResult
 from buddy.cards.select import select_suppliers
 from buddy.cards.summary import write
-from buddy.cards.validate import clean_enums, needs_choice, resolve_intent, supplier_ids_in
+from buddy.cards.validate import clean_enums, cue_metrics, needs_choice, resolve_intent, supplier_ids_in
 
 log = logging.getLogger(__name__)
 
@@ -79,9 +80,13 @@ def compare_suppliers(
 
 
 def _compare(request, intent, direction, mentions, use_compare_tray, rank_by, rank_order, limit, tool_context) -> dict:
-    ms =[m if isinstance(m, dict) else m.model_dump() for m in mentions]
+    ms = [m if isinstance(m, dict) else m.model_dump() for m in mentions]
+    cues = cue_metrics(request)
     for m in ms:
         m["metrics"] = clean_enums("compare", "safest", m["metrics"], None)[2]
+        narrowed = [k for k in m["metrics"] if k in cues]
+        if len(m["metrics"]) > 1 and len(narrowed) == 1:
+            m["metrics"] = narrowed  # a clear cue word in the buyer's message settles it: no question
     for m in ms:  # ambiguity -> the buyer chooses one option
         if needs_choice(m["metrics"], request):
             options = [f"{LABELS[k]}: {GLOSSARY[k]}" for k in m["metrics"]]
@@ -89,6 +94,8 @@ def _compare(request, intent, direction, mentions, use_compare_tray, rank_by, ra
                               question=f"'{m['phrase']}' can mean different things. Which one should I compare?",
                               options=options).model_dump(exclude_none=True)
     metrics = list(dict.fromkeys(k for m in ms for k in m["metrics"]))  # mentions with no metric add nothing
+    if not metrics:
+        metrics = cues  # the model missed a clear cue word ("bankrupt"): use the buyer's own words
     intent, direction, metrics, rank_by = clean_enums(intent, direction, metrics, rank_by)
     intent = resolve_intent(intent, metrics)
 
@@ -105,6 +112,36 @@ def _compare(request, intent, direction, mentions, use_compare_tray, rank_by, ra
 
     card = build_card(intent, direction, metrics, sel.ids)
     return ToolResult(status="ok", card=card, summary=card["summary"]).model_dump(exclude_none=True)
+
+
+# What the model needs from a result: never the card itself (the browser gets that from the tool event).
+MODEL_FIELDS = ("status", "summary", "question", "options", "message")
+
+
+def slim_card_results(callback_context, llm_request):
+    """before_model_callback: the model sees `compare_suppliers` results without the card.
+
+    Seen live: every card (3-25 KB of JSON) stayed in the thread history, and after ~4 comparisons
+    Nemotron started answering with made-up "[ERROR: Max turns (10) exceeded]"-style text. The card is
+    only for the browser; the model replies from `summary`. New objects are built so the stored session
+    (and the card the frontend renders) is not modified.
+    """
+    contents = []
+    for content in llm_request.contents:
+        parts = content.parts or []
+        if not any(p.function_response and p.function_response.name == "compare_suppliers" for p in parts):
+            contents.append(content)
+            continue
+        slim_parts = []
+        for p in parts:
+            fr = p.function_response
+            if fr and fr.name == "compare_suppliers" and isinstance(fr.response, dict):
+                slim = {k: v for k, v in fr.response.items() if k in MODEL_FIELDS}
+                p = types.Part(function_response=types.FunctionResponse(id=fr.id, name=fr.name, response=slim))
+            slim_parts.append(p)
+        contents.append(types.Content(role=content.role, parts=slim_parts))
+    llm_request.contents = contents
+    return None
 
 
 compare_suppliers.__doc__ = (

@@ -110,7 +110,7 @@ docs/plans/            concept plan + step-by-step build plans (00–04)
   - `NEBIUS_API_KEY`
   - `NEBIUS_API_BASE`, default `https://api.tokenfactory.nebius.com/v1`
   - per-role models: `DATA_BUDDY_MODEL`, `RESEARCH_BUDDY_MODEL`
-  - reasoning levels: `DATA_BUDDY_REASONING=none`, `RESEARCH_BUDDY_REASONING=medium`
+  - reasoning levels: `DATA_BUDDY_REASONING=low` (at `none`, multi-turn threads broke down after a few comparisons, see 05c), `RESEARCH_BUDDY_REASONING=medium`
 - **`web/.env.local`:**
   - `AGENT_BASE_URL` (server-only)
   - `COPILOTKIT_TELEMETRY_DISABLED=true`

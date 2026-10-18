@@ -156,12 +156,22 @@ Clicking the chip scrolls the dashboard to `#card-{toolCallId}` and highlights i
 - Holding text back adds no delay to normal replies after the first ~11 characters. Reasoning chunks are never held.
 - Cards disappear on reload, and so do the threads (in-memory runner, Step 3 F8). That's expected until the UI-state store exists.
 
+## Found in 5c-3 (browser), and fixed
+The scripted runs used a fresh thread per prompt and no browser tools. The browser has both, and that showed four problems:
+
+| # | Seen in the browser | Cause | Fix (code decides) |
+|---|---|---|---|
+| B1 | The same question repeated 3 times | After a clarification, the model called `show_notice` anyway; the frontend tool re-ran the agent | `hide_notice_unless_asked` (`before_model_callback`): `show_notice` reaches the model only if the buyer's message says "notice". `AGUIToolset(tool_filter=...)` can't do this: ag-ui-adk calls the filter without the run context |
+| B2 | "Least likely to go bankrupt" asked a question, or ranked on total risk | The model listed both financial metrics, or none | `CLEAR_CUES` in `validate.py`: a cue word in the buyer's message ("bankrupt", "credit rating", "on time", "hacking", ...) narrows the candidates or fills in a missing metric |
+| B3 | From the 4th turn of a thread: replies like "[ERROR: Max turns (10) exceeded]" | **Made up by the model**, not by any library (verified: not in any dependency, and the model call is logged). At reasoning `none`, Nemotron Lightning drifts in longer tool-calling threads, then copies its own error text on every later turn | Data Buddy reasoning is now **`low`**: 16/16 turns correct in two 8-turn threads (about 3–5 s per turn). It also stopped the stray `dataset_info` calls and the wordy replies |
+| B4 | Every card (3–25 KB of JSON) stayed in the model's context | The tool result is both the frontend event and the model's history | `slim_card_results` (`before_model_callback`): the model sees only `status`/`summary`/question; the stored session and the frontend keep the full card |
+
 ## Later (not in 5c)
-- **Trim what the model sees.** The model receives the whole card as the tool result, up to ~24 KB. That costs tokens and probably explains the wordy replies at Checkpoint 5b. A follow-up could return only `status`/`summary` to the model and send the card to the browser through a separate channel.
 - Parallel-coordinates and radar renderers.
+- Turn off CopilotKit's Inspector for the demo: its floating button covers the ✕ on the top dashboard card.
 
 ## Done when
-- [ ] 5c-1: unit tests pass; in 4 live credit prompts, no `<tool_call>` text reaches the chat.
-- [ ] 5c-2: all 10 fixtures render in `/cards` with no overlapping labels, light and dark; `npm run build` is clean.
-- [ ] 5c-3: each prompt puts exactly one card on the dashboard. The reply matches `summary`. "Financial risk" shows the question with no card. A re-render or agent switch never duplicates a card.
-- [ ] The quick eval holds: the ask-or-not decision is right in 12/12, and no supplier IDs are invented.
+- [x] 5c-1: unit tests pass; in 4 live credit prompts, no `<tool_call>` text reaches the chat. (The retry wasn't triggered live in 14 runs; unit tests only.)
+- [x] 5c-2: all 10 fixtures render in `/cards` with no overlapping labels, light and dark; `npm run build` is clean. (Desktop only.)
+- [x] 5c-3: each prompt puts exactly one card on the dashboard. The reply matches `summary`. "Financial risk" shows the question with no card, and answering it adds the card. A re-render or agent switch never duplicates a card, and a closed card stays closed.
+- [x] The quick eval holds: 12/12 on ask-or-not, 12/12 on the exact metric, no supplier IDs invented.

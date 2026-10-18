@@ -12,6 +12,17 @@ INTENT_ALIASES = {"watch": "watchlist", "red_flags": "watchlist", "overall": "ov
 
 SUPPLIER_ID = re.compile(r"SUPP_\d{5}")
 
+# Words that name exactly one metric (the skill's "clear examples"). Seen live: for "least likely to go
+# bankrupt" the model sometimes listed both financial metrics, or none. A cue in the buyer's own words decides.
+CLEAR_CUES: dict[str, re.Pattern] = {
+    "Financial_Health_Score": re.compile(r"bankrupt|insolven|go(?:es|ing)? under", re.I),
+    "Credit_Rating_Score": re.compile(r"credit ?rating|creditworth", re.I),
+    "Supplier Delivery Rating": re.compile(r"on[- ]time|deliver\w* late|late deliver", re.I),
+    "Order Change Rate": re.compile(r"chang\w* (?:our |the )?orders?", re.I),
+    "Digital_Security_Score": re.compile(r"hack|cyber", re.I),
+    "Sub_Tier_Visibility_Score": re.compile(r"sub-?suppliers?|sub-?tier", re.I),
+}
+
 
 def _name_terms(metric: str) -> str:
     """Plain name a buyer would write, e.g. 'Credit rating' -> 'credit rating', 'Spend (PO volume, EUR)' -> 'spend'."""
@@ -58,3 +69,8 @@ def clean_enums(intent: str, direction: str, metrics: list[str], rank_by: str | 
     metrics = [m for m in metrics if m in METRICS]
     rank_by = rank_by if rank_by in METRICS else None
     return intent, direction, metrics, rank_by
+
+
+def cue_metrics(request: str) -> list[str]:
+    """Metrics the buyer named with an unambiguous cue word, in CLEAR_CUES order."""
+    return [k for k, pattern in CLEAR_CUES.items() if pattern.search(request)]
