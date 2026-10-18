@@ -31,6 +31,7 @@ The model is the biggest unknown in the stack, which is why this step comes firs
 | F5 | ADK's `LiteLlm(model, **kwargs)` forwards extra kwargs (`api_base`, `api_key`, `extra_body`, `temperature`, …) to `litellm.completion`. It manages `messages`, `tools` and `stream` itself. | `google-adk 2.12.0`: `models/lite_llm.py` | All model config lives in `get_model()`. |
 | F6 | ADK maps `reasoning_content` to `Part(thought=True)`, and ag-ui-adk turns thought parts into AG-UI **REASONING** events, separate from `TEXT_MESSAGE` events. | `lite_llm.py`, `ag_ui_adk/event_translator.py` | If Token Factory fills `reasoning_content`, thinking **won't leak into chat text**. The smoke test checks that it doesn't come back as `<think>` tags inside `content` instead. |
 | F7 | `ag-ui-adk 0.10.0` requires `google-adk>=1.28.1,<3`, and `google-adk 2.12.0` requires `fastapi>=0.133`. | PyPI metadata | The pins from the umbrella plan are compatible. |
+| F8 | *Found during 1b:* `litellm.completion` imports its MCP handler whenever `tools` are passed, and that needs the `mcp` package. litellm doesn't declare it, so every tool call failed with `ModuleNotFoundError: mcp`. | Live run, traceback through `litellm/main.py` | `mcp>=1.24,<3` is added as an explicit dependency, using the same range google-adk declares. |
 
 ## Prerequisite (Luca)
 - Create a Nebius Token Factory account and an API key at tokenfactory.nebius.com → API keys. The hackathon credits are already on the account.

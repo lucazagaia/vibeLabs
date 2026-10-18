@@ -1,0 +1,15 @@
+[project]
+name = "vibelabs-agent"
+version = "0.1.0"
+description = "Buddy: ADK supervisor agent for the vibeLabs Siemens supplier-risk app"
+requires-python = ">=3.13"
+dependencies = [
+    "google-adk==2.12.*",
+    "httpx>=0.28.1",
+    "litellm==1.106.*",
+    "mcp>=1.24,<3",
+    "python-dotenv>=1.2.4",
+]
+
+[tool.uv]
+package = false
