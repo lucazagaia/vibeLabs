@@ -39,7 +39,7 @@ MetricKey = Literal[
     "Supply Chain Complexity",
 ]
 
-# One line per metric, from docs/Siemens_into.md. Part of the tool description on every call:
+# One line per metric, from data/risk_criteria_description.md. Part of the tool description on every call:
 # tests showed bare keys map only 17/34 natural-language requests correctly, with the glossary 34/34.
 GLOSSARY: dict[str, str] = {
     "Total_Risk_Index": "overall risk profile (weighted average of all risk categories)",
