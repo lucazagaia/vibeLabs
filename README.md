@@ -208,9 +208,7 @@ python app.py "Research Siemens Mobility for ESG and compliance risk"
 
 <img src="docs/images/team.jpg" alt="Team vibeLabs in front of the Nebius and NVIDIA hackathon banner in Berlin" width="420">
 
-- **Alex**: Research Buddy (the LangGraph and Tavily pipeline, its live progress and report UI) and the landing page
-- **Adham**: the supplier workspace (table, filters, profiles, comparison pool) and the architecture diagram
-- **Luca**: Data Buddy (Google ADK and Nemotron), the card engine, and dashboard widgets
+Built by **Alex Gaballa, Adham Gouda and Luca Zagaia**.
 
 Thanks to Siemens for the challenge and dataset, and to Nebius and NVIDIA for Token Factory and Nemotron.
 
