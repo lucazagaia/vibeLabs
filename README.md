@@ -208,6 +208,8 @@ python app.py "Research Siemens Mobility for ESG and compliance risk"
 
 **vibeLabs**, Nebius hackathon Berlin 2026:
 
+<img src="docs/images/team.jpg" alt="Team vibeLabs in front of the Nebius and NVIDIA hackathon banner in Berlin" width="420">
+
 - **Alex**: Research Buddy (the LangGraph and Tavily pipeline, its live progress and report UI) and the landing page
 - **Adham**: the supplier workspace (table, filters, profiles, comparison pool) and the architecture diagram
 - **Luca**: Data Buddy (Google ADK and Nemotron), the card engine, and dashboard widgets
