@@ -2,7 +2,7 @@
 
 # 🚆 Supplier Risk Buddy
 
-Uploading supplier-risk-buddy.mp4…
+https://github.com/user-attachments/assets/d785ea8b-2f46-4567-b0fe-34ada06ed114
 
 **Data Buddy** turns plain questions about 10,000 rail suppliers into charts, with every number computed in code.<br>
 **Research Buddy** investigates a real company and writes a risk report where every claim links to its source.
