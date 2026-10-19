@@ -4,10 +4,11 @@
 
 https://github.com/user-attachments/assets/d785ea8b-2f46-4567-b0fe-34ada06ed114
 
-**Data Buddy** turns plain questions about 10,000 rail suppliers into charts, with every number computed in code.<br>
-**Research Buddy** investigates a real company and writes a risk report where every claim links to its source.
+**Supplier Risk Buddy is a workspace for rail buyers with two AI agents inside.** Pick one in the chat:<br>
+**Data Buddy** answers questions about the 10,000 suppliers in the dataset, with a chart.<br>
+**Research Buddy** checks a real company on the web and writes a sourced risk report.
 
-<sub>Built in a weekend by team <b>vibeLabs</b> for the Siemens challenge <i>"Smart Supplier Selection for Trains"</i> at the Nebius hackathon, Berlin, October 2026.</sub>
+<sub>Built in one day by team <b>vibeLabs</b> at the <a href="https://luma.com/big-gtc-hack">Nebius Build Week Hackathon with NVIDIA</a> in Berlin (18 October 2026), for the Siemens challenge <i>"Smart Supplier Selection for Trains"</i>.</sub>
 
 [![Nebius Token Factory](https://img.shields.io/badge/Nebius-Token%20Factory-0f1117?style=flat-square)](https://tokenfactory.nebius.com)
 [![NVIDIA Nemotron 3.5](https://img.shields.io/badge/NVIDIA-Nemotron%203.5-76b900?style=flat-square&logo=nvidia&logoColor=white)](https://www.nvidia.com/en-us/ai-data-science/foundation-models/nemotron/)
@@ -20,9 +21,9 @@ https://github.com/user-attachments/assets/d785ea8b-2f46-4567-b0fe-34ada06ed114
 
 ## What it does
 
-A buyer has 10,000 suppliers and 25 risk and performance metrics for each. Supplier Risk Buddy gives them three ways in.
+<img src="docs/images/agents-overview.png" alt="Two agents, one job each. Data Buddy: you ask about suppliers in the dataset; Nemotron reads the question, code picks the suppliers and one of 19 charts and computes the numbers; you get a comparison card. Research Buddy: you ask about a real company; it plans 4 research lanes, searches the web via Tavily, digs into red flags and writes the report; you get a risk report with every claim linked to its source." width="100%">
 
-### 1. Data Buddy: ask a question, get a chart
+### 1. Data Buddy: questions about the supplier dataset
 
 Ask in plain words. Data Buddy picks the right metric and one of 19 chart types, and drops a comparison card on the dashboard.
 
@@ -35,13 +36,13 @@ Ask in plain words. Data Buddy picks the right metric and one of 19 chart types,
 
 <img src="docs/images/dashboard.jpg" alt="Supplier workspace: comparison cards on the dashboard, Data Buddy chat on the right" width="100%">
 
-### 2. Research Buddy: a sourced risk report on any real company
+### 2. Research Buddy: questions about a real company
 
 Ask *"Research Knorr-Bremse for supplier risk"*. Research Buddy plans its research, searches news and public sources, digs deeper on red flags, and writes a report where every claim links to its source (here: 18 sources, 2 open red flags).
 
 <img src="docs/images/research-report.jpg" alt="Research Buddy risk report for Knorr-Bremse: 18 sources, findings with source links, 2 open red flags" width="100%">
 
-### 3. Supplier workspace: browse all 10,000 suppliers
+### 3. Supplier workspace: look for yourself, no AI
 
 Filter and sort the whole list, open any supplier's risk profile, and collect candidates in a comparison pool. No AI involved.
 
@@ -91,13 +92,7 @@ How we checked it:
 
 <img src="docs/images/architecture-overview.png" alt="Architecture: one chat and one dashboard in the browser, a backend that routes to Data Buddy (Python, Google ADK) or Research Buddy (TypeScript, LangGraph), and NVIDIA Nemotron models on Nebius Token Factory" width="100%">
 
-| Part | Built with |
-|---|---|
-| **Data Buddy** | Google ADK skill · Nemotron 3.5 Lightning |
-| **Research Buddy** | LangGraph · Tavily · Nemotron 3.5 Super VL (planner) + Lightning (workers) |
-| **Workspace and widgets** | Next.js 16 · CopilotKit (AG-UI, `useRenderTool`) |
-
-The detailed diagram, with ports and protocols, is [`docs/architecture.png`](docs/architecture.png). The card contract is in [`docs/specs/card-contract.md`](docs/specs/card-contract.md), and the build log is in [`docs/plans/`](docs/plans/).
+The chat and dashboard are Next.js 16 with CopilotKit (AG-UI); every answer renders as a widget through `useRenderTool`. The detailed diagram, with ports and protocols, is [`docs/architecture.png`](docs/architecture.png). The card contract is in [`docs/specs/card-contract.md`](docs/specs/card-contract.md), and the build log is in [`docs/plans/`](docs/plans/).
 
 ## Try it
 
@@ -198,7 +193,7 @@ python app.py "Research Siemens Mobility for ESG and compliance risk"
 
 ## Team
 
-**vibeLabs**, Nebius hackathon Berlin 2026:
+**vibeLabs**, at the Nebius Build Week Hackathon with NVIDIA, Berlin, 18 October 2026:
 
 <img src="docs/images/team.jpg" alt="Team vibeLabs in front of the Nebius and NVIDIA hackathon banner in Berlin" width="420">
 

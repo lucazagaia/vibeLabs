@@ -1,0 +1,138 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<!-- Which agent does what. Screenshot at 1536×880 (2× device scale) to agents-overview.png. -->
+<style>
+  :root {
+    --ink: #10213a; --muted: #5b6b80; --soft: #8592a3; --line: #4c5d73;
+    --panel: #f1f5fa; --panel-border: #e3e9f1; --bg: #fbfcfe;
+    --blue: #e6f0fc; --blue-border: #b9d3f4; --blue-ink: #2a5ea8;
+    --green: #e8f5ec; --green-border: #bfe3c9; --green-ink: #23794a;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body { width: 1536px; height: 880px; background: var(--bg); font-family: -apple-system, "SF Pro Display", "Helvetica Neue", Arial, sans-serif; color: var(--ink); position: relative; overflow: hidden; }
+  .abs { position: absolute; }
+  h1 { font-size: 50px; font-weight: 700; letter-spacing: -0.5px; }
+  .sub { font-size: 27px; color: var(--muted); }
+  .colhead { font-size: 17px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--soft); }
+
+  /* rows */
+  .when { font-size: 20px; font-weight: 700; line-height: 1.3; }
+  .bubble { margin-top: 16px; background: #fff; border: 1.5px solid #dfe5ec; border-radius: 18px 18px 18px 6px; padding: 16px 18px; font-size: 18px; line-height: 1.4; color: #24364d; box-shadow: 0 2px 6px rgba(16,33,58,.05); }
+  .agent { border-radius: 20px; padding: 24px 28px; border: 1.5px solid; }
+  .agent.data { background: var(--blue); border-color: var(--blue-border); }
+  .agent.research { background: var(--green); border-color: var(--green-border); }
+  .head { display: flex; gap: 16px; align-items: center; }
+  .head h3 { font-size: 28px; font-weight: 700; }
+  .tech { font-size: 16px; color: var(--muted); margin-top: 2px; }
+  .works { margin-top: 16px; font-size: 16px; color: var(--muted); }
+  .works b { color: var(--ink); font-weight: 600; }
+  ol { margin-top: 12px; padding-left: 0; list-style: none; counter-reset: s; }
+  ol li { counter-increment: s; position: relative; padding-left: 36px; font-size: 17px; line-height: 1.35; margin-bottom: 9px; color: #24364d; }
+  ol li::before { content: counter(s); position: absolute; left: 0; top: -1px; width: 25px; height: 25px; border-radius: 50%; font-size: 14px; font-weight: 700; display: grid; place-items: center; color: #fff; }
+  .data ol li::before { background: var(--blue-ink); }
+  .research ol li::before { background: var(--green-ink); }
+  ol li .ai { font-size: 13px; font-weight: 600; padding: 1px 7px; border-radius: 6px; background: #fff; border: 1px solid #d6dde6; color: var(--muted); margin-left: 6px; vertical-align: 1px; }
+
+  /* output mocks */
+  .out { background: #fff; border: 1.5px solid #dfe5ec; border-radius: 16px; padding: 18px 20px; box-shadow: 0 6px 20px rgba(16,33,58,.07); }
+  .out .t { font-size: 17px; font-weight: 700; }
+  .out .s { font-size: 13px; color: var(--soft); margin-top: 2px; }
+  .out .sum { font-size: 14px; color: #33465e; margin-top: 10px; line-height: 1.4; }
+  .cap { font-size: 17px; color: var(--muted); margin-top: 14px; line-height: 1.35; }
+  .cap b { color: var(--ink); }
+  .src { display: inline-block; font-size: 11.5px; padding: 1px 8px; border-radius: 999px; border: 1px solid #a7e3cf; background: #ecfaf4; color: #0d6b50; vertical-align: 1px; }
+  .flags { margin-top: 12px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 10px; padding: 8px 12px; font-size: 12.5px; font-weight: 700; letter-spacing: .05em; color: #b91c1c; }
+  .bar { height: 7px; border-radius: 4px; background: #e6ebf1; margin-top: 7px; }
+
+  svg.arrows { position: absolute; inset: 0; width: 1536px; height: 880px; pointer-events: none; }
+  .foot { font-size: 18px; color: var(--muted); }
+  .foot b { color: var(--ink); }
+</style>
+</head>
+<body>
+  <h1 class="abs" style="left:44px; top:30px;">Two agents, one job each</h1>
+  <div class="abs sub" style="left:44px; top:96px;">Supplier Risk Buddy is one app. In its chat, you pick which agent answers.</div>
+
+  <div class="abs colhead" style="left:44px; top:170px;">You ask</div>
+  <div class="abs colhead" style="left:452px; top:170px;">The agent</div>
+  <div class="abs colhead" style="left:1092px; top:170px;">You get</div>
+
+  <!-- Row 1: Data Buddy -->
+  <div class="abs" style="left:44px; top:214px; width:340px;">
+    <div class="when" style="color:var(--blue-ink)">About suppliers in<br>the dataset</div>
+    <div class="bubble">“Which of these four suppliers has the best credit rating?”</div>
+  </div>
+  <div class="abs agent data" style="left:452px; top:206px; width:572px; height:236px;">
+    <div class="head">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#10213a" stroke-width="1.8"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg>
+      <div><h3>Data Buddy</h3><div class="tech">Python · Google ADK · Nemotron 3.5 Lightning</div></div>
+    </div>
+    <div class="works">Works on: <b>the supplier dataset</b> (10,000 suppliers × 25 metrics)</div>
+    <ol>
+      <li>Reads the question: which suppliers, which metric <span class="ai">Nemotron</span></li>
+      <li>Picks the suppliers and one of 19 charts <span class="ai">code</span></li>
+      <li>Computes the numbers and the summary <span class="ai">code</span></li>
+    </ol>
+  </div>
+  <div class="abs" style="left:1092px; top:206px; width:400px;">
+    <div class="out">
+      <div class="t">Financial health vs credit rating</div>
+      <div class="s">4 suppliers · financial credit</div>
+      <div class="sum">Best: SUPP_00141 (43); worst: SUPP_00731 (76).</div>
+      <svg width="358" height="104" viewBox="0 0 358 104" style="margin-top:10px">
+        <rect x="0" y="0" width="358" height="104" fill="#fff"/>
+        <rect x="8" y="52" width="170" height="48" fill="#e7f6ee"/>
+        <rect x="178" y="4" width="172" height="48" fill="#fdecec"/>
+        <line x1="178" y1="4" x2="178" y2="100" stroke="#9aa6b5" stroke-dasharray="4 4"/>
+        <line x1="8" y1="52" x2="350" y2="52" stroke="#9aa6b5" stroke-dasharray="4 4"/>
+        <rect x="8" y="4" width="342" height="96" fill="none" stroke="#dfe5ec"/>
+        <circle cx="140" cy="62" r="7" fill="#1fb57a" stroke="#d97706" stroke-width="2.5"/>
+        <circle cx="205" cy="40" r="6" fill="#e04343"/><circle cx="212" cy="28" r="6" fill="#e04343"/><circle cx="268" cy="44" r="6" fill="#e04343"/>
+      </svg>
+    </div>
+    <div class="cap"><b>A comparison card</b> on the dashboard, every number computed in code</div>
+  </div>
+
+  <!-- Row 2: Research Buddy -->
+  <div class="abs" style="left:44px; top:536px; width:340px;">
+    <div class="when" style="color:var(--green-ink)">About a real company<br>in the outside world</div>
+    <div class="bubble">“Research Knorr-Bremse for supplier risk”</div>
+  </div>
+  <div class="abs agent research" style="left:452px; top:528px; width:572px; height:236px;">
+    <div class="head">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#10213a" stroke-width="1.8"><circle cx="10" cy="10" r="7"/><path d="m21 21-6-6"/></svg>
+      <div><h3>Research Buddy</h3><div class="tech">TypeScript · LangGraph · Nemotron 3.5 Super VL + Lightning</div></div>
+    </div>
+    <div class="works">Works on: <b>news and public web sources</b> (searched via Tavily)</div>
+    <ol>
+      <li>Plans 4 lanes: financial, ESG, compliance, news <span class="ai">code</span></li>
+      <li>Searches each lane, up to 4 times <span class="ai">Lightning + Tavily</span></li>
+      <li>Digs into red flags, writes the report <span class="ai">Super VL</span></li>
+    </ol>
+  </div>
+  <div class="abs" style="left:1092px; top:528px; width:400px;">
+    <div class="out">
+      <div class="t" style="font-size:20px">Knorr-Bremse</div>
+      <div class="s" style="font-size:13.5px"><span style="color:#10b981">●</span> Report ready · 18 sources</div>
+      <div class="bar" style="width:96%; margin-top:12px"></div>
+      <div class="bar" style="width:70%; display:inline-block"></div> <span class="src">finance.yahoo.com</span>
+      <div class="bar" style="width:88%"></div>
+      <div class="bar" style="width:52%; display:inline-block"></div> <span class="src">justice.gov</span>
+      <div class="flags">2 OPEN RED FLAGS</div>
+    </div>
+    <div class="cap"><b>A risk report</b> in the workspace, every claim linked to its source</div>
+  </div>
+
+  <svg class="arrows">
+    <defs><marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0 0 10 5 0 10" fill="none" stroke="#4c5d73" stroke-width="1.6"/></marker></defs>
+    <path d="M396 350 H440" stroke="#4c5d73" stroke-width="2" fill="none" marker-end="url(#a)"/>
+    <path d="M1034 350 H1080" stroke="#4c5d73" stroke-width="2" fill="none" marker-end="url(#a)"/>
+    <path d="M396 672 H440" stroke="#4c5d73" stroke-width="2" fill="none" marker-end="url(#a)"/>
+    <path d="M1034 672 H1080" stroke="#4c5d73" stroke-width="2" fill="none" marker-end="url(#a)"/>
+  </svg>
+
+  <div class="abs foot" style="left:44px; top:838px;">Both agents run on <b>NVIDIA Nemotron 3.5</b> via <b>Nebius Token Factory</b>. Prefer to look yourself? The <b>supplier workspace</b> browses and filters all 10,000 suppliers, no AI involved.</div>
+</body>
+</html>
