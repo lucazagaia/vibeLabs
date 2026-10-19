@@ -170,7 +170,7 @@ Restart the server after changing an env file.
 
 ```
 agent/                    Python ADK (port 8000) + TypeScript LangGraph (port 8123)
-  main.py                 /data, /research, /health (ADK)
+  main.py                 /data, /health (ADK)
   buddy/cards/            the card engine: select · route · preflight · facts · summary · composite
   buddy/skills/           the supplier-comparison-cards ADK skill (SKILL.md)
   src/                    LangGraph deep research nodes

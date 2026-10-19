@@ -1,4 +1,4 @@
-"""AG-UI server: Data Buddy at /data, Research Buddy at /research (contract C2).
+"""AG-UI server: Data Buddy at /data (contract C2). Research Buddy runs on LangGraph (`npm run dev`).
 
     cd agent && uv run uvicorn main:app --port 8000
 """
@@ -9,7 +9,6 @@ from google.adk.agents import LlmAgent
 from google.adk.apps import App, ResumabilityConfig
 
 from buddy.data_buddy.agent import build_data_buddy
-from buddy.research_buddy.agent import build_research_buddy
 
 app = FastAPI(title="vibeLabs Buddy agents")
 
@@ -36,7 +35,6 @@ def serve(root_agent: LlmAgent, path: str) -> None:
 
 
 serve(build_data_buddy(), "/data")
-serve(build_research_buddy(), "/research")
 
 
 @app.get("/health")
