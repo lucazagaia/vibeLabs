@@ -197,7 +197,7 @@ python app.py "Research Siemens Mobility for ESG and compliance risk"
 
 <img src="docs/images/team.jpg" alt="Team vibeLabs in front of the Nebius and NVIDIA hackathon banner in Berlin" width="420">
 
-Built by **Alex Gaballa, Adham Gouda and Luca Zagaia**.
+Built together by [Alex Gaballa](https://github.com/alexgaballa), [Adham Gouda](https://github.com/adhamyakout) and [Luca Zagaia](https://github.com/lucazagaia).
 
 Thanks to Siemens for the challenge and dataset, and to Nebius and NVIDIA for Token Factory and Nemotron.
 
