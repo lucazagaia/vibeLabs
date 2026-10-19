@@ -93,7 +93,9 @@ Open http://localhost:3000 and click **Start now**. No API key handy? http://loc
 
 ## How it works
 
-<img src="docs/architecture.png" alt="Architecture: Next.js + CopilotKit frontend, Data Buddy on Google ADK, Research Buddy on LangGraph, Nemotron on Nebius Token Factory" width="100%">
+<img src="docs/images/architecture-overview.png" alt="Architecture: one chat and one dashboard in the browser, a backend that routes to Data Buddy (Python, Google ADK) or Research Buddy (TypeScript, LangGraph), and NVIDIA Nemotron models on Nebius Token Factory" width="100%">
+
+<sub>The detailed version, with ports and protocols, is in <a href="docs/architecture.png"><code>docs/architecture.png</code></a>.</sub>
 
 **The model understands; code decides.** Data Buddy uses Nemotron for exactly one step: reading the buyer's question. Everything after that is plain, tested Python.
 

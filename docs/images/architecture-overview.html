@@ -1,0 +1,168 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  :root {
+    --ink: #10213a; --muted: #5b6b80; --soft: #8592a3; --line: #4c5d73;
+    --panel: #f1f5fa; --panel-border: #e3e9f1; --bg: #fbfcfe;
+    --blue: #e6f0fc; --blue-border: #b9d3f4; --green: #e8f5ec; --green-border: #bfe3c9; --route: #2f3b4c;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body { width: 1536px; height: 770px; background: var(--bg); font-family: -apple-system, "SF Pro Display", "Helvetica Neue", Arial, sans-serif; color: var(--ink); position: relative; overflow: hidden; }
+  .abs { position: absolute; }
+  h1 { font-size: 50px; font-weight: 700; letter-spacing: -0.5px; }
+  .sub { font-size: 27px; color: var(--muted); }
+  .panel { background: var(--panel); border: 1.5px solid var(--panel-border); border-radius: 22px; }
+  .title { font-size: 26px; font-weight: 700; }
+  .caption { font-size: 18px; color: var(--muted); }
+  .card { border-radius: 16px; padding: 22px 24px; }
+  .card h3 { font-size: 21px; font-weight: 700; }
+  .card .tech { font-size: 16px; color: var(--muted); margin-top: 6px; }
+  .card ul { margin-top: 14px; padding-left: 20px; font-size: 15px; line-height: 1.4; color: #24364d; }
+  .card li { margin-bottom: 4px; }
+  .head { display: flex; gap: 18px; align-items: flex-start; }
+  .icon { width: 42px; height: 42px; flex: none; }
+  .label { font-size: 17px; color: var(--muted); text-align: center; }
+  .chip { background: #e4e9f0; border-radius: 12px; padding: 12px 10px; text-align: center; font-size: 14.5px; line-height: 1.35; color: #2a3b52; }
+  .chip b { font-size: 14.5px; }
+  .chip span { color: var(--soft); }
+  svg.lines { position: absolute; inset: 0; width: 1536px; height: 770px; pointer-events: none; }
+  /* browser mock */
+  .browser { background: #fff; border: 2px solid #cfd8e4; border-radius: 14px; overflow: hidden; }
+  .bar { height: 30px; background: #e9eef4; display: flex; gap: 7px; align-items: center; padding-left: 14px; }
+  .bar i { width: 9px; height: 9px; border-radius: 50%; background: #b9c3cf; display: block; }
+  .box { border: 1.5px solid #e1e7ee; border-radius: 10px; background: #fff; }
+  .pick { display: flex; align-items: center; gap: 12px; border-radius: 8px; padding: 10px 12px; font-size: 15px; }
+  .radio { margin-left: auto; width: 14px; height: 14px; border-radius: 50%; border: 2px solid #c7d0db; }
+  .radio.on { border-color: #4b8de6; background: radial-gradient(circle, #4b8de6 45%, #fff 50%); }
+</style>
+</head>
+<body>
+  <h1 class="abs" style="left:44px; top:30px;">Supplier Risk Buddy</h1>
+  <div class="abs sub" style="left:44px; top:96px;">One chat. One dashboard. Two specialist agents.</div>
+
+  <!-- Browser -->
+  <div class="abs browser" style="left:38px; top:205px; width:317px; height:425px;">
+    <div class="bar"><i></i><i></i><i></i></div>
+    <div class="box" style="margin:12px; height:70px; display:flex; align-items:center; gap:12px; padding:0 14px;">
+      <svg width="26" height="26" viewBox="0 0 26 26"><circle cx="13" cy="13" r="12" fill="#e4e9f0"/><circle cx="13" cy="10" r="4" fill="#8592a3"/><path d="M5 21c2-4 14-4 16 0" fill="#8592a3"/></svg>
+      <div style="flex:1"><div style="height:8px;background:#dfe5ec;border-radius:4px;width:85%"></div><div style="height:8px;background:#e8edf2;border-radius:4px;width:60%;margin-top:8px"></div></div>
+    </div>
+    <div class="box" style="margin:0 12px; padding:12px;">
+      <div style="font-size:15px; font-weight:600; margin-bottom:10px;">Choose an agent</div>
+      <div class="pick" style="background:#dce9fb;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2c3e57" stroke-width="2"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg>
+        Data Buddy<div class="radio on"></div>
+      </div>
+      <div class="pick" style="margin-top:6px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2c3e57" stroke-width="2"><circle cx="10" cy="10" r="7"/><path d="m21 21-6-6"/></svg>
+        Research Buddy<div class="radio"></div>
+      </div>
+    </div>
+    <div style="display:flex; gap:10px; margin:12px;">
+      <div class="box" style="flex:1; height:136px; padding:16px 14px; display:flex; flex-direction:column; justify-content:flex-end;">
+        <div style="display:flex; align-items:flex-end; gap:8px; height:70px;">
+          <div style="width:12px;height:22px;background:#8fb3e8;border-radius:2px"></div><div style="width:12px;height:34px;background:#6f9ee3;border-radius:2px"></div>
+          <div style="width:12px;height:26px;background:#8fb3e8;border-radius:2px"></div><div style="width:12px;height:44px;background:#4f86d8;border-radius:2px"></div>
+          <div style="width:12px;height:62px;background:#3b74c9;border-radius:2px"></div>
+        </div>
+        <div style="height:6px;background:#e3e8ee;border-radius:3px;margin-top:12px;width:90%"></div>
+        <div style="height:6px;background:#eceff4;border-radius:3px;margin-top:6px;width:60%"></div>
+      </div>
+      <div class="box" style="flex:1; height:136px; padding:16px 14px; display:flex; align-items:center; gap:10px;">
+        <svg width="70" height="70" viewBox="0 0 42 42"><circle cx="21" cy="21" r="15" fill="none" stroke="#a7d9bb" stroke-width="9"/><circle cx="21" cy="21" r="15" fill="none" stroke="#4d6782" stroke-width="9" stroke-dasharray="36 94.2" transform="rotate(-90 21 21)"/></svg>
+        <div style="flex:1"><div style="height:6px;background:#e3e8ee;border-radius:3px;margin-bottom:8px"></div><div style="height:6px;background:#e3e8ee;border-radius:3px;margin-bottom:8px;width:80%"></div><div style="height:6px;background:#eceff4;border-radius:3px;width:60%"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="abs" style="left:38px; top:655px; width:317px; text-align:center;">
+    <div style="font-size:21px; font-weight:700;">Browser</div>
+    <div class="label" style="margin-top:6px;">Chat + dashboard + supplier workspace</div>
+  </div>
+
+  <!-- Backend -->
+  <div class="abs panel" style="left:483px; top:157px; width:624px; height:590px;"></div>
+  <div class="abs title" style="left:515px; top:187px;">Web App Backend</div>
+  <div class="abs caption" style="left:515px; top:228px;">Single entry point</div>
+
+  <div class="abs" style="left:513px; top:320px; width:217px; height:250px; background:var(--route); border-radius:16px; color:#fff; text-align:center; padding:30px 18px;">
+    <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><rect x="3" y="3" width="18" height="7" rx="1.5"/><rect x="3" y="14" width="18" height="7" rx="1.5"/><path d="M7 6.5h.01M7 17.5h.01M11 6.5h6M11 17.5h6"/></svg>
+    <div style="font-size:25px; font-weight:700; margin-top:14px;">Route</div>
+    <div style="font-size:16px; line-height:1.45; margin-top:10px; color:#dbe2ea;">Forwards to the active agent and streams the answer</div>
+    <div style="font-size:13px; margin-top:14px; color:#9fb0c3;">Next.js · CopilotKit runtime</div>
+  </div>
+
+  <div class="abs card" style="left:790px; top:266px; width:300px; height:216px; background:var(--blue); border:1.5px solid var(--blue-border);">
+    <div class="head">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#10213a" stroke-width="1.7"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg>
+      <div><h3>Data Buddy</h3><div class="tech">Python · Google ADK</div></div>
+    </div>
+    <ul>
+      <li>Answers questions about 10k suppliers (25 metrics)</li>
+      <li>One tool: code computes every number</li>
+      <li>Builds the dashboard charts</li>
+    </ul>
+  </div>
+
+  <div class="abs card" style="left:790px; top:496px; width:300px; height:240px; background:var(--green); border:1.5px solid var(--green-border);">
+    <div class="head">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#10213a" stroke-width="1.7"><circle cx="10" cy="10" r="7"/><path d="m21 21-6-6"/></svg>
+      <div><h3>Research Buddy</h3><div class="tech">TypeScript · LangGraph</div></div>
+    </div>
+    <ul style="margin-top:10px;">
+      <li>Plans 4 lanes: financial, ESG, compliance, news</li>
+      <li>Searches the web, ≤ 4 searches per lane</li>
+      <li>Digs into up to 3 red flags</li>
+      <li>Writes a sourced report</li>
+    </ul>
+  </div>
+
+  <!-- Right column -->
+  <div class="abs panel" style="left:1158px; top:157px; width:342px; height:270px; padding:26px 28px;">
+    <div class="head" style="align-items:center;">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#10213a" stroke-width="1.7"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2c3 3 4.5 6.5 4.5 10S15 19 12 22M12 2C9 5 7.5 8.5 7.5 12S9 19 12 22"/></svg>
+      <div style="font-size:21px; font-weight:700;">Web &amp; Data Sources</div>
+    </div>
+    <div class="head" style="margin-top:28px; align-items:center;">
+      <svg style="width:30px;height:30px;margin-left:14px;" viewBox="0 0 24 24" fill="none" stroke="#10213a" stroke-width="1.7"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg>
+      <div><div style="font-size:17px;">Supplier dataset</div><div style="font-size:16px;color:var(--soft);margin-top:3px;">10k suppliers · 25 metrics</div></div>
+    </div>
+    <div class="head" style="margin-top:22px; align-items:center;">
+      <svg style="width:30px;height:30px;margin-left:14px;" viewBox="0 0 24 24" fill="none" stroke="#10213a" stroke-width="1.7"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2c3 3 4.5 6.5 4.5 10S15 19 12 22M12 2C9 5 7.5 8.5 7.5 12S9 19 12 22"/></svg>
+      <div><div style="font-size:17px;">Open web</div><div style="font-size:16px;color:var(--soft);margin-top:3px;">news &amp; public sources, via Tavily</div></div>
+    </div>
+  </div>
+
+  <div class="abs panel" style="left:1158px; top:457px; width:342px; height:290px; padding:26px 28px;">
+    <div class="head" style="align-items:center;">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#10213a" stroke-width="1.7"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4M10 10h4v4h-4z"/></svg>
+      <div style="font-size:21px; font-weight:700;">Model Provider</div>
+    </div>
+    <div style="font-size:20px; font-weight:700; margin-top:20px;">Nebius Token Factory</div>
+    <div style="font-size:16px; color:var(--muted); margin-top:4px;">NVIDIA Nemotron 3.5 models</div>
+    <div style="display:flex; gap:10px; margin-top:18px;">
+      <div class="chip" style="flex:1;"><b>Lightning</b><br><span>fast: questions &amp; extraction</span></div>
+      <div class="chip" style="flex:1;"><b>Super VL</b><br><span>strong: planning &amp; writing</span></div>
+    </div>
+  </div>
+
+  <!-- arrows -->
+  <svg class="lines" viewBox="0 0 1536 770">
+    <defs>
+      <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M1 1 9 5 1 9" fill="none" stroke="#4c5d73" stroke-width="1.6"/></marker>
+    </defs>
+    <g stroke="#4c5d73" stroke-width="2" fill="none">
+      <line x1="370" y1="380" x2="466" y2="380" marker-end="url(#a)"/>
+      <line x1="466" y1="470" x2="370" y2="470" marker-end="url(#a)"/>
+      <path d="M742 400 h10 a10 10 0 0 0 10 -10 v-12 a10 10 0 0 1 10 -10 h14" marker-start="url(#a)" marker-end="url(#a)"/>
+      <path d="M742 500 h10 a10 10 0 0 1 10 10 v64 a10 10 0 0 0 10 10 h14" marker-start="url(#a)" marker-end="url(#a)"/>
+      <line x1="1112" y1="330" x2="1148" y2="330" marker-start="url(#a)" marker-end="url(#a)"/>
+      <line x1="1112" y1="590" x2="1148" y2="590" marker-start="url(#a)" marker-end="url(#a)"/>
+    </g>
+    <text x="418" y="355" text-anchor="middle" font-size="17" fill="#5b6b80" font-family="-apple-system, Helvetica Neue, Arial">Message</text>
+    <text x="418" y="505" text-anchor="middle" font-size="17" fill="#5b6b80" font-family="-apple-system, Helvetica Neue, Arial">Streamed</text>
+    <text x="418" y="528" text-anchor="middle" font-size="17" fill="#5b6b80" font-family="-apple-system, Helvetica Neue, Arial">response</text>
+  </svg>
+</body>
+</html>

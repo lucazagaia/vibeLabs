@@ -4,7 +4,8 @@ How Supplier Risk Buddy was designed and built, step by step. Start with the arc
 
 | | |
 |---|---|
-| [`architecture.png`](architecture.png) · [`.svg`](architecture.svg) | The multi-agent architecture |
+| [`images/architecture-overview.png`](images/architecture-overview.png) | The architecture at a glance (used in the main README); edit [`architecture-overview.html`](images/architecture-overview.html) and screenshot it at 1536×770 to update |
+| [`architecture.png`](architecture.png) · [`.svg`](architecture.svg) | The detailed architecture: ports, protocols, data flow |
 | [`specs/card-contract.md`](specs/card-contract.md) | The card contract shared by the Python engine and the React renderers |
 | [`specs/comparison-card-template-spec.md`](specs/comparison-card-template-spec.md) | Which chart fits which metric (the template spec the engine routes by) |
 | [`plans/buddy-capability-plan.md`](plans/buddy-capability-plan.md) | The original concept: use cases, tools, panels |
