@@ -80,16 +80,23 @@ Open http://localhost:3000 and click **Start now**. No API key handy? http://loc
 | **Supplier workspace** | Filter and sort all 10,000 suppliers, open any supplier's risk profile, collect candidates in a comparison pool | Next.js, no LLM |
 | **Widgets** | Every answer is a widget: a preview in the grid, then maximized with a path (*Widgets / Full supplier analysis / Financial health*) | CopilotKit `useRenderTool` |
 
-<table>
-<tr>
-<td width="50%"><img src="docs/images/research-report.jpg" alt="Research Buddy risk report for Knorr-Bremse with sources and red flags"><br><sub><b>Research Buddy:</b> a sourced risk report with open red flags</sub></td>
-<td width="50%"><img src="docs/images/supplier-profile.jpg" alt="Supplier profile with KPIs, strongest and weakest signal, and risk bars"><br><sub><b>Supplier profile:</b> KPIs, strongest and weakest signal, all 19 risk scores</sub></td>
-</tr>
-<tr>
-<td width="50%"><img src="docs/images/widget-open.jpg" alt="A multi-panel analysis opened full-size with its path"><br><sub><b>Maximized widget:</b> a 7-panel full analysis, each panel expandable</sub></td>
-<td width="50%"><img src="docs/images/card-previews.jpg" alt="Gallery of card types built from real data"><br><sub><b>Card types</b> from real data (<a href="http://localhost:3000/cards"><code>/cards</code></a> when running)</sub></td>
-</tr>
-</table>
+### Research Buddy: a sourced risk report
+
+<img src="docs/images/research-report.jpg" alt="Research Buddy risk report for Knorr-Bremse: 18 sources, findings with source links, 2 open red flags" width="100%">
+
+### Supplier profile: every risk score at a glance
+
+<img src="docs/images/supplier-profile.jpg" alt="Supplier profile with KPIs, strongest and weakest signal, and a bar for each risk score" width="100%">
+
+### A widget opened full-size
+
+<img src="docs/images/widget-open.jpg" alt="The 7-panel full supplier analysis opened full-size, starting with the overall benchmark heatmap" width="100%">
+
+### The card types, from real data
+
+<img src="docs/images/card-previews.jpg" alt="Six card types: ranked lollipop, log-scale spend, financial scatter, performance scatter, benchmark heatmap, replaceability grid" width="100%">
+
+<sub>All 12 example cards are at <code>/cards</code> when the app is running.</sub>
 
 ## How it works
 
