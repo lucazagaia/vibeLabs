@@ -18,9 +18,9 @@ One turns 10,000 supplier records into charts. The other researches real compani
 
 [Try it](#quickstart) · [What it does](#what-it-does) · [How it works](#how-it-works) · [Proof](#proof) · [Limitations](#limitations) · [Team](#team)
 
-<a href="https://cdn.jsdelivr.net/gh/lucazagaia/vibeLabs@main/docs/video/supplier-risk-buddy.mp4"><img src="docs/images/video-poster.jpg" alt="Watch the 25-second tour: Data Buddy turns a question into a comparison card, Research Buddy writes a sourced risk report" width="100%"></a>
+<a href="https://cdn.jsdelivr.net/gh/lucazagaia/vibeLabs@a750022/docs/video/supplier-risk-buddy.mp4"><img src="docs/images/video-poster.jpg" alt="Watch the 25-second tour: Data Buddy turns a question into a comparison card, Research Buddy writes a sourced risk report" width="100%"></a>
 
-<sub>▶ <a href="https://cdn.jsdelivr.net/gh/lucazagaia/vibeLabs@main/docs/video/supplier-risk-buddy.mp4">Watch the 25-second tour</a> (MP4, 8 MB)</sub>
+<sub>▶ <a href="https://cdn.jsdelivr.net/gh/lucazagaia/vibeLabs@a750022/docs/video/supplier-risk-buddy.mp4">Watch the 25-second tour</a> (MP4, 8 MB)</sub>
 
 </div>
 
