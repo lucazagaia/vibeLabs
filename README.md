@@ -18,7 +18,9 @@ One turns 10,000 supplier records into charts. The other researches real compani
 
 [Try it](#quickstart) · [What it does](#what-it-does) · [How it works](#how-it-works) · [Proof](#proof) · [Limitations](#limitations) · [Team](#team)
 
-<img src="docs/images/dashboard.jpg" alt="Supplier workspace: comparison cards on the dashboard, Data Buddy chat on the right" width="100%">
+<a href="docs/video/supplier-risk-buddy.mp4"><img src="docs/images/video-poster.jpg" alt="Watch the 25-second tour: Data Buddy turns a question into a comparison card, Research Buddy writes a sourced risk report" width="100%"></a>
+
+<sub>▶ <a href="docs/video/supplier-risk-buddy.mp4">Watch the 25-second tour</a> (MP4, 8 MB)</sub>
 
 </div>
 
@@ -79,6 +81,9 @@ Open http://localhost:3000 and click **Start now**. No API key handy? http://loc
 | **Research Buddy** | Takes a real company name, plans its research, searches news and public sources, follows up on red flags, and writes a risk report with source links | LangGraph · Tavily · Nemotron 3.5 Super VL (planner) + Lightning (workers) |
 | **Supplier workspace** | Filter and sort all 10,000 suppliers, open any supplier's risk profile, collect candidates in a comparison pool | Next.js, no LLM |
 | **Widgets** | Every answer is a widget: a preview in the grid, then maximized with a path (*Widgets / Full supplier analysis / Financial health*) | CopilotKit `useRenderTool` |
+
+<img src="docs/images/dashboard.jpg" alt="Supplier workspace: comparison cards on the dashboard, Data Buddy chat on the right" width="100%">
+<sub><b>The workspace:</b> comparison cards on the dashboard, Data Buddy chat on the right</sub>
 
 ### Research Buddy: a sourced risk report
 

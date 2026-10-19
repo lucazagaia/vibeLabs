@@ -18,5 +18,6 @@ How Supplier Risk Buddy was designed and built, step by step. Start with the arc
 | [`plans/05c-card-integration.md`](plans/05c-card-integration.md) | Step 5c: cards on the dashboard, and what broke in the browser |
 | [`plans/05d-composite-cards.md`](plans/05d-composite-cards.md) | Step 5d: multi-panel cards, follow-ups, preview widgets |
 | [`images/`](images/) | Screenshots used in the main README |
+| [`video/supplier-risk-buddy.mp4`](video/supplier-risk-buddy.mp4) | The 25-second launch video (made with [/brag](https://github.com/latent-spaces/brag)); its poster is [`images/video-poster.jpg`](images/video-poster.jpg) |
 
 The column descriptions for the dataset are in [`../data/risk_criteria_description.md`](../data/risk_criteria_description.md).

@@ -38,6 +38,7 @@ yarn-error.log*
 
 # misc
 .DS_Store
+brag-output*/
 *.pem
 
 # vercel / typescript
