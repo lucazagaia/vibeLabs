@@ -131,8 +131,20 @@ These are all things we actually ran into:
 | `address already in use` on :8000 or :3000 | An old server is still running | `lsof -ti tcp:8000 \| xargs kill` (same for 3000) |
 | `reasoning_effort` seems to do nothing | LiteLLM drops it for Nebius | It's sent through `extra_body` in `buddy/models.py` |
 
+## Limitations
+Built in a hackathon weekend. Known gaps:
+- **Data Buddy has one skill (comparison cards).** It compares and ranks 2–20 suppliers well, but questions about a single supplier ("Why is SUPP_00018's risk so high?") and filtering by chat aren't supported. Use the supplier profile and the filters in the workspace for those. Next step: one skill per buyer use case (explain, filter, compare, shortlist memo).
+- **Broad phrases get a question back.** "Financial risk" or "reputation" can mean several metrics, so Data Buddy asks which one (or "all of them") instead of guessing.
+- **No persistence and no login.** Cards and chat threads live in the browser and reset on reload.
+- **The supplier pages load all 10,000 rows at once** (`/api/suppliers`, ~16 MB): fine locally, slow over a slow connection.
+- **Replies vary between runs.** Every number comes from code, but the model's wording and chart choice can differ slightly.
+- **Research Buddy** needs a Tavily key, and its reports are only as good as the public sources it finds.
+
 ## Docs and plans
 - [Concept plan](docs/plans/buddy-capability-plan.md)
 - [00 Basics architecture](docs/plans/00-basics-architecture.md)
 - [03 CopilotKit frontend](docs/plans/03-copilotkit-frontend.md) · [04 Integration](docs/plans/04-integration.md)
 - Deep research CLI: [deep_research/README.md](deep_research/README.md)
+
+## License
+[MIT](LICENSE). The supplier dataset in `data/` is anonymized challenge data provided by Siemens for the hackathon and is not covered by this licence.

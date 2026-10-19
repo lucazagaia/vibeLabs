@@ -18,7 +18,6 @@ deep_research/.pytest_cache/
 # Node / Next.js
 node_modules/
 agent/node_modules/
-agent/agent/node_modules/
 agent/dist/
 agent/.langgraph_api/
 .next/

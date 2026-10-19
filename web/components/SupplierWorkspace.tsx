@@ -154,32 +154,23 @@ export function SupplierWorkspace({
             <Kpi label="PO exposure" value={formatMoney(selected["Purchase Order Volume (EUR)"])} />
           </div>
 
-          <div className="grid gap-4 lg:grid-cols-[1.1fr_.9fr]">
-            <section className="rounded-xl border border-black/10 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-neutral-900">
-              <div className="flex items-start justify-between">
-                <div>
-                  <h2 className="text-sm font-semibold">Signals that stand out</h2>
-                  <p className="mt-1 text-xs text-black/45 dark:text-white/45">Compared with the full supplier dataset.</p>
-                </div>
-                <span className="rounded-full bg-black/[0.04] px-2 py-1 text-[10px] text-black/45 dark:bg-white/[0.04] dark:text-white/45">{reported.length} reported signals</span>
+          <section className="rounded-xl border border-black/10 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-neutral-900">
+            <div className="flex items-start justify-between">
+              <div>
+                <h2 className="text-sm font-semibold">Signals that stand out</h2>
+                <p className="mt-1 text-xs text-black/45 dark:text-white/45">Compared with the full supplier dataset.</p>
               </div>
-              {strongest && weakest ? (
-                <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                  <Insight label="Strongest signal" metric={strongest.label} score={value(selected, strongest.key)} good />
-                  <Insight label="Weakest signal" metric={weakest.label} score={value(selected, weakest.key)} />
-                </div>
-              ) : (
-                <p className="mt-4 text-xs text-black/40 dark:text-white/40">No risk signals are reported for this supplier.</p>
-              )}
-            </section>
-
-            <section className="rounded-xl border border-amber-200 bg-amber-50/60 p-5">
-              <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-amber-700/70">Mock critical news</p>
-              <h2 className="mt-2 text-sm font-semibold text-amber-950">Regional logistics disruption flagged near a supplier facility</h2>
-              <p className="mt-2 text-xs leading-5 text-amber-900/70">Trade Press Wire · 3 days ago</p>
-              <p className="mt-3 text-xs leading-5 text-amber-900/80">A short-term labor action could affect outbound logistics. Treat this as a demo-only research placeholder until the research agent is connected.</p>
-            </section>
-          </div>
+              <span className="rounded-full bg-black/[0.04] px-2 py-1 text-[10px] text-black/45 dark:bg-white/[0.04] dark:text-white/45">{reported.length} reported signals</span>
+            </div>
+            {strongest && weakest ? (
+              <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                <Insight label="Strongest signal" metric={strongest.label} score={value(selected, strongest.key)} good />
+                <Insight label="Weakest signal" metric={weakest.label} score={value(selected, weakest.key)} />
+              </div>
+            ) : (
+              <p className="mt-4 text-xs text-black/40 dark:text-white/40">No risk signals are reported for this supplier.</p>
+            )}
+          </section>
 
           <section className="rounded-xl border border-black/10 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-neutral-900">
             <h2 className="text-sm font-semibold">Risk profile</h2>
