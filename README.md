@@ -2,12 +2,12 @@
 
 # 🚆 Supplier Risk Buddy
 
-**Ask your supplier data. Get the chart, not a guess.**
-
-Two AI agents that help rail buyers choose suppliers: one turns 10,000 supplier records into charts,<br>
-the other researches real companies and writes a sourced risk report.
-
 https://github.com/user-attachments/assets/0e18d40a-4eaa-45ed-93f6-c6156ed9b599
+
+**Data Buddy** turns plain questions about 10,000 rail suppliers into charts, with every number computed in code.<br>
+**Research Buddy** investigates a real company and writes a risk report where every claim links to its source.
+
+<sub>Built in a weekend by team <b>vibeLabs</b> for the Siemens challenge <i>"Smart Supplier Selection for Trains"</i> at the Nebius hackathon, Berlin, October 2026.</sub>
 
 [![Nebius Token Factory](https://img.shields.io/badge/Nebius-Token%20Factory-0f1117?style=flat-square)](https://tokenfactory.nebius.com)
 [![NVIDIA Nemotron 3.5](https://img.shields.io/badge/NVIDIA-Nemotron%203.5-76b900?style=flat-square&logo=nvidia&logoColor=white)](https://www.nvidia.com/en-us/ai-data-science/foundation-models/nemotron/)
@@ -17,8 +17,6 @@ https://github.com/user-attachments/assets/0e18d40a-4eaa-45ed-93f6-c6156ed9b599
 [What it does](#what-it-does) · [Why you can trust the numbers](#why-you-can-trust-the-numbers) · [Try it](#try-it) · [Team](#team)
 
 </div>
-
-Built in a weekend by team **vibeLabs** for the Siemens challenge *"Smart Supplier Selection for Trains"* at the Nebius hackathon, Berlin, October 2026.
 
 ## What it does
 
